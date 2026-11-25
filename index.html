@@ -338,6 +338,20 @@ details.supply .in{padding:0 14px 14px}
 .dpill{display:inline-block;font-size:10.5px;font-weight:700;color:#fff;background:var(--red);border-radius:5px;padding:0 6px;margin-right:5px;vertical-align:1px}
 @media (min-width:760px){.rail{grid-auto-columns:300px}.rail.one{grid-auto-columns:300px}.cgrid{grid-template-columns:1fr 1fr}}
 
+/* 三餐 */
+.ml{margin-top:8px;background:#fffdf8;border-radius:12px;padding:7px 8px 8px;box-shadow:0 1px 6px rgba(23,48,79,.06)}
+.ml .mh{font-size:11px;font-weight:700;color:var(--navy);margin:0 2px 4px}
+.ml .cells{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.ml .c{background:var(--bg);border-radius:9px;padding:5px 6px 6px;line-height:1.35;min-width:0}
+.ml .c i{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;color:#fff;background:var(--navy2);border-radius:5px;padding:0 6px;margin-bottom:2px}
+.ml .c b{display:block;font-size:12.5px;color:var(--ink);font-weight:500}
+.ml .c small{display:block;font-size:10.5px;color:#b26b00;font-weight:700;margin-top:1px}
+.ml .c.self b{color:var(--muted)}
+.gifts{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.gifts span{font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 9px}
+.gifts .g{background:#ffe9e4;color:#b3261e}
+.gifts .sp{background:#fff1d6;color:#9a5b00}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -725,6 +739,12 @@ document.getElementById('classicgrid').innerHTML=CLASSIC.map(([c,n,d,p,w,img,emo
 document.getElementById('beautygrid').innerHTML=BEAUTY.map(([n,d,t,img,emo,u])=>`<a class="bi" href="${u}" target="_blank" rel="noopener"><div class="ph ${img?'':'noimg'}">${ph(img,emo)}<span class="tag tsm tg">${t}</span></div><div class="bd"><div class="nm">${n}</div><div class="ds">${d}</div></div></a>`).join('');
 document.getElementById('wintergrid').innerHTML=WINTER.map(([n,d,t,img,emo,u])=>`<a class="bi" href="${u}" target="_blank" rel="noopener"><div class="ph ${img?'':'noimg'}">${ph(img,emo)}<span class="tag tsm tg">${t}</span></div><div class="bd"><div class="nm">${n}</div><div class="ds">${d}</div></div></a>`).join('');
 
+
+/* ============ 三餐・贈送 ============ */
+const MEALS={"1": [["自理", "機上簡餐", "", "日式花壽司餐盒＋綠茶（贈送宵夜）", "¥1,000"], [], []], "2": [["飯店早餐", "茨城豚味噌陶板燒御膳", "¥2,200", "飯店迎賓會席料理", ""], [], []], "3": [["飯店早餐", "水澤烏龍麵御膳", "¥2,500", "旅館和洋自助餐", ""], ["伊香保溫泉饅頭（每人一顆）"], ["水澤烏龍麵（日本三大烏龍麵）", "輕井澤王子購物廣場"]], "4": [["飯店早餐", "上信越釜飯風味御膳", "¥2,500", "長腳蟹吃到飽＋精緻地元料理", ""], [], ["長腳蟹吃到飽", "JR 小海線高原列車（停駛退 ¥200）"]], "5": [["飯店早餐", "甲斐寶刀麵（ほうとう）御膳", "¥2,500", "飯店和洋自助餐", ""], ["忍野八海名水豆腐或草餅（每人一份）"], []], "6": [["飯店早餐", "日式壽喜燒風味御膳", "¥2,500", "日式迷你懷石料理", ""], ["大涌谷延壽黑玉子（每人一顆）"], ["蘆之湖海盜船（停駛退 ¥500）", "十國峠纜車"]], "7": [["飯店早餐", "日式涮涮鍋吃到飽＋軟飲暢飲", "¥3,000", "B 級美食居酒屋＋酒水一杯", "¥5,000"], [], []], "8": [["飯店早餐", "自由安排（代金每人 ¥2,000）", "", "機上簡餐", ""], [], []]};
+const mealHTML=d=>{const [[b,l,lp,dn,dp],g,sp]=MEALS[d];const c=(k,t,p)=>`<div class="c ${/自理|自由|機上/.test(t)?'self':''}"><i>${k}</i><b>${t}</b>${p?`<small>餐標 ${p}</small>`:''}</div>`;
+  return `<div class="ml"><div class="mh">🍽️ 三餐</div><div class="cells">${c('早',b,'')}${c('午',l,lp)}${c('晚',dn,dp)}</div>${g.length||sp.length?`<div class="gifts">${g.map(x=>`<span class="g">🎁 贈送：${x}</span>`).join('')}${sp.map(x=>`<span class="sp">⭐ 特別安排：${x}</span>`).join('')}</div>`:''}</div>`};
+
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -818,7 +838,7 @@ DAYS.forEach(day=>{
        <div class="lks">${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:''}${s.mall?`<button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
-    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.filter(m=>!m.startsWith('晚')).map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="${day.d}"></div></div>
+    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="wx" data-d="${day.d}"></div>${mealHTML(day.d)}</div>
     ${day.spots.length>1?posterHTML(day.spots.map((s,i)=>({num:s._num,cap:s.name,art:SCENES[s.scene](),photo:s.photo,go:`d${day.d}s${i}`})),`今日路線・${day.spots.length} 個景點`):''}
     <div class="map"></div>
     <div class="maplinks"><span>點數字跳到該景點</span><a target="_blank" rel="noopener" href="${dirUrl([day.start.q||HOTELS[day.hotel-1].q,...withLL.map(o=>o.s.q),h.q])}">整天路線・Google ↗</a></div>
@@ -849,7 +869,7 @@ DAYS.forEach(day=>{
   ovl.insertAdjacentHTML('beforeend',`<a href="#d8"><span class="dd" style="color:var(--red)">D8<small>12/12</small></span><span><span class="ss">${d.short}</span><br><span class="hh">夜機返台</span><span class="ow" data-d="8"></span></span><span class="ar">›</span></a>`);
   const el=document.createElement('div');el.className='view';el.id=key;
   el.innerHTML=`<div class="wrap">
-   <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}<br>${d.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="8"></div></div>
+   <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}</div><div class="wx" data-d="8"></div>${mealHTML(8)}</div>
    ${posterHTML(d.stops.map((s,i)=>({num:s.k,cls:s.start||s.end?'r':'',tm:s.t,cap:s.name,art:s.art(),go:`d8s${i}`})),'今日路線・12 站')}
    <div class="map"></div>
    <div class="maplinks"><span>點數字跳到該站</span><a target="_blank" rel="noopener" href="${dirUrl(d.stops.map(s=>s.q))}">整天路線・Google ↗</a></div>
