@@ -134,6 +134,22 @@ details.supply .in{padding:0 14px 14px}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .btn{background:var(--navy);color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:9px}
 
+/* 天氣 */
+.wx{margin-top:10px;background:#fff;border-radius:12px;padding:8px 10px 9px;box-shadow:0 1px 6px rgba(23,48,79,.06)}
+.wx .wh{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--muted);margin-bottom:4px}
+.wx .wh b{color:var(--navy);font-size:12px}
+.wx .src{font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:6px;background:var(--gr);color:var(--grt)}
+.wx .src.live{background:var(--fm);color:var(--fmt)}
+.wx .cells{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.wx .c{background:var(--bg);border-radius:10px;padding:6px 4px;text-align:center;line-height:1.25}
+.wx .c .p{font-size:11px;color:var(--muted)}
+.wx .c .p b{color:var(--navy)}
+.wx .c .e{font-size:22px;line-height:1.2}
+.wx .c .t{font-size:18px;font-weight:700;color:var(--navy)}
+.wx .c .t.cold{color:#2a6fd1}
+.wx .c .r{font-size:11.5px;color:#2a6fd1;font-weight:700}
+.wx .c .s{font-size:9.5px;color:var(--muted)}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -393,6 +409,39 @@ const D8={d:8,date:'12/12（六）· 09:00 – 16:00',title:'東京特種兵 1 �
  ]};
 
 const STORES=[[["全家", "ファミリーマート ホテルマイステイズプレミア成田店", 35.78443, 140.35152], ["7-11", "セブン-イレブン", 35.78441, 140.3536], ["7-11", "セブン-イレブン", 35.78339, 140.35625], ["其他", "デイリーヤマザキ", 35.77463, 140.36191]], [["其他", "やまざきショップ (Yamazaki Shop)", 36.83311, 139.71845], ["Lawson", "ローソン", 36.83165, 139.71674], ["Lawson", "ローソン", 36.83224, 139.71622], ["其他", "Save on", 36.83452, 139.71724], ["Lawson", "Lawson", 36.82643, 139.71884], ["7-11", "セブン-イレブン 鬼怒川立岩店", 36.82305, 139.71222], ["超市", "リオンドール", 36.81251, 139.71262]], [], [["7-11", "セブン-イレブン 春日居温泉郷店", 35.65802, 138.64531], ["Lawson", "ローソン", 35.65958, 138.64431], ["7-11", "セブン-イレブン セブンイレブン春日居鎮目店", 35.66534, 138.64397], ["7-11", "セブン-イレブン", 35.65498, 138.66347], ["其他", "ヤマザキショップ", 35.64982, 138.64296], ["7-11", "セブン-イレブン", 35.65625, 138.63563], ["其他", "NewDays", 35.65773, 138.63527], ["超市", "オギノ 春日居店", 35.67028, 138.65829], ["超市", "イオン 石和店", 35.65664, 138.63437], ["Lawson", "ローソン", 35.65246, 138.63603], ["7-11", "セブン-イレブン", 35.64596, 138.64484], ["其他", "ヤマザキショップ", 35.65287, 138.6356], ["7-11", "セブン-イレブン", 35.64895, 138.63603], ["7-11", "セブン-イレブン", 35.64637, 138.6634], ["超市", "川合商店", 35.65057, 138.6339], ["全家", "ファミリーマート 石和町市部店", 35.65081, 138.6334], ["超市", "クックーY", 35.64864, 138.63467]], [["Lawson", "ローソン", 35.48563, 138.76157], ["全家", "ファミリーマート", 35.48724, 138.76268], ["全家", "ファミリーマート", 35.49023, 138.74533], ["超市", "マックスバリュ 富士河口湖店", 35.4911, 138.74311], ["Lawson", "ローソン", 35.48987, 138.76234], ["超市", "セルバ", 35.49024, 138.76427], ["7-11", "セブン-イレブン", 35.49176, 138.76387], ["7-11", "セブン-イレブン", 35.48324, 138.72441], ["7-11", "セブン-イレブン", 35.48542, 138.77678], ["Lawson", "ローソン", 35.48355, 138.72152], ["全家", "ファミリーマート", 35.48181, 138.78129], ["超市", "Welcia", 35.49604, 138.76405], ["7-11", "セブン-イレブン", 35.48241, 138.78145], ["Lawson", "ローソン", 35.49856, 138.75628]], [["7-11", "セブン-イレブン", 34.96909, 139.09785], ["超市", "Welcia", 34.97042, 139.09662], ["超市", "Welcia", 34.96811, 139.0945], ["Lawson", "ローソン", 34.97045, 139.09489], ["Lawson", "ローソン", 34.97122, 139.1012], ["超市", "フードストアあおき", 34.97078, 139.10163], ["7-11", "セブン-イレブン", 34.97204, 139.09221], ["7-11", "セブン-イレブン 伊東ベイサイド店", 34.97088, 139.10331], ["超市", "マックスバリュ 伊東駅前店", 34.97321, 139.09261], ["7-11", "セブン-イレブン", 34.96366, 139.10161], ["全家", "ファミリーマート", 34.96426, 139.09103], ["7-11", "セブン-イレブン", 34.97444, 139.09344], ["其他", "NEWDAYS", 34.97424, 139.09206], ["超市", "max valu", 34.96175, 139.09042]], [["全家", "ファミリーマート 御殿山トラストタワー店", 35.62232, 139.73699], ["超市", "まいばすけっと 北品川駅東店", 35.62229, 139.73972], ["全家", "ファミリーマート", 35.62045, 139.73968], ["全家", "ファミリーマート 北品川店", 35.62192, 139.74032], ["全家", "ファミリーマート", 35.62367, 139.73355], ["其他", "デイリーヤマザキ 京王品川ビル店", 35.62442, 139.73978], ["超市", "まいばすけっと", 35.62088, 139.74095], ["其他", "ミニストップ", 35.61844, 139.73468], ["7-11", "セブン-イレブン 北品川八ッ山通り", 35.62118, 139.74178], ["7-11", "セブン-イレブン", 35.62193, 139.73102], ["Lawson", "ローソン ゲートシティ大崎店", 35.61894, 139.73185], ["超市", "京急ストア 高輪店", 35.62683, 139.73736], ["全家", "ファミリーマート サンズ高輪四丁目店", 35.62673, 139.73513], ["Lawson", "ローソン", 35.61918, 139.73137], ["超市", "成城石井", 35.61924, 139.7313], ["全家", "ファミリーマート 品川グランパサージュ店", 35.62586, 139.74091], ["Lawson", "ローソン", 35.6178, 139.73243], ["全家", "ファミリーマート 新馬場サクセス通り店", 35.61814, 139.74167], ["7-11", "セブン-イレブン 北品川3丁目", 35.61741, 139.74076], ["全家", "ファミリーマート", 35.61928, 139.73041], ["7-11", "セブン-イレブン 新馬場駅前", 35.61704, 139.74135], ["全家", "ファミリーマート", 35.62254, 139.72907], ["7-11", "セブン-イレブン 東五反田2丁目", 35.62498, 139.73001], ["7-11", "セブン-イレブン 品川プリンスホテル", 35.62822, 139.7364], ["超市", "ライフ", 35.62007, 139.72919], ["全家", "ファミリーマート", 35.62052, 139.72898], ["Lawson", "ローソン", 35.62358, 139.72907], ["超市", "スーパー", 35.62059, 139.72893], ["Lawson", "ローソン Natural 品川インターシティ店", 35.62679, 139.74201], ["7-11", "セブン-イレブン 品川イーストワンタワー", 35.62768, 139.74083]]];
+
+/* ============ 天氣 ============ */
+const WXP={"1": [[25.08, 121.23], [25.08, 121.23], [35.78447, 140.3514]], "2": [[36.3726, 140.452], [36.758, 139.5988], [36.83269, 139.71864]], "3": [[36.4977, 138.92], [36.3404, 138.6344], [36.6371, 138.50784]], "4": [[36.399, 138.5725], [35.9047, 138.4306], [35.65878, 138.65102]], "5": [[35.504, 138.6567], [35.5237, 138.7468], [35.4703, 138.7501]], "6": [[35.2443, 139.0208], [35.1468, 138.959], [34.96855, 139.09723]], "7": [[35.251, 139.1535], [35.6251, 139.7756], [35.62187, 139.73676]], "8": [[35.6608, 139.7412], [35.6624, 139.6993], [35.78447, 140.3514]]};
+const CLIM={"1": [["桃園", 17.6, 38], ["桃園", 19.9, 29], ["成田", 9.1, 9]], "2": [["水戶", 6.4, 13], ["日光", 7.2, 33], ["鬼怒川", 4.6, 18]], "3": [["伊香保", 0.6, 11], ["輕井澤", 6.2, 13], ["萬座", -4.6, 20]], "4": [["輕井澤", -1.4, 16], ["清里", 6.2, 13], ["石和", 6.5, 16]], "5": [["西湖", 3.2, 5], ["河口湖", 9.0, 11], ["河口湖", 3.3, 11]], "6": [["箱根", 1.6, 11], ["三島", 11.8, 11], ["伊東", 10.5, 11]], "7": [["小田原", 9.1, 11], ["台場", 11.4, 5], ["品川", 9.4, 11]], "8": [["麻布台", 5.3, 15], ["澀谷", 11.0, 9], ["成田", 8.3, 9]]};
+const WXH=[8,12,18],WXW=[[6,10],[11,15],[17,21]],WXL=['早','午','晚'];
+let WX=null,WXSRC='clim',WXUPD='';
+const wxEmoji=c=>c==null?'':c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌦️':c<=86?'🌨️':'⛈️';
+const wxDate=d=>`2026-12-${String(4+d).padStart(2,'0')}`;
+function wxFromApi(arr){if(!Array.isArray(arr))arr=[arr];const out={};let i=0;
+  for(let d=1;d<=8;d++){out[d]=[];for(let k=0;k<3;k++){const h=arr[i++].hourly,date=wxDate(d),idx={};
+    h.time.forEach((t,j)=>{if(t.startsWith(date))idx[+t.slice(11,13)]=j});
+    const j=idx[WXH[k]];if(j==null||h.temperature_2m[j]==null){out[d].push(null);continue}
+    const pp=[],wc=[];for(let x=WXW[k][0];x<=WXW[k][1];x++){const q=idx[x];if(q==null)continue;if(h.precipitation_probability[q]!=null)pp.push(h.precipitation_probability[q]);if(h.weather_code[q]!=null)wc.push(h.weather_code[q])}
+    out[d].push([Math.round(h.temperature_2m[j]*10)/10,pp.length?Math.max(...pp):null,wc.length?Math.max(...wc):null]);}}
+  return out}
+function renderWx(){
+  document.querySelectorAll('.wx[data-d]').forEach(el=>{const d=+el.dataset.d,fc=WX&&WX[d];let anyFc=false;
+    const cells=[0,1,2].map(k=>{const c=CLIM[d][k],f=fc&&fc[k];if(f)anyFc=true;
+      const t=f?f[0]:c[1],p=f?f[1]:c[2];
+      return `<div class="c"><div class="p"><b>${WXL[k]}</b> ${c[0]}</div><div class="e">${f?wxEmoji(f[2]):(p>=30?'🌂':'🌡️')}</div><div class="t ${t<=0?'cold':''}">${Math.round(t)}°</div><div class="r">☔ ${p==null?'–':p+'%'}</div>${f?'':'<div class="s">往年平均</div>'}</div>`}).join('');
+    const src=anyFc?`<span class="src live">${WXSRC==='live'?'即時預報':'預報 '+WXUPD}</span>`:`<span class="src">往年平均・約出發前 15 天起改為預報</span>`;
+    el.innerHTML=`<div class="wh"><b>天氣 ${WXH.map(h=>h+':00').join(' / ')}</b>${src}</div><div class="cells">${cells}</div>`;});
+}
+async function loadWx(){
+  renderWx();
+  const pts=[];for(let d=1;d<=8;d++)pts.push(...WXP[d]);
+  const ctl=new AbortController();setTimeout(()=>ctl.abort(),9000);
+  try{const u='https://api.open-meteo.com/v1/forecast?latitude='+pts.map(p=>p[0]).join(',')+'&longitude='+pts.map(p=>p[1]).join(',')+'&hourly=temperature_2m,precipitation_probability,weather_code&timezone=Asia%2FTokyo&forecast_days=16';
+    const r=await fetch(u,{signal:ctl.signal});if(!r.ok)throw 0;WX=wxFromApi(await r.json());WXSRC='live';renderWx();return;}catch(e){}
+  try{const r=await fetch('weather.json?'+Date.now());if(!r.ok)throw 0;const j=await r.json();WX=j.days;WXSRC='file';
+    const u=new Date(j.updated);WXUPD=`${u.getMonth()+1}/${u.getDate()} 更新`;renderWx();}catch(e){}
+}
+
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -484,7 +533,7 @@ DAYS.forEach(day=>{
        ${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">在 Google 地圖開啟 ↗</a>`:''}</div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
-    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div></div>
+    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="${day.d}"></div></div>
     <div class="map"></div>
     <div class="maplinks"><span>點數字跳到該景點</span><a target="_blank" rel="noopener" href="${dirUrl([day.start.q||HOTELS[day.hotel-1].q,...withLL.map(o=>o.s.q),h.q])}">整天路線・Google ↗</a></div>
     <div class="carousel"><div class="track">${cards}</div><button class="arr l" aria-label="上一個">‹</button><button class="arr r" aria-label="下一個">›</button>
@@ -509,7 +558,7 @@ DAYS.forEach(day=>{
   ovl.insertAdjacentHTML('beforeend',`<a href="#d8"><span class="dd" style="color:var(--red)">D8<small>12/12</small></span><span><span class="ss">${d.short}</span><br><span class="hh">夜機返台</span></span><span class="ar">›</span></a>`);
   const el=document.createElement('div');el.className='view';el.id=key;
   el.innerHTML=`<div class="wrap">
-   <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}<br>${d.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div></div>
+   <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}<br>${d.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="8"></div></div>
    <div class="map"></div>
    <div class="maplinks"><span>點數字跳到該站</span><a target="_blank" rel="noopener" href="${dirUrl(d.stops.map(s=>s.q))}">整天路線・Google ↗</a></div>
    <div class="banner tips4">${d.tips.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('')}</div>
@@ -546,6 +595,7 @@ document.addEventListener('click',e=>{
 
 window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
 show(location.hash.slice(1)||'overview');
+loadWx();
 </script>
 </body>
 </html>
