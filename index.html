@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>東京深度八日｜冬日旅遊小書</title>
+<meta name="description" content="2026.12.05–12.12 日光・伊香保・輕井澤・清里・富士五湖・箱根・三島・東京 八日行程，每個景點附簡圖與地圖。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{
+  --navy:#17304f; --navy2:#24466e; --red:#c8413b; --bg:#eef3f8; --card:#fff;
+  --ink:#1c2b3d; --muted:#5b6b7e; --line:#d5dfea; --ice:#dbe7f2;
+  --c711:#fde3d3; --c711t:#a4421b; --law:#dbe8fb; --lawt:#1f4f9a; --fm:#dcf3e3; --fmt:#1f7a43; --sm:#ece3fa; --smt:#5f3aa4; --gr:#e7ebf0; --grt:#46566a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;line-height:1.65;font-size:15px}
+a{color:inherit}
+.serif{font-family:"Noto Serif TC",serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+
+/* hero */
+header.hero{background:var(--navy);color:#fff;padding:44px 0 36px;position:relative;overflow:hidden}
+.hero .eyebrow{letter-spacing:.22em;font-size:12px;color:#9fb6d3;font-weight:500}
+.hero h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(32px,7vw,56px);line-height:1.15;margin:10px 0 12px}
+.hero p{color:#d6e2f0;max-width:640px;margin:0 0 18px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{background:var(--navy2);border-radius:999px;padding:5px 14px;font-size:13px}
+.pill.red{background:var(--red);font-weight:700}
+.flake{position:absolute;right:-20px;top:10px;width:260px;opacity:.18}
+
+/* day nav */
+nav.days{position:sticky;top:0;z-index:1000;background:rgba(238,243,248,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav.days .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+nav.days a{flex:none;text-decoration:none;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--navy)}
+nav.days a:hover{background:var(--navy);color:#fff}
+
+section{padding:28px 0 8px}
+h2.sec{font-family:"Noto Serif TC",serif;font-size:26px;margin:0 0 14px;color:var(--navy)}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:20px 0 0;position:relative}
+.info .box{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 2px 10px rgba(23,48,79,.07)}
+.info .lab{font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:700}
+.info .big{font-weight:700;font-size:17px}
+.info .sm{font-size:13px;color:var(--muted)}
+
+table.ov{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:14px}
+table.ov th,table.ov td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+table.ov th{background:var(--navy);color:#fff;font-weight:500;font-size:13px}
+table.ov td:first-child{font-weight:700;white-space:nowrap;color:var(--navy)}
+table.ov tr:last-child td{border-bottom:0}
+table.ov a{text-decoration:none}
+.tscroll{overflow-x:auto;border-radius:14px}
+
+.map{height:340px;border-radius:14px;overflow:hidden;background:var(--ice);border:1px solid var(--line);z-index:0}
+.maplinks{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px;color:var(--muted);margin:6px 2px 0}
+.maplinks a{font-weight:700;color:var(--navy)}
+
+/* day */
+.day{padding-top:40px}
+.dayhead{border-bottom:3px solid var(--navy);padding-bottom:12px;margin-bottom:14px}
+.daytag{color:var(--red);font-weight:700;letter-spacing:.12em;font-size:13px}
+.dayhead h2{font-family:"Noto Serif TC",serif;font-size:clamp(24px,5vw,34px);margin:4px 0 6px;color:var(--navy);line-height:1.25}
+.meals{font-size:13px;color:var(--muted)}
+.meals b{color:var(--ink);font-weight:500}
+.meals span{margin-right:14px;display:inline-block}
+
+.spot{background:#fff;border-radius:16px;margin:14px 0;overflow:hidden;box-shadow:0 2px 10px rgba(23,48,79,.06);display:grid;grid-template-columns:340px 1fr}
+.spot .vis{position:relative;background:var(--ice);min-height:220px;display:flex;align-items:center}
+.spot .vis svg{display:block;width:100%;height:auto}
+.spot .vis .mini{position:absolute;inset:0;display:none}
+.spot .vis.show-map .mini{display:block}
+.spot .vis.show-map svg{visibility:hidden}
+.seg{position:absolute;left:10px;bottom:10px;z-index:500;display:flex;background:rgba(255,255,255,.92);border-radius:999px;padding:3px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button{border:0;background:none;font:inherit;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;cursor:pointer;color:var(--navy)}
+.seg button.on{background:var(--navy);color:#fff}
+.spot .txt{padding:16px 18px}
+.spot h3{margin:0;font-family:"Noto Serif TC",serif;font-size:21px;color:var(--navy);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.num{flex:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-family:"Noto Sans TC";font-size:14px;font-weight:700}
+.spot .sub{font-size:13px;color:var(--muted);font-family:"Noto Sans TC";font-weight:400}
+.spot p{margin:8px 0 10px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:14px}
+.kv dt{color:var(--red);font-weight:700}
+.kv dd{margin:0}
+.gm{display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:var(--navy);text-decoration:none;border-bottom:1px dashed var(--navy)}
+
+.banner{background:var(--navy);color:#fff;border-radius:14px;padding:12px 16px;margin:12px 0;font-size:14px}
+.banner b{color:#ffb4a2;margin-right:8px}
+
+.supply{background:#fff;border:2px solid var(--navy);border-radius:16px;padding:14px 16px;margin:16px 0}
+.supply .top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.supply .top b{font-size:15px}
+.supply .top span{font-size:12px;color:var(--muted)}
+.srow{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.srow:last-of-type{border-bottom:0}
+.srow .d,.srow .h{font-size:13px;color:var(--muted);white-space:nowrap}
+.srow a{text-decoration:none;border-bottom:1px dashed #9fb0c4}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.t711{background:var(--c711);color:var(--c711t)}.tlaw{background:var(--law);color:var(--lawt)}.tfm{background:var(--fm);color:var(--fmt)}.tsm{background:var(--sm);color:var(--smt)}.tgr{background:var(--gr);color:var(--grt)}
+.warn{color:var(--red);font-weight:700}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{background:var(--navy);color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:7px 14px;border-radius:9px}
+
+/* day 8 timeline */
+.stops{list-style:none;margin:0;padding:0}
+.stop{display:grid;grid-template-columns:200px 1fr;gap:0;background:#fff;border-radius:14px;margin:10px 0;overflow:hidden;box-shadow:0 2px 10px rgba(23,48,79,.06)}
+.stop svg{display:block;width:100%;height:100%}
+.stop .b{padding:12px 16px}
+.stop .t{font-size:13px;color:var(--muted);font-weight:700}
+.stop h4{margin:2px 0 4px;font-size:17px;color:var(--navy)}
+.stop h4 a{text-decoration:none;border-bottom:1px dashed var(--navy)}
+.stop .stay{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--fm);color:var(--fmt);margin-left:6px;vertical-align:2px}
+.stop .nx{font-size:12px;color:var(--muted);margin-top:4px}
+.stop p{margin:0;font-size:14px}
+.num.r{background:var(--red)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tip{background:#fff;border-radius:14px;padding:14px 18px}
+.tip h3{font-family:"Noto Serif TC",serif;margin:0 0 6px;color:var(--navy)}
+.tip p{margin:4px 0;font-size:14px}
+body{overflow-x:hidden}.spot>*,.stop>*,.srow>*,.info>*{min-width:0}.spot p,.kv dd,.stop p{overflow-wrap:anywhere}
+footer{color:var(--muted);font-size:12px;padding:30px 0 50px}
+
+.lf-num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font:700 13px "Noto Sans TC";border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.lf-num.sq{border-radius:7px;background:#fff;color:var(--navy);border:2px solid var(--navy)}
+.leaflet-tooltip{font-family:"Noto Sans TC";font-weight:700}
+
+@media (max-width:720px){
+  .d8tips{grid-template-columns:1fr!important}
+  .spot{grid-template-columns:1fr}
+  .spot .vis{min-height:0}
+  .stop{grid-template-columns:1fr}
+  .stop svg{height:120px}
+  .grid2{grid-template-columns:1fr}
+  .map{height:280px}
+  .srow{grid-template-columns:auto 1fr auto;}
+  .srow .h{grid-column:2/4;margin-top:-4px}
+}
+@media print{nav.days{display:none}.seg{display:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="flake" viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><g id="arm"><path d="M50 50V8M50 20l-8-8M50 20l8-8M50 32l-10-8M50 32l10-8"/></g><use href="#arm" transform="rotate(60 50 50)"/><use href="#arm" transform="rotate(120 50 50)"/><use href="#arm" transform="rotate(180 50 50)"/><use href="#arm" transform="rotate(240 50 50)"/><use href="#arm" transform="rotate(300 50 50)"/></svg>
+  <div class="wrap">
+    <div class="eyebrow">WINTER TRAVEL BOOKLET · 2026.12.05 – 12.12</div>
+    <h1>東京深度八日<br>冬日旅遊小書</h1>
+    <p>日光世界遺產・伊香保・輕井澤・清里・富士五湖・箱根・三島大吊橋・關東五溫泉巡禮，最後一天東京潮流朝聖。每個景點都附手繪簡圖，點「地圖」可切換到真實地圖。</p>
+    <div class="pills"><span class="pill red">團號 26JTD05JXS</span><span class="pill">星宇航空 JX804 / JX805</span><span class="pill">雄獅旅遊</span></div>
+  </div>
+</header>
+
+<nav class="days"><div class="wrap" id="daynav"><a href="#overview">總覽</a></div></nav>
+
+<main class="wrap">
+  <section id="overview" style="padding-top:0">
+    <div class="info">
+      <div class="box"><div class="lab">集合</div><div class="big">12/05（六）12:30</div><div class="sm">桃園機場第一航廈・星宇 5 號櫃台</div></div>
+      <div class="box"><div class="lab">去程 JX804</div><div class="big">15:00 桃園 → 成田</div><div class="sm">約 19:00 抵達成田</div></div>
+      <div class="box"><div class="lab">回程 JX805</div><div class="big">12/12（六）20:10</div><div class="sm">成田起飛，約 23:20 抵達桃園</div></div>
+    </div>
+
+    <h2 class="sec" style="margin-top:28px">八日行程一覽</h2>
+    <div class="tscroll"><table class="ov" id="ovtable"><tr><th>日期</th><th>主要景點</th><th>住宿</th></tr></table></div>
+
+    <h2 class="sec" style="margin-top:28px">八晚住宿路線</h2>
+    <div class="map" id="map-ov"></div>
+    <div class="maplinks"><span>真實地圖（OpenStreetMap），可縮放拖曳；點標記看飯店名稱</span><a id="ovgm" target="_blank" rel="noopener">整趟路線・Google 地圖 ↗</a></div>
+  </section>
+
+  <div id="days"></div>
+
+  <section id="tips">
+    <h2 class="sec">補給站總覽＋冬季須知</h2>
+    <div class="tscroll"><table class="ov">
+      <tr><th>晚上住哪</th><th>7-11</th><th>Lawson</th><th>全家</th><th>超市</th></tr>
+      <tr><td>D1 成田</td><td>約 250m</td><td>—</td><td>飯店 1F・24h</td><td>—（約 3km）</td></tr>
+      <tr><td>D2 鬼怒川</td><td>約 1.2km</td><td>約 250m・24h</td><td>—</td><td>1.7km・週日休</td></tr>
+      <tr style="background:#fbecea"><td class="warn">D3 萬座 ！</td><td>—</td><td>—</td><td>—</td><td>只有館內商店（到 20:00）</td></tr>
+      <tr><td>D4 石和溫泉</td><td>約 500m・24h</td><td>約 1km</td><td>約 1.8km</td><td>AEON 1.5km</td></tr>
+      <tr style="background:#fbecea"><td class="warn">D5 河口湖 ！</td><td>約 2.4km</td><td>約 3.5km</td><td>約 2.3km</td><td>MaxValu 2.4km</td></tr>
+      <tr><td>D6 伊東</td><td>對面 70m・24h</td><td>約 250m</td><td>約 800m</td><td>約 500m</td></tr>
+      <tr><td>D7 品川</td><td>約 450m</td><td>約 1.1km</td><td>旁邊 50m</td><td>約 350m</td></tr>
+    </table></div>
+    <p style="font-size:13px;color:var(--muted)">！這兩晚出門不方便：萬座前一站（輕井澤王子購物廣場）、河口湖白天行程中，先把零食飲料買好。</p>
+    <div class="grid2">
+      <div class="tip"><h3>冬季穿搭</h3><p>奧日光、清里、萬座都在標高 1,200m 以上，12 月經常是零下。洋蔥式穿法：發熱衣＋毛衣＋防風羽絨外套。</p><p>防滑鞋底（石階、參道、湖邊會結冰）、手套、毛帽、暖暖包、護唇膏與乳液。</p></div>
+      <div class="tip"><h3>溫泉禮儀</h3><p>大浴場全裸入浴，先沖洗再入池；毛巾不放進池裡。</p><p>空腹或喝酒後別泡，每次約 15 分鐘為限；有刺青不能進大浴場。</p><p>硫磺泉會讓銀飾變黑，先拿下首飾。</p></div>
+      <div class="tip"><h3>搭機規定</h3><p>託運 1 件 23kg、手提 1 件 7kg；回程買很多記得預留重量。</p><p>行動電源每人最多 2 個，機上禁用、禁充電；隨身液體每瓶 100ml 以下，裝透明袋。</p></div>
+      <div class="tip"><h3>超商必買</h3><p><span class="tag t711">7-11</span> 飯糰、7-Premium 甜點</p><p><span class="tag tlaw">Lawson</span> からあげクン炸雞塊、Uchi Café 甜點</p><p><span class="tag tfm">全家</span> ファミチキ炸雞、Famima 咖啡</p><p style="color:var(--muted);font-size:13px">領隊與送機人員電話請看紙本小書或說明會資料（網頁公開，不放電話）。</p></div>
+    </div>
+  </section>
+
+  <footer>簡圖為手繪示意，非實景照片。地圖座標為景點大致位置，實際集合點以領隊為準。超商與超市的位置、營業時間依 Google 地圖資料（2026 年 11 月查詢），距離為直線估算；營業時間可能變動，出發前請再確認。地圖底圖 © OpenStreetMap contributors。</footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+/* ============ 簡圖（SVG）元件 ============ */
+let gid=0;
+const W=320,H=180;
+const sky=(t,b)=>{const id='g'+(++gid);return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#${id})"/>`};
+const ground=(y,c)=>`<rect x="0" y="${y}" width="${W}" height="${H-y}" fill="${c}"/>`;
+const mtn=(cx,by,w,h,c,snow=0)=>{let s=`<polygon points="${cx-w/2},${by} ${cx},${by-h} ${cx+w/2},${by}" fill="${c}"/>`;if(snow){const sh=h*snow,sw=w/2*snow;s+=`<polygon points="${cx-sw},${by-h+sh} ${cx},${by-h} ${cx+sw},${by-h+sh} ${cx+sw*.45},${by-h+sh*.78} ${cx+sw*.1},${by-h+sh*1.05} ${cx-sw*.35},${by-h+sh*.8}" fill="#fff"/>`}return s};
+const fuji=(cx,by,w,h)=>{const t=w*.08,k=.4,y2=by-h+h*k,x2=t+(w/2-t)*k;return `<polygon points="${cx-w/2},${by} ${cx-t},${by-h} ${cx+t},${by-h} ${cx+w/2},${by}" fill="#4f74a3"/><path d="M${cx-t},${by-h}L${cx+t},${by-h}L${cx+x2},${y2}L${cx+x2*.62},${y2-7}L${cx+x2*.3},${y2+4}L${cx},${y2-6}L${cx-x2*.35},${y2+5}L${cx-x2*.7},${y2-5}L${cx-x2},${y2}Z" fill="#fff"/>`};
+const hills=(by,c,amp=10,ph=0)=>{let d=`M0,${H}L0,${by}`;for(let x=0;x<=W;x+=40){d+=` Q${x+20},${by-amp*Math.sin((x+ph)/50)-amp} ${x+40},${by}`}return `<path d="${d}L${W},${H}Z" fill="${c}"/>`};
+const lake=(y,h,c='#7fb0d6')=>{let s=`<rect x="0" y="${y}" width="${W}" height="${h}" fill="${c}"/>`;for(let i=0;i<7;i++){const wy=y+5+i*(h-8)/7,wx=15+((i*97)%270);s+=`<path d="M${wx},${wy}q6,-3 12,0t12,0" stroke="#fff" stroke-opacity=".65" fill="none" stroke-width="1.3"/>`}return s};
+const torii=(x,by,s,c='#c8413b')=>{const w=44*s,h=46*s,p=4.5*s;return `<g><rect x="${x-w*.36}" y="${by-h}" width="${p}" height="${h}" fill="${c}"/><rect x="${x+w*.36-p}" y="${by-h}" width="${p}" height="${h}" fill="${c}"/><rect x="${x-w*.45}" y="${by-h+11*s}" width="${w*.9}" height="${3.5*s}" fill="${c}"/><path d="M${x-w/2-5*s},${by-h-4*s}Q${x},${by-h+2*s} ${x+w/2+5*s},${by-h-4*s}L${x+w/2+3*s},${by-h+2*s}Q${x},${by-h+6*s} ${x-w/2-3*s},${by-h+2*s}Z" fill="#222"/><rect x="${x-w/2}" y="${by-h+2*s}" width="${w}" height="${3.5*s}" fill="${c}"/></g>`};
+const cedar=(x,by,h,c='#2e5a48',snow=true)=>{const w=h*.42;let s=`<rect x="${x-1.5}" y="${by-h*.15}" width="3" height="${h*.15}" fill="#5b3b25"/>`;for(let i=0;i<3;i++){const ty=by-h+i*h*.25,bw=w*(.55+i*.25);s+=`<polygon points="${x},${ty} ${x-bw/2},${ty+h*.42} ${x+bw/2},${ty+h*.42}" fill="${c}"/>`;if(snow)s+=`<polygon points="${x},${ty} ${x-bw*.16},${ty+h*.12} ${x+bw*.16},${ty+h*.12}" fill="#fff"/>`}return s};
+const bareTree=(x,by,h,c='#6b4a35')=>`<g stroke="${c}" stroke-linecap="round" fill="none"><path d="M${x},${by}L${x},${by-h*.55}" stroke-width="3"/><path d="M${x},${by-h*.5}L${x-h*.3},${by-h*.9}M${x},${by-h*.55}L${x+h*.28},${by-h}M${x},${by-h*.7}L${x+h*.05},${by-h*1.05}M${x-h*.16},${by-h*.7}L${x-h*.36},${by-h*.72}M${x+h*.15},${by-h*.78}L${x+h*.34},${by-h*.74}" stroke-width="1.6"/></g>`;
+const bamboo=(x,by,h)=>{let s=`<g stroke="#5f9b5a" stroke-width="3">`;for(let i=0;i<4;i++){const xx=x+i*7;s+=`<line x1="${xx}" y1="${by}" x2="${xx+1}" y2="${by-h+i*6}"/>`}s+=`</g><g stroke="#3f7a3c" stroke-width="1">`;for(let i=0;i<4;i++)for(let j=1;j<5;j++){const xx=x+i*7,yy=by-j*h/5;s+=`<line x1="${xx-2}" y1="${yy}" x2="${xx+2}" y2="${yy}"/>`}return s+'</g>'};
+const hall=(x,by,w,h,body='#f3ead8',roof='#33475f',pillar='')=>{const rh=h*.45;let s=`<rect x="${x-w/2}" y="${by-h+rh*.6}" width="${w}" height="${h-rh*.6}" fill="${body}"/>`;if(pillar){for(let i=0;i<=4;i++)s+=`<rect x="${x-w/2+i*(w-3)/4}" y="${by-h+rh*.6}" width="3" height="${h-rh*.6}" fill="${pillar}"/>`}s+=`<path d="M${x-w/2-w*.16},${by-h+rh}Q${x-w*.32},${by-h+rh*.55} ${x-w*.3},${by-h}L${x+w*.3},${by-h}Q${x+w*.32},${by-h+rh*.55} ${x+w/2+w*.16},${by-h+rh}Z" fill="${roof}"/>`;return s};
+const steps=(x,by,wb,wt,h,n=10,c='#b7aa95')=>{let s=`<polygon points="${x-wb/2},${by} ${x-wt/2},${by-h} ${x+wt/2},${by-h} ${x+wb/2},${by}" fill="${c}"/>`;for(let i=1;i<n;i++){const t=i/n,yy=by-h*t,ww=wb+(wt-wb)*t;s+=`<line x1="${x-ww/2}" y1="${yy}" x2="${x+ww/2}" y2="${yy}" stroke="#8c7f6b" stroke-width="1"/>`}return s};
+const steam=(x,y,h=40,o=.85)=>`<path d="M${x},${y}c-7,-${h*.2} 7,-${h*.3} 0,-${h*.5}c-7,-${h*.2} 7,-${h*.3} 0,-${h*.5}" stroke="#fff" stroke-opacity="${o}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+const lantern=(x,y,s=1)=>`<rect x="${x-4*s}" y="${y}" width="${8*s}" height="${11*s}" rx="${3*s}" fill="#e3594b"/><rect x="${x-4*s}" y="${y+4*s}" width="${8*s}" height="${2*s}" fill="#ffd27a"/>`;
+const bridge=(x1,x2,dy,th)=>{let s=`<rect x="${x1-3}" y="${dy-th}" width="6" height="${th+30}" fill="#e8edf3" stroke="#8aa0b8"/><rect x="${x2-3}" y="${dy-th}" width="6" height="${th+30}" fill="#e8edf3" stroke="#8aa0b8"/><path d="M${x1-60},${dy}L${x1},${dy-th}Q${(x1+x2)/2},${dy+th*0.1} ${x2},${dy-th}L${x2+60},${dy}" stroke="#46566a" stroke-width="2" fill="none"/>`;for(let x=x1+12;x<x2;x+=12){const t=(x-x1)/(x2-x1),cy=dy-th+4*(th*1.1)*t*(1-t)*.98;s+=`<line x1="${x}" y1="${cy}" x2="${x}" y2="${dy}" stroke="#46566a" stroke-width=".8"/>`}return s+`<rect x="0" y="${dy}" width="${W}" height="4" fill="#46566a"/>`};
+const ship=(x,y,s=1)=>`<g transform="translate(${x},${y}) scale(${s})"><rect x="-6" y="-58" width="3" height="50" fill="#5b3b25"/><rect x="14" y="-48" width="3" height="40" fill="#5b3b25"/><path d="M-26,-50Q-4,-42 -26,-14Z" fill="#f6efe1" stroke="#a98d64"/><path d="M-2,-54Q14,-38 -2,-14Z" fill="#f6efe1" stroke="#a98d64"/><path d="M18,-44Q30,-30 18,-14Z" fill="#f6efe1" stroke="#a98d64"/><path d="M-40,-10L40,-10L30,8L-34,8Z" fill="#8c2f2a"/><rect x="-36" y="-14" width="72" height="5" fill="#d9a441"/><path d="M-4,-58l10,3l-10,3Z" fill="#c8413b"/></g>`;
+const train=(x,y,s=1,c='#f2f5f7',st='#2a7f62')=>`<g transform="translate(${x},${y}) scale(${s})"><rect x="0" y="0" width="80" height="26" rx="6" fill="${c}" stroke="#46566a"/><rect x="0" y="16" width="80" height="4" fill="${st}"/><rect x="84" y="0" width="70" height="26" rx="6" fill="${c}" stroke="#46566a"/><rect x="84" y="16" width="70" height="4" fill="${st}"/>${[8,24,40,56,92,108,124,140].map(v=>`<rect x="${v}" y="5" width="11" height="8" fill="#5c7ea6"/>`).join('')}${[14,66,98,140].map(v=>`<circle cx="${v}" cy="28" r="4" fill="#333"/>`).join('')}</g>`;
+const castle=(x,by,s=1)=>`<g transform="translate(${x},${by}) scale(${s})"><polygon points="-46,0 -38,-22 38,-22 46,0" fill="#9aa3ad"/><path d="M-38,-22h76" stroke="#7d8690"/>${hall(0,-22,64,26,'#fbfbf8','#3c4a5a')}${hall(0,-44,48,24,'#fbfbf8','#3c4a5a')}${hall(0,-64,32,22,'#fbfbf8','#3c4a5a')}<path d="M-6,-86q-4,-4 -2,-8M6,-86q4,-4 2,-8" stroke="#d9a441" stroke-width="2.5" fill="none"/></g>`;
+const thatch=(x,by,s=1)=>`<g transform="translate(${x},${by}) scale(${s})"><rect x="-26" y="-22" width="52" height="22" fill="#e9dcc4"/><rect x="-26" y="-22" width="52" height="22" fill="none" stroke="#5b3b25" stroke-width="1.5"/><rect x="-6" y="-16" width="12" height="16" fill="#5b3b25"/><polygon points="-34,-20 0,-62 34,-20" fill="#8b6a3e"/><polygon points="-10,-50 0,-62 10,-50" fill="#5b3b25"/><path d="M-34,-20L34,-20" stroke="#5b3b25" stroke-width="2"/><polygon points="-22,-36 0,-62 22,-36 0,-44" fill="#fff" opacity=".85"/></g>`;
+const church=(x,by,s=1)=>`<g transform="translate(${x},${by}) scale(${s})"><rect x="-6" y="-92" width="12" height="40" fill="#7a5a3f"/><polygon points="-9,-90 0,-118 9,-90" fill="#3a4654"/><path d="M0,-118v-10M-4,-124h8" stroke="#3a4654" stroke-width="2"/><rect x="-30" y="-40" width="60" height="40" fill="#efe5d4" stroke="#7a5a3f"/><polygon points="-40,-36 0,-80 40,-36" fill="#4a5664"/><path d="M-30,-40L30,-40" stroke="#7a5a3f" stroke-width="2"/><rect x="-6" y="-20" width="12" height="20" rx="6" fill="#7a5a3f"/><path d="M-22,-30v12M22,-30v12" stroke="#7a5a3f" stroke-width="3"/></g>`;
+const carousel=(x,by,s=1)=>`<g transform="translate(${x},${by}) scale(${s})"><rect x="-40" y="-4" width="80" height="6" fill="#c9b48b"/>${[-30,-10,10,30].map(v=>`<line x1="${v}" y1="-4" x2="${v}" y2="-44" stroke="#d9a441" stroke-width="2"/><ellipse cx="${v}" cy="${v%20?-18:-24}" rx="7" ry="5" fill="#fff" stroke="#8c6b4a"/>`).join('')}<polygon points="-46,-44 0,-72 46,-44" fill="#c8413b"/>${[-34,-12,12].map(v=>`<polygon points="${v},-44 0,-72 ${v+12},-44" fill="#fff"/>`).join('')}<circle cx="0" cy="-74" r="3" fill="#d9a441"/></g>`;
+const xmas=(x,by,h)=>`<rect x="${x-2}" y="${by-h*.12}" width="4" height="${h*.12}" fill="#5b3b25"/>${[0,1,2].map(i=>`<polygon points="${x},${by-h+i*h*.22} ${x-h*(.18+i*.08)},${by-h*.42+i*h*.12} ${x+h*(.18+i*.08)},${by-h*.42+i*h*.12}" fill="#2f6b45"/>`).join('')}<polygon points="${x},${by-h-7} ${x+3},${by-h-1} ${x-3},${by-h-1}" fill="#ffd35a"/>${[[-.1,.55],[.12,.5],[-.18,.75],[.15,.78],[0,.68],[.05,.35]].map(([a,b])=>`<circle cx="${x+a*h}" cy="${by-h+b*h}" r="2.2" fill="${b>.6?'#e3594b':'#ffd35a'}"/>`).join('')}`;
+const cable=(x1,y1,x2,y2,t=.5)=>{const cx=x1+(x2-x1)*t,cy=y1+(y2-y1)*t;return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#46566a" stroke-width="1.4"/><line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy+8}" stroke="#46566a"/><rect x="${cx-12}" y="${cy+8}" width="24" height="16" rx="3" fill="#c8413b"/><rect x="${cx-9}" y="${cy+11}" width="18" height="6" fill="#dbe7f2"/>`};
+const plane=(x,y,s=1)=>`<g transform="translate(${x},${y}) scale(${s}) rotate(-12)"><path d="M-30,0Q-30,-5 -24,-5L24,-5Q34,-4 36,0Q34,4 24,5L-24,5Q-30,5 -30,0Z" fill="#fff" stroke="#8aa0b8"/><path d="M-4,-4L-14,-24L-6,-24L10,-4ZM-4,4L-14,24L-6,24L10,4ZM-24,-4L-30,-14L-25,-14L-18,-4Z" fill="#c9a86a"/><g fill="#5c7ea6">${[-14,-8,-2,4,10,16].map(v=>`<circle cx="${v}" cy="-1" r="1.4"/>`).join('')}</g></g>`;
+const snow=(n=26,seed=1)=>{let s='',r=seed*9301;for(let i=0;i<n;i++){r=(r*9301+49297)%233280;const x=r/233280*W;r=(r*9301+49297)%233280;const y=r/233280*H;s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(1+i%3*.6).toFixed(1)}" fill="#fff" opacity=".85"/>`}return s};
+const sun=(x,y,r=14,c='#ffd98a')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`;
+const bldg=(x,by,w,h,c='#dfe6ee',win='#9cb4cf',rows=4,cols=5)=>{let s=`<rect x="${x}" y="${by-h}" width="${w}" height="${h}" fill="${c}"/>`;for(let r=0;r<rows;r++)for(let k=0;k<cols;k++)s+=`<rect x="${x+6+k*(w-12)/cols}" y="${by-h+6+r*(h-14)/rows}" width="${(w-12)/cols-4}" height="${(h-14)/rows-5}" fill="${win}"/>`;return s};
+const txt=(x,y,t,sz=12,c='#17304f',w=700,a='middle')=>`<text x="${x}" y="${y}" font-size="${sz}" fill="${c}" font-weight="${w}" text-anchor="${a}" font-family="Noto Sans TC,sans-serif">${t}</text>`;
+const ice=(x,y,n=5)=>{let s='';for(let i=0;i<n;i++){const xx=x+i*14,h=10+(i*7)%14;s+=`<path d="M${xx},${y}q3,-${h} 7,-${h*.6}q3,${h*.2} 5,${h*.6}Z" fill="#f4fbff" stroke="#b8d3e8"/>`}return s};
+const egg=(x,y,s=1)=>`<ellipse cx="${x}" cy="${y}" rx="${8*s}" ry="${10*s}" fill="#2b2b2b"/><ellipse cx="${x-2.5*s}" cy="${y-4*s}" rx="${2*s}" ry="${3*s}" fill="#fff" opacity=".35"/>`;
+const bowl=(x,y)=>`<path d="M${x-22},${y}Q${x},${y+24} ${x+22},${y}Z" fill="#8c2f2a"/><path d="M${x-18},${y-1}q6,-6 12,0t12,0t12,0" stroke="#f4ecd6" stroke-width="3" fill="none"/><line x1="${x+6}" y1="${y-26}" x2="${x+20}" y2="${y-2}" stroke="#b58a52" stroke-width="2"/><line x1="${x+12}" y1="${y-28}" x2="${x+24}" y2="${y-4}" stroke="#b58a52" stroke-width="2"/>`;
+const svg=(parts,h=H)=>`<svg viewBox="0 0 ${W} ${h}" preserveAspectRatio="xMidYMid slice" role="img">${parts.join('')}</svg>`;
+
+/* 每個景點的簡圖 */
+const SCENES={
+  narita:()=>svg([sky('#26446d','#e9a27a'),sun(260,120,18,'#ffcf8a'),ground(140,'#55606d'),`<rect x="0" y="152" width="${W}" height="6" fill="#3d4652"/>`,...[20,70,120,170,220,270].map(x=>`<rect x="${x}" y="154" width="24" height="2" fill="#fff"/>`).join(''),`<path d="M30,140L40,112L180,112L190,140Z" fill="#dfe6ee"/><rect x="40" y="112" width="140" height="6" fill="#8aa0b8"/>`,bldg(46,140,128,22,'#e9eef4','#7fa2c8',1,8),`<rect x="210" y="92" width="8" height="48" fill="#dfe6ee"/><rect x="202" y="84" width="24" height="12" rx="2" fill="#a5c2e0"/>`,plane(110,60,1.3),bldg(240,140,50,40,'#f4efe6','#e9b56a',4,4),txt(265,96,'宿',12,'#17304f')]),
+  kairakuen:()=>svg([sky('#cfe0ef','#f2f6fa'),lake(128,52,'#8fb7d8'),ground(120,'#c9d9c2'),`<rect x="0" y="120" width="${W}" height="10" fill="#c9d9c2"/>`,hall(150,122,70,34,'#f1e6cf','#3e4c3a'),hall(150,90,40,24,'#f1e6cf','#3e4c3a'),bareTree(40,124,70),bareTree(80,128,50),bareTree(240,124,60),...[[34,64],[52,72],[24,82],[90,90],[232,72],[256,66],[246,84]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#e889a4"/>`),bamboo(276,126,90),txt(150,170,'千波湖',11,'#fff',500)]),
+  toshogu:()=>svg([sky('#bcd2e6','#eef3f8'),cedar(22,170,150,'#294f3f'),cedar(60,170,120,'#2e5a48'),cedar(270,170,140,'#294f3f'),cedar(300,170,160,'#2e5a48'),ground(152,'#e9eef2'),`<rect x="100" y="140" width="120" height="14" fill="#cbb98f"/>`,hall(160,140,96,46,'#fff7e6','#2b3640','#c8413b'),`<rect x="128" y="104" width="64" height="8" fill="#d9a441"/>`,hall(160,104,70,30,'#fff7e6','#2b3640','#d9a441'),`<path d="M140,74q-4,-6 0,-10M180,74q4,-6 0,-10" stroke="#d9a441" stroke-width="3" fill="none"/>`,`<rect x="150" y="118" width="20" height="22" fill="#2b3640"/>`,snow(18,3)]),
+  chuzenji:()=>svg([sky('#9fbcd9','#e8f0f7'),mtn(110,118,260,96,'#5d7593',.38),mtn(260,118,160,50,'#7d93ad',.3),lake(116,64,'#6e9fc8'),ground(160,'#eef4f9'),ice(16,162,6),ice(200,164,7),cedar(300,164,46,'#2e5a48'),txt(110,40,'男體山',11,'#17304f',500),snow(22,5)]),
+  ikaho:()=>svg([sky('#c9d7e6','#f1f4f8'),bldg(0,180,80,120,'#e3d6c0','#b38b5d',5,3),bldg(240,180,80,120,'#e3d6c0','#b38b5d',5,3),steps(160,180,150,40,124,16),torii(160,58,.7),...[60,90,120,150].map((y,i)=>lantern(i%2?232:82,y,1)),steam(116,170,36),steam(204,176,42),snow(14,7)]),
+  mizusawa:()=>svg([sky('#cfdcea','#f3f6f9'),cedar(20,160,110),cedar(300,160,120),ground(150,'#e3e7ea'),hall(110,150,110,56,'#f2e7d2','#3a4654','#8c2f2a'),`<g>${hall(240,150,46,30,'#f2e7d2','#3a4654','#8c2f2a')}${hall(240,120,36,26,'#f2e7d2','#3a4654','#8c2f2a')}<line x1="240" y1="94" x2="240" y2="80" stroke="#d9a441" stroke-width="3"/></g>`,txt(240,172,'六角二重塔',11,'#17304f',500),`<path d="M258,140a18,6 0 1,1 -36,0" stroke="#c8413b" stroke-width="2" fill="none"/>`,bowl(56,172)]),
+  karuizawaOutlet:()=>svg([sky('#a9c8e4','#eef4f9'),mtn(230,104,220,70,'#6f7f92',.25),steam(232,36,30,.7),hills(112,'#c8d8bf',6),lake(132,22,'#86b5da'),ground(154,'#cfdcc8'),bldg(14,130,80,30,'#f4efe6','#9cb4cf',2,5),bldg(110,128,60,26,'#efe6d6','#9cb4cf',2,4),bldg(250,130,60,30,'#f4efe6','#9cb4cf',2,4),`<polygon points="10,100 54,84 98,100" fill="#46566a"/><polygon points="106,102 140,88 174,102" fill="#46566a"/><polygon points="246,100 280,86 314,100" fill="#46566a"/>`,txt(230,30,'淺間山',11,'#17304f',500),...[40,90,140,200,250].map(x=>`<rect x="${x}" y="160" width="14" height="10" rx="2" fill="#c8413b"/>`)]),
+  shiraito:()=>svg([sky('#b6cfe4','#e9f0f7'),`<path d="M0,40Q160,10 320,40L320,140Q160,112 0,140Z" fill="#5a5148"/>`,`<g stroke="#f4fbff" stroke-width="1.6" opacity=".95">${Array.from({length:44},(_,i)=>{const x=6+i*7.2,top=40-26*Math.sin(Math.PI*x/320)+8,bot=140-28*Math.sin(Math.PI*x/320);return `<line x1="${x}" y1="${top.toFixed(1)}" x2="${x}" y2="${bot.toFixed(1)}"/>`}).join('')}</g>`,`<path d="M0,140Q160,112 320,140L320,${H}L0,${H}Z" fill="#7fbfc9"/>`,`<path d="M0,150Q160,128 320,150" stroke="#fff" stroke-opacity=".7" fill="none"/>`,cedar(18,70,50),cedar(302,70,54),txt(160,172,'寬約 70m・高約 3m',11,'#17304f',700)]),
+  kyukaru:()=>svg([sky('#c3d6e8','#f2f5f9'),cedar(20,150,100),cedar(54,150,80),cedar(296,150,110),ground(150,'#e6e1d6'),church(110,150,1),bldg(180,150,48,46,'#efe3cf','#7a5a3f',2,2),`<polygon points="176,106 204,88 232,106" fill="#7a5a3f"/>`,bldg(236,150,44,40,'#f4ecdf','#7a5a3f',2,2),`<polygon points="232,112 258,96 284,112" fill="#5d4a3a"/>`,`<rect x="190" y="118" width="28" height="8" fill="#c8413b"/>`,txt(204,124.5,'SHOP',6,'#fff'),snow(18,11)]),
+  moegi:()=>svg([sky('#2c4a72','#7d9cc0'),cedar(14,150,110,'#244a3b'),cedar(44,150,86,'#2e5a48'),cedar(290,150,120,'#244a3b'),ground(148,'#eef3f8'),carousel(120,150,1),xmas(232,150,92),...[[90,40],[150,30],[200,46],[260,24]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.6" fill="#fff"/>`),snow(26,13),txt(232,170,'5.4m 聖誕樹',10,'#17304f',500)]),
+  koumi:()=>svg([sky('#9fc1e0','#eef4f9'),mtn(80,110,200,80,'#5f738d',.35),mtn(200,110,150,62,'#6f849f',.32),mtn(290,110,140,50,'#7f93ad',.3),ground(110,'#eef4f9'),`<rect x="0" y="146" width="${W}" height="3" fill="#7d8690"/>`,...Array.from({length:16},(_,i)=>`<rect x="${i*20+4}" y="149" width="10" height="3" fill="#9aa3ad"/>`).join(''),train(40,118,1,'#f5f7f2','#2a7f62'),`<rect x="226" y="124" width="70" height="20" fill="#fff" stroke="#17304f"/>`,txt(261,134,'JR最高地點',8,'#c8413b'),txt(261,142,'標高 1,375m',7,'#17304f',500),`<line x1="240" y1="144" x2="240" y2="152" stroke="#17304f"/><line x1="282" y1="144" x2="282" y2="152" stroke="#17304f"/>`,txt(80,26,'八岳',11,'#17304f',500)]),
+  nenba:()=>svg([sky('#9cc3e6','#eaf3fa'),fuji(160,118,250,92),hills(122,'#9fb59a',6,30),ground(140,'#d9cfb6'),thatch(64,152,1),thatch(160,160,1.1),thatch(258,154,1),cedar(16,150,44,'#2e5a48',false),cedar(306,150,50,'#2e5a48',false)]),
+  oishi:()=>svg([sky('#8fbbe4','#e8f2fa'),fuji(190,104,260,86),lake(104,40,'#5f9ccc'),ground(144,'#b6c9a9'),...Array.from({length:40},(_,i)=>`<circle cx="${(i*37)%320}" cy="${148+(i*13)%28}" r="3" fill="${['#e889a4','#f0c15a','#b48ad6','#fff'][i%4]}"/>`).join(''),`<path d="M0,176Q120,150 320,160" stroke="#d8cbb0" stroke-width="7" fill="none"/>`,txt(70,128,'河口湖',11,'#fff',500)]),
+  sengen:()=>svg([sky('#b9cde0','#eef3f8'),...[10,34,58,82].map((x,i)=>cedar(x,176,150-i*20,'#294f3f')),...[238,262,286,310].map((x,i)=>cedar(x,176,90+i*20,'#294f3f')),`<polygon points="110,180 146,110 174,110 210,180" fill="#cbbd9e"/>`,torii(160,128,1.4),hall(160,112,44,20,'#f2e7d2','#2b3640','#c8413b'),snow(16,17)]),
+  oshino:()=>svg([sky('#9cc3e6','#eaf3fa'),fuji(110,100,220,78),ground(100,'#cdd9c3'),thatch(250,120,.9),cedar(300,118,40,'#2e5a48'),`<ellipse cx="150" cy="148" rx="120" ry="26" fill="#1f8bb0"/><ellipse cx="150" cy="148" rx="96" ry="18" fill="#37a8c9"/><ellipse cx="150" cy="148" rx="60" ry="10" fill="#6fd0e4"/>`,...[[120,146],[170,152],[150,142]].map(([x,y])=>`<path d="M${x},${y}q4,-3 8,0" stroke="#e8754a" stroke-width="2.5" fill="none"/>`).join(''),txt(150,176,'湧池・透明見底',10,'#17304f',700)]),
+  owakudani:()=>svg([sky('#a8c3dc','#eef3f8'),fuji(250,90,150,50),`<path d="M0,180L0,100Q60,60 140,96Q200,70 320,110L320,180Z" fill="#a89b84"/>`,`<path d="M0,180L0,130Q90,110 180,140Q250,120 320,150L320,180Z" fill="#c9b98e"/>`,steam(60,118,60),steam(96,128,70),steam(140,112,56),steam(186,132,64),cable(0,60,320,20,.75),egg(260,158),egg(282,160),egg(271,146,.9),txt(272,178,'黑玉子',10,'#17304f')]),
+  pirate:()=>svg([sky('#9cc3e6','#eaf3fa'),fuji(230,92,170,58),hills(96,'#4f7a5e',8),lake(100,80,'#5f9ccc'),torii(56,132,.7),`<rect x="34" y="132" width="44" height="3" fill="#c8413b" opacity=".4"/>`,ship(196,150,1)]),
+  mishima:()=>svg([sky('#94bfe6','#eaf3fa'),fuji(110,96,220,72),`<path d="M200,104L320,104L320,120L200,120Z" fill="#5f9ccc"/>`,txt(268,116,'駿河灣',9,'#fff',500),hills(130,'#4f7a5e',12,10),bridge(40,280,120,40),hills(176,'#3e6a4d',10,60),txt(160,170,'全長 400m',11,'#fff',700)]),
+  jikkoku:()=>svg([sky('#8fbbe4','#e8f2fa'),fuji(230,86,170,56),`<rect x="0" y="100" width="${W}" height="16" fill="#5f9ccc"/>`,`<path d="M0,180L0,150L150,92L320,90L320,180Z" fill="#7a9a6a"/>`,`<path d="M30,170L170,96" stroke="#46566a" stroke-width="2"/>`,`<g transform="translate(96,128) rotate(-28)"><rect x="-14" y="-10" width="28" height="18" rx="3" fill="#c8413b"/><rect x="-10" y="-6" width="20" height="7" fill="#dbe7f2"/></g>`,`<rect x="168" y="80" width="44" height="12" fill="#e8edf3" stroke="#46566a"/>`,txt(190,72,'360° 展望台',10,'#17304f'),txt(50,116,'相模灣',9,'#fff',500)]),
+  odawara:()=>svg([sky('#a9c8e4','#eef4f9'),lake(150,30,'#6e9fc8'),ground(140,'#8aa071'),`<rect x="0" y="140" width="${W}" height="12" fill="#9aa3ad"/>`,castle(170,140,1.05),`<path d="M10,150Q40,96 70,110Q90,90 112,118" stroke="#5b3b25" stroke-width="5" fill="none"/>`,...[[40,98],[70,92],[100,104],[20,118]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="18" ry="8" fill="#2e5a48"/>`),`<ellipse cx="290" cy="110" rx="22" ry="10" fill="#2e5a48"/><path d="M292,150V112" stroke="#5b3b25" stroke-width="4"/>`]),
+  dutyfree:()=>svg([sky('#cfdcea','#f3f6f9'),ground(150,'#d7dde4'),bldg(70,150,180,90,'#f6f2ea','#b8cbe0',3,6),`<rect x="70" y="54" width="180" height="16" fill="#c8413b"/>`,txt(160,66,'TAX FREE 免稅',11,'#fff'),...[[100,'💊'],[150,'📷'],[200,'🎁']].map(([x,e])=>`<text x="${x}" y="176" font-size="18" text-anchor="middle">${e}</text>`).join('')]),
+  odaiba:()=>svg([sky('#132743','#3b5d88'),...Array.from({length:14},(_,i)=>`<circle cx="${(i*53)%320}" cy="${10+(i*19)%50}" r="1" fill="#fff"/>`).join(''),lake(130,50,'#1f3b5e'),`<path d="M-10,130L40,70L40,130M40,74Q110,120 180,74M180,70L180,130M180,74Q250,120 330,80" stroke="#e9eef4" stroke-width="1.8" fill="none"/><rect x="0" y="118" width="${W}" height="3" fill="#e9eef4"/>`,`<rect x="34" y="66" width="12" height="64" fill="#cfd9e5"/><rect x="174" y="66" width="12" height="64" fill="#cfd9e5"/>`,bldg(216,130,96,56,'#2b3a52','#ffd27a',3,6),txt(264,68,'DiverCity',12,'#fff'),...Array.from({length:12},(_,i)=>`<rect x="${10+i*26}" y="${150+(i%3)*6}" width="10" height="2" fill="#ffd27a" opacity=".7"/>`).join('')]),
+};
+/* 第 8 天店家立面 */
+const store=(name,c,motif,label2='')=>svg([sky('#dfe8f1','#f4f7fa'),ground(150,'#cfd6de'),`<rect x="30" y="34" width="260" height="116" fill="${c}"/>`,`<rect x="30" y="34" width="260" height="22" fill="rgba(0,0,0,.18)"/>`,txt(160,50,name,13,'#fff'),`<rect x="48" y="70" width="104" height="80" fill="#cfe1f2" stroke="rgba(0,0,0,.25)"/><rect x="168" y="70" width="104" height="80" fill="#cfe1f2" stroke="rgba(0,0,0,.25)"/>`,`<text x="100" y="124" font-size="40" text-anchor="middle">${motif}</text>`,label2?txt(220,114,label2,12,'#17304f'):'',`<rect x="214" y="70" width="12" height="80" fill="rgba(0,0,0,.2)"/>`],H);
+
+/* ============ 資料 ============ */
+const G=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const HOTELS=[
+ {n:'Hotel MyStays Premier 成田',q:'ホテルマイステイズプレミア成田',ll:[35.7895,140.3207]},
+ {n:'鬼怒川 Plaza Hotel',q:'鬼怒川プラザホテル',ll:[36.8173,139.7168]},
+ {n:'萬座王子大飯店',q:'万座プリンスホテル',ll:[36.6396,138.5158]},
+ {n:'石和 Isawa View Hotel',q:'石和ビューホテル',ll:[35.6627,138.6413]},
+ {n:'河口湖 Fuji Premium Resort',q:'Fuji Premium Resort 河口湖',ll:[35.4935,138.7610]},
+ {n:'伊東 Hotel 暖香園',q:'ホテル暖香園 伊東',ll:[34.9686,139.1015]},
+ {n:'東京萬豪酒店（品川）',q:'東京マリオットホテル 品川',ll:[35.6183,139.7322]},
+];
+const T={'7-11':'t711','Lawson':'tlaw','全家':'tfm','超市':'tsm','館內':'tgr','提醒':'tgr'};
+
+const DAYS=[
+{d:1,date:'12/05（六）',title:'桃園 → 成田，入住機場飯店',short:'桃園 → 成田',meals:['早｜自理','午｜機上餐','晚｜贈送宵夜（花壽司餐盒＋綠茶）'],
+ start:{n:'成田機場',ll:[35.7720,140.3929],q:'成田国際空港'},hotel:0,
+ spots:[{name:'成田國際機場',sub:'約 19:00 抵達',scene:'narita',ll:[35.7720,140.3929],q:'成田国際空港',noNum:true,
+   desc:'15:00 星宇 JX804 起飛，約 19:00 抵達成田。落地前先在 Visit Japan Web 填好入境與海關資料，通關出示 QR code 會快很多。飯店離機場車程約 10 分鐘，入住後享用宵夜。',
+   kv:[['集合','12:30 桃園機場第一航廈星宇 5 號櫃台'],['行李','託運 1 件 23kg、手提 1 件 7kg；行動電源最多 2 個，隨身帶'],['交通卡','第 8 天會自己搭電車，先在手機設定 Suica 或在機場買交通卡'],['注意','明天一早出發去水戶、日光，整理一個隨身小包放保暖衣物']]}],
+ supply:{note:'Lawson、超市步行範圍內都沒有',rows:[['全家','飯店 1F 大廳旁','館內','24 小時'],['7-11','Hilton 成田館內','約 250m','7:00–23:00','セブンイレブン ヒルトン成田'],['7-11','成田インター店','約 450m','5:00–23:00','セブンイレブン 成田インター店']]}},
+
+{d:2,date:'12/06（日）',title:'偕樂園 → 世界遺產日光 → 鬼怒川',short:'偕樂園・日光東照宮・中禪寺湖',meals:['午｜茨城豚味噌陶板燒御膳','晚｜飯店迎賓會席'],start:{n:'成田',ll:HOTELS[0].ll},hotel:1,
+ spots:[
+  {name:'偕樂園',sub:'水戶・日本三名園之一',scene:'kairakuen',ll:[36.3726,140.4520],q:'偕楽園',desc:'以約 3,000 株梅樹聞名；12 月不是梅花季，看點改在好文亭和孟宗竹林的靜謐感。',kv:[['必吃','水戶名物納豆'],['必買','水戶銘菓「吉原殿中」、梅干'],['必拍','好文亭樓上遠眺千波湖、竹林小徑'],['注意','園區大、碎石步道多，穿好走的鞋']]},
+  {name:'日光東照宮',sub:'世界遺產・供奉德川家康',scene:'toshogu',ll:[36.7580,139.5988],q:'日光東照宮',desc:'金碧雕刻的陽明門，看再久都看不膩，所以又叫「日暮門」。',kv:[['必吃','日光湯波（豆皮）料理、日光羊羹'],['必買','湯波、羊羹、東照宮御守'],['必拍','陽明門、三猿（不看・不說・不聽）、眠貓'],['注意','往奧宮有 207 階石階；部分殿內禁攝影；穿厚襪']]},
+  {name:'中禪寺湖',sub:'奧日光・標高約 1,269m',scene:'chuzenji',ll:[36.7340,139.4770],q:'中禅寺湖 歌ヶ浜',desc:'走過 48 個髮夾彎的伊呂波坂上山，眼前是男體山與湖面。強風低溫的日子，歌之濱湖畔會結出「浪花冰」（しぶき氷）。',kv:[['必吃','中禪寺湖名物姬鱒（ひめます）'],['必買','停留短，以拍照為主'],['必拍','湖面＋男體山雪景'],['注意','氣溫在零下、路面易結冰；手套、毛帽、暖暖包必備']]}],
+ supply:{note:'溫泉街晚上很早就沒店開；附近沒有全家',rows:[['Lawson','鬼怒川滝店（最近）','約 250m','24 小時','ローソン 鬼怒川滝店'],['Lawson','鬼怒川温泉さくら通り店','約 700m','24 小時','ローソン 鬼怒川温泉さくら通り店'],['7-11','鬼怒川立岩店','約 1.2km','24 小時','セブンイレブン 鬼怒川立岩店'],['超市','きぬスーパー 松原店・<span class="warn">週日公休，12/6 剛好週日</span>','約 1.7km','9:00–19:00','きぬスーパー 松原店'],['超市','Lion D\'or 鬼怒川店','約 2.3km','8:00–21:00','リオン・ドール 鬼怒川店'],['館內','飯店販賣部','館內','15:00–21:30']]}},
+
+{d:3,date:'12/07（一）',title:'伊香保石段街 → 水澤觀音 → 輕井澤購物',short:'伊香保石段街・水澤觀音・輕井澤王子購物廣場',meals:['午｜水澤烏龍麵御膳','晚｜飯店和洋自助餐','贈｜每人一顆溫泉饅頭'],start:{n:'鬼怒川',ll:HOTELS[1].ll},hotel:2,
+ spots:[
+  {name:'伊香保石段街',sub:'群馬・伊香保溫泉',scene:'ikaho',ll:[36.4977,138.9200],q:'伊香保 石段街',desc:'365 階石階一路往上到伊香保神社，兩旁是溫泉饅頭店、射的屋（日式打靶）和老旅館，石階下就流著溫泉。',kv:[['必吃','剛蒸好的溫泉饅頭（伊香保是溫泉饅頭的發源地之一）'],['必買','溫泉饅頭禮盒'],['必拍','石階中段的溫泉地圖、頂端伊香保神社往下拍'],['注意','冬天石階可能結霜，穿防滑鞋、扶著欄杆走']]},
+  {name:'水澤觀音（水澤寺）',sub:'坂東三十三觀音第 16 番',scene:'mizusawa',ll:[36.4688,138.9480],q:'水澤寺',desc:'寺內的六角二重塔供奉六地藏，可以用手推著轉，傳說轉三圈能消災祈福。門前就是水澤烏龍麵老街。',kv:[['必吃','水澤烏龍麵（日本三大烏龍麵之一，午餐已含）'],['必買','水澤烏龍麵乾麵，好帶好送'],['必拍','六角堂、本堂'],['注意','寺院內輕聲，推轉六角堂照現場指示方向']]},
+  {name:'輕井澤王子購物廣場',sub:'輕井澤站南口・大型 Outlet',scene:'karuizawaOutlet',ll:[36.3404,138.6344],q:'軽井沢・プリンスショッピングプラザ',desc:'草坪與池塘圍繞的超大 Outlet，運動、戶外、日系品牌集中，天氣好時可以看到淺間山。',kv:[['必吃','美食街，邊逛邊補充體力'],['必買','運動、戶外、日系品牌（帶護照辦免稅）'],['必拍','池塘草坪＋淺間山'],['注意','冬天 16:30 前後天就黑；<span class="warn">今晚萬座沒有任何超商，零食飲料在這裡買好</span>']]}],
+ banner:['今晚是祕湯','萬座溫泉標高約 1,800m，是日本硫磺含量數一數二的乳白色溫泉。硫磺會讓銀飾變黑，泡湯前先拿下首飾。'],
+ supply:{note:'山上沒有超商，請在輕井澤先買好',rows:[['館內','本館 1F 紀念品店（有群馬伴手禮）','館內','8:30–20:00'],['提醒','7-11・Lawson・全家・超市：萬座溫泉一帶都沒有','—','—'],['館內','溫泉開放時間','館內','5:00–24:00'],['館內','露天混浴可買湯浴衣：男 ¥700 / 女 ¥1,400','館內','販賣部'],['館內','住客可免費泡隔壁萬座高原飯店「石庭露天風呂」','步行','依飯店公告']]}},
+
+{d:4,date:'12/08（二）',title:'白絲瀑布 → 舊輕井澤 → 清里 → 小海線',short:'白絲瀑布・舊輕井澤銀座・聖保羅教堂・萌木之村・小海線',meals:['午｜上信越釜飯御膳','晚｜飯店長腳蟹吃到飽＋地元料理'],start:{n:'萬座',ll:HOTELS[2].ll},hotel:3,
+ spots:[
+  {name:'白絲瀑布',sub:'輕井澤・白糸の滝',scene:'shiraito',ll:[36.3990,138.5725],q:'白糸の滝 軽井沢',desc:'寬約 70m、高約 3m，地下水從整面岩壁滲出，像無數條白絲垂落成弧形。',kv:[['必拍','正面弧形全景'],['注意','步道約 3–5 分鐘，冬天可能結冰']]},
+  {name:'舊輕井澤銀座・聖保羅教堂',sub:'自由活動',scene:'kyukaru',ll:[36.3500,138.6330],q:'旧軽井沢銀座通り',desc:'百年避暑地的主街，木造洋風小店林立；街旁就是 1935 年建築師安東尼・雷蒙設計的木造聖保羅天主教堂。',kv:[['必吃','ミカド珈琲的摩卡霜淇淋'],['必買','澤屋（沢屋）果醬、腸詰屋香腸'],['必拍','教堂尖塔與大斜屋頂外觀'],['注意','12 月淡季部分店家休息；教堂內保持安靜、不用閃光燈']]},
+  {name:'萌木之村',sub:'清里高原・標高約 1,200m',scene:'moegi',ll:[35.9047,138.4306],q:'萌木の村',desc:'森林小村，有旋轉木馬、音樂盒博物館；往年 12/25 前有聖誕佈置與 5.4m 聖誕樹。',kv:[['必吃','餐廳 ROCK 的咖哩、八岳在地啤酒'],['必買','聖誕裝飾、音樂盒'],['必拍','旋轉木馬＋聖誕樹'],['注意','高原風大，比平地冷很多']]},
+  {name:'JR 小海線高原列車',sub:'清里站 → 野邊山站',scene:'koumi',ll:[35.9417,138.4718],q:'野辺山駅',desc:'這段有日本 JR 最高地點，野邊山站是 JR 標高最高的車站。',kv:[['必拍','野邊山站「JR 最高駅」標示'],['注意','若因維修停駛，退每人 ¥200']]}],
+ supply:{note:'7-11 走路約 7 分鐘',rows:[['7-11','春日居温泉郷店（最近）','約 500m','24 小時','セブンイレブン 春日居温泉郷店'],['7-11','笛吹春日居町小松店','約 550m','24 小時','セブンイレブン 笛吹春日居町小松店'],['Lawson','石和松本店','約 1km','24 小時','ローソン 石和松本店'],['全家','石和町市部店','約 1.8km','24 小時','ファミリーマート 石和町市部店'],['超市','AEON 石和（石和溫泉站前）','約 1.5km','9:00–22:00','イオン石和店']]}},
+
+{d:5,date:'12/09（三）',title:'西湖根場 → 大石公園 → 淺間神社 → 忍野八海',short:'西湖根場合掌村・大石公園・富士淺間神社・忍野八海',meals:['午｜甲斐寶刀麵御膳（山梨餺飥 ほうとう）','晚｜飯店和洋自助餐','贈｜名水豆腐或草餅'],start:{n:'石和溫泉',ll:HOTELS[3].ll},hotel:4,
+ spots:[
+  {name:'西湖療癒之里根場',sub:'西湖畔・茅草屋聚落',scene:'nenba',ll:[35.5040,138.6567],q:'西湖いやしの里根場',desc:'原本的茅草屋村落在 1966 年被颱風土石流沖毀，重建後在 2006 年開放，晴天時茅草屋後面就是富士山。',kv:[['必拍','茅草屋＋富士山同框'],['必買','手作工藝、和紙小物'],['注意','若休園，改去富岳風穴或鳴澤冰穴']]},
+  {name:'大石公園',sub:'河口湖北岸',scene:'oishi',ll:[35.5237,138.7468],q:'大石公園 河口湖',desc:'湖面、花田步道和富士山排成一直線，是河口湖最經典的看富士山角度。',kv:[['必吃','河口湖自然生活館的藍莓霜淇淋'],['必拍','湖畔步道＋富士山'],['注意','湖邊風很大，帽子圍巾抓緊']]},
+  {name:'北口本宮冨士淺間神社',sub:'富士山吉田口登山道起點',scene:'sengen',ll:[35.4747,138.7967],q:'北口本宮冨士浅間神社',desc:'參道兩旁是高聳的老杉木，盡頭是朱紅大鳥居，氣氛非常莊嚴。',kv:[['必拍','杉木參道＋大鳥居'],['必買','御守、御朱印'],['注意','參道碎石、落葉濕滑']]},
+  {name:'忍野八海',sub:'世界遺產「富士山」構成資產',scene:'oshino',ll:[35.4603,138.8327],q:'忍野八海',desc:'富士山的雪水在地下過濾多年後湧出，形成八個清澈見底的泉池。',kv:[['必吃','草餅、名水豆腐（今天有贈送）'],['必拍','湧池透明池水、茅草屋＋富士山'],['注意','人潮多；不要碰池水、不要丟硬幣']]}],
+ supply:{note:'飯店在小立森林區，最近的店也要 2km 以上，晚上路暗又冷，不建議走路。白天先買，或問櫃台叫車',rows:[['全家','河口湖フォレストモール店','約 2.3km','24 小時','ファミリーマート 河口湖フォレストモール店'],['7-11','河口湖東恋路店','約 2.4km','24 小時','セブンイレブン 河口湖東恋路店'],['超市','MaxValu 富士河口湖店','約 2.4km','7:00–23:30','マックスバリュ 富士河口湖店'],['超市','Power Market TAC','約 2.5km','9:00–20:00','パワーマーケット TAC 河口湖'],['Lawson','河口湖站前店（爆紅的「富士山 Lawson」拍照點）','約 3.5km','24 小時','ローソン 河口湖駅前店']]}},
+
+{d:6,date:'12/10（四）',title:'大涌谷 → 蘆之湖 → 三島大吊橋 → 十國峠',short:'大涌谷・蘆之湖海盜船・三島大吊橋・十國峠',meals:['午｜日式壽喜燒御膳','晚｜日式迷你懷石','贈｜每人一顆黑玉子'],start:{n:'河口湖',ll:HOTELS[4].ll},hotel:5,
+ spots:[
+  {name:'大涌谷',sub:'箱根・火山噴煙地',scene:'owakudani',ll:[35.2443,139.0208],q:'大涌谷',desc:'白煙不停從山谷冒出。氣象廳 2026 年 10 月的評估是火山活動大致平靜，維持噴火警戒等級 1。',kv:[['必吃','黑玉子（傳說吃一顆延壽 7 年）'],['必拍','噴氣口白煙＋富士山（晴天）'],['注意','有硫磺氣體，氣喘、心臟病者別久留'],['注意','自然研究路要上網預約＋協力金 ¥800']]},
+  {name:'蘆之湖海盜船',sub:'約 10 分鐘航程',scene:'pirate',ll:[35.2050,139.0245],q:'箱根海賊船 元箱根港',desc:'坐上華麗的海盜船橫渡蘆之湖，天氣好時湖面倒映富士山。',kv:[['必拍','湖上看箱根神社「平和鳥居」'],['注意','甲板風大；停駛退每人 ¥500']]},
+  {name:'三島大吊橋（三島 Skywalk）',sub:'日本最長人行吊橋・全長 400m',scene:'mishima',ll:[35.1468,138.9590],q:'三島スカイウォーク',desc:'走在半空中，一邊是富士山，一邊是駿河灣。',kv:[['必拍','橋中央的富士山＋駿河灣'],['必買','園區的富士山造型伴手禮'],['注意','橋會晃，怕高走中間別往下看；無法參觀退每人 ¥1,000']]},
+  {name:'十國峠纜車',sub:'熱海・函南之間',scene:'jikkoku',ll:[35.1290,139.0358],q:'十国峠ケーブルカー',desc:'名字來自山頂能一次望見古時的「十國」。坐纜車上山就是 360° 展望台。',kv:[['必拍','富士山、相模灣全景'],['注意','山頂風強，冬天體感溫度很低']]}],
+ supply:{note:'這晚補給最方便，對面就有 7-11',rows:[['7-11','伊東竹の内店（飯店正對面）','約 70m','24 小時','セブンイレブン 伊東竹の内店'],['Lawson','伊東中央店','約 250m','24 小時','ローソン 伊東中央店'],['全家','末廣町店','約 800m','24 小時','ファミリーマート 伊東末広町店'],['超市','Food Store あおき 伊東店','約 500m','10:00–22:00','フードストアあおき 伊東店'],['超市','MaxValu 伊東站前店','約 600m','7:00–23:30','マックスバリュ 伊東駅前店']]}},
+
+{d:7,date:'12/11（五）',title:'小田原城 → 免稅店 → 台場 DiverCity',short:'小田原城・免稅店・台場 DiverCity',meals:['午｜涮涮鍋吃到飽＋軟飲','晚｜B 級美食居酒屋＋一杯酒'],start:{n:'伊東',ll:HOTELS[5].ll},hotel:6,
+ spots:[
+  {name:'小田原城址公園',sub:'戰國北條氏的根據地',scene:'odawara',ll:[35.2510,139.1535],q:'小田原城址公園',desc:'今天不登天守閣，在公園內看白色天守和護城河。',kv:[['必吃','小田原魚板（かまぼこ）'],['必買','魚板、小田原梅干'],['必拍','天守閣外觀＋松樹'],['注意','下車參觀時間有限，先拍再逛']]},
+  {name:'免稅店',sub:'約 1 小時',scene:'dutyfree',noNum:true,desc:'藥妝、電器、伴手禮一次買。',kv:[['注意','先比價再買；備好護照']]},
+  {name:'台場 DiverCity Tokyo Plaza',sub:'台場購物中心',scene:'odaiba',ll:[35.6251,139.7756],q:'ダイバーシティ東京 プラザ',desc:'大型購物中心，有美食街和許多日系品牌。',kv:[['注意','<span class="warn">實物大獨角獸鋼彈已在 2026/8/31 結束展示</span>，現場看不到了'],['必拍','台場夜景，彩虹橋要另外走到海濱公園'],['必逛','館內商店、美食街']]}],
+ banner:['明天自由活動','Day 8 的潮流路線從萬豪 09:00 出發，今晚先把行李打包好、退房物品整理好，並跟領隊確認明天往成田的專車集合時間。'],
+ supply:{note:'飯店在坡上，買完回程是上坡',rows:[['全家','北品川 4 丁目（就在飯店旁）','約 50m','7:00–23:00','ファミリーマート 北品川四丁目店'],['7-11','北品川 1 丁目店','約 450m','7:00–23:00','セブンイレブン 北品川1丁目店'],['Lawson','東五反田 2 丁目店','約 1.1km','24 小時','ローソン 東五反田二丁目店'],['超市','Maruetsu Petit 北品川店','約 350m','9:00–22:00','マルエツプチ 北品川店'],['超市','My Basket 北品川 1 丁目店','約 400m','7:00–24:00','まいばすけっと 北品川1丁目店']]}},
+];
+
+const D8={d:8,date:'12/12（六）· 09:00 – 16:00',title:'東京特種兵 1 日潮流朝聖',short:'東京潮流朝聖 09:00–16:00 → 成田',sub:'麻布台 → 原宿 → 澀谷 → 有樂町，12 站一路走完',meals:['午｜自理（代金每人 ¥2,000）','晚｜機上餐'],
+ tips:[['週六人潮多','排隊超過預估就果斷跳下一站'],['早上先墊胃','14:00 前沒有正餐，在 FamiMa 買點心'],['免稅','帶護照，同店同日購物滿 ¥5,000（未稅）'],['最晚 16:00 回飯店','專車集合時間以領隊公告為準']],
+ stops:[
+  {k:'01',t:'09:00',name:'東京萬豪酒店 出發',ll:HOTELS[6].ll,q:HOTELS[6].q,nx:'鐵路＋步行約 50 分',p:'帶護照（免稅用）、西瓜卡／Mobile Suica 先儲值',art:()=>store('TOKYO MARRIOTT','#3a4654','🧳'),start:true},
+  {k:'02',t:'09:50–10:20',name:'FAMIMA PARK 麻布台',stay:'待 30 分',ll:[35.6608,139.7412],q:'FAMIMA PARK 麻布台',nx:'鐵路＋步行約 40 分',p:'全家第一間旗艦店，NIGO 監修，2026/7 開幕；神谷町站步行 1 分、6:00–翌 1:00、可免稅。<b>必買</b> 限定 T 恤、丹寧外套、托特包、F 字造型「アミマ」娃娃　<b>必喝</b> 世界冠軍咖啡師粕谷哲聯名限定咖啡（有試衣間）',art:()=>store('FAMIMA PARK','#1f7a43','☕','NIGO')},
+  {k:'03',t:'11:00–11:20',name:'HUMAN MADE TOKYO',stay:'待 20 分',ll:[35.6705,139.7058],q:'HUMAN MADE TOKYO 明治通り',nx:'步行約 6 分',p:'品牌第一間旗艦店，2026/9/26 開幕，明治通り上 3 層樓、獅子主題。<b>必買</b> 品牌首款球鞋 DUCK KICK、旗艦限定款；掃商品 QR 碼用手機下單',art:()=>store('HUMAN MADE TOKYO','#b8352f','🦁','♥ 3F')},
+  {k:'04',t:'11:26–11:46',name:'HUMAN MADE 原宿',stay:'待 20 分',ll:[35.6693,139.7046],q:'HUMAN MADE 原宿',nx:'步行約 4 分',p:'照路線圖排的原宿店；原宿一帶有不只一間 HUMAN MADE，出發前用 Google Maps 確認是哪一間',art:()=>store('HUMAN MADE','#c8413b','♥')},
+  {k:'05',t:'11:50–12:15',name:'lululemon 原宿',stay:'待 25 分',ll:[35.6680,139.7072],q:'lululemon 原宿',nx:'步行約 5 分',p:'日本第一間全球旗艦店，2026/8/19 開幕，表參道旁、2 層樓約 1,220㎡，10:30–20:00。<b>原宿限定</b> Everywhere 腰包壓印、Back to Life 水壺刻字服務',art:()=>store('lululemon','#9b2335','🧘','FLAGSHIP')},
+  {k:'06',t:'12:20–12:35',name:'ADERERROR Tokyo Space',stay:'待 15 分',ll:[35.6669,139.7094],q:'ADERERROR Tokyo Space 表参道',nx:'步行約 2 分',p:'品牌第一間全球旗艦（表參道，11:00–21:00），巨型蝸牛和種子裝置打造的「Continuum」空間，本身就很好拍',art:()=>store('ADERERROR','#2f62c9','🐌','Continuum')},
+  {k:'07',t:'12:37–12:57',name:'Stüssy 原宿 Chapter',stay:'待 20 分',ll:[35.6694,139.7065],q:'Stussy 原宿 Chapter',nx:'鐵路＋步行約 18 分',p:'原宿旗艦店，有只在這裡賣的限定商品',art:()=>store('STÜSSY','#1c1c1c','🎲','限定')},
+  {k:'08',t:'13:15–13:30',name:'HUMAN MADE 澀谷 PARCO',stay:'待 15 分',ll:[35.6620,139.6986],q:'HUMAN MADE 渋谷PARCO',nx:'步行約 3 分',p:'PARCO 1F，2025/9 改裝成 PART 1、PART 2 兩間，11:00–21:00；B1 有 HUMAN MADE 開的咖哩店 CURRY UP',art:()=>store('HUMAN MADE · PARCO','#c8413b','🍛','PART 1·2')},
+  {k:'09',t:'13:33–13:58',name:'mont-bell 澀谷店',stay:'待 25 分',ll:[35.6627,139.6996],q:'モンベル 渋谷店',nx:'步行即到',p:'5 層樓大店（B1–4F 賣場），入口挑高處有 13m 攀岩牆，10:30–21:00',art:()=>store('mont-bell','#1d4f91','🧗','13m 攀岩牆')},
+  {k:'10',t:'14:00–14:30',name:'Shake Shack 澀谷',stay:'待 30 分',ll:[35.6624,139.6993],q:'Shake Shack 渋谷',nx:'鐵路＋步行約 30 分',p:'JouLe SHIBUYA 2F，約 100 席，牆上有 18m 長的像素藝術。<b>今天唯一的正餐</b>，午餐代金 ¥2,000 用在這裡',art:()=>store('SHAKE SHACK','#4b8b3b','🍔','午餐 ¥2,000')},
+  {k:'11',t:'15:00–15:20',name:'ADERERROR 有樂町',stay:'待 20 分',ll:[35.6731,139.7629],q:'阪急メンズ東京 ADERERROR',nx:'鐵路約 35–40 分',p:'阪急 MEN\'S TOKYO 6F，2025/10 開幕，蜘蛛為靈感的店面設計',art:()=>store('ADERERROR · 6F','#2f62c9','🕷️','阪急 MEN\'S')},
+  {k:'終',t:'16:00',name:'回到東京萬豪酒店',ll:HOTELS[6].ll,q:HOTELS[6].q,p:'取行李 → 專車前往成田，JX805 20:10 起飛',art:()=>svg([sky('#26446d','#e9a27a'),sun(70,110,16,'#ffcf8a'),ground(140,'#55606d'),plane(190,70,1.5),txt(160,166,'JX805 20:10 成田 → 桃園',12,'#fff')]),end:true}
+ ]};
+
+/* ============ 繪製頁面 ============ */
+const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'});
+const icon=(t,sq)=>L.divIcon({className:'',html:`<div class="lf-num${sq?' sq':''}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
+const dirUrl=pts=>'https://www.google.com/maps/dir/'+pts.map(p=>encodeURIComponent(p)).join('/');
+function routeMap(id,pts){ // pts: [{ll,label,tip,sq}]
+  const m=L.map(id,{scrollWheelZoom:false,tap:true});tiles().addTo(m);
+  L.polyline(pts.map(p=>p.ll),{color:'#c8413b',weight:3,dashArray:'7 7'}).addTo(m);
+  pts.forEach(p=>L.marker(p.ll,{icon:icon(p.label,p.sq)}).addTo(m).bindTooltip(p.tip,{direction:'top',offset:[0,-12]}));
+  m.fitBounds(L.latLngBounds(pts.map(p=>p.ll)),{padding:[30,30],maxZoom:15});
+  return m;
+}
+const nav=document.getElementById('daynav'), days=document.getElementById('days'), ov=document.getElementById('ovtable');
+const supplyHTML=(s,h)=>`<div class="supply"><div class="top"><b>今晚補給站｜<a href="${G(h.q)}" target="_blank" rel="noopener">${h.n}</a></b><span>${s.note}</span></div>${s.rows.map(r=>`<div class="srow"><span class="tag ${T[r[0]]}">${r[0]}</span><span>${r[4]?`<a href="${G(r[4])}" target="_blank" rel="noopener">${r[1]}</a>`:r[1]}</span><span class="d">${r[2]}</span><span class="h">${r[3]}</span></div>`).join('')}<div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent('コンビニ')}/@${h.ll[0]},${h.ll[1]},16z">📍 飯店周邊超商 ↗</a><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent('スーパー')}/@${h.ll[0]},${h.ll[1]},15z">📍 飯店周邊超市 ↗</a></div></div>`;
+
+DAYS.forEach(day=>{
+  const h=HOTELS[day.hotel];
+  nav.insertAdjacentHTML('beforeend',`<a href="#d${day.d}">D${day.d} ${day.date.slice(0,5)}</a>`);
+  ov.insertAdjacentHTML('beforeend',`<tr><td><a href="#d${day.d}">D${day.d} ${day.date}</a></td><td>${day.short}</td><td>${h.n}</td></tr>`);
+  let n=0;
+  const cards=day.spots.map((s,i)=>{const num=s.noNum?'':++n;s._num=num;return `
+   <article class="spot" id="d${day.d}s${i}">
+     <div class="vis">${SCENES[s.scene]()}${s.ll?`<div class="mini" id="mini${day.d}_${i}"></div><div class="seg"><button class="on" data-v="sk">簡圖</button><button data-v="map">地圖</button></div>`:''}</div>
+     <div class="txt">
+       <h3>${num?`<span class="num">${num}</span>`:''}${s.name}<span class="sub">${s.sub}</span></h3>
+       <p>${s.desc}</p>
+       <dl class="kv">${s.kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+       ${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">在 Google 地圖開啟 ↗</a>`:''}
+     </div>
+   </article>`}).join('');
+  const sec=document.createElement('section');sec.className='day';sec.id='d'+day.d;
+  sec.innerHTML=`<div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div></div>
+   <div class="map" id="map${day.d}"></div>
+   <div class="maplinks"><span>紅色虛線為行車順序示意（非實際道路）</span><a target="_blank" rel="noopener" id="gm${day.d}">整天路線・Google 地圖 ↗</a></div>
+   ${cards}${day.banner?`<div class="banner"><b>${day.banner[0]}</b>${day.banner[1]}</div>`:''}${supplyHTML(day.supply,h)}`;
+  days.appendChild(sec);
+  const withLL=day.spots.filter(s=>s.ll&&s._num);
+  const pts=[{ll:day.start.ll,label:'起',sq:true,tip:'起・'+day.start.n},...withLL.map(s=>({ll:s.ll,label:s._num,tip:s._num+'・'+s.name})),{ll:h.ll,label:'宿',sq:true,tip:'宿・'+h.n}];
+  routeMap('map'+day.d,pts);
+  document.getElementById('gm'+day.d).href=dirUrl([day.start.q||HOTELS[day.hotel-1]?.q||day.start.n,...withLL.map(s=>s.q),h.q]);
+});
+
+/* Day 8 */
+(()=>{
+  const d=D8;
+  nav.insertAdjacentHTML('beforeend',`<a href="#d8">D8 12/12</a><a href="#tips">須知</a>`);
+  ov.insertAdjacentHTML('beforeend',`<tr><td><a href="#d8" style="color:var(--red)">D8 12/12（六）</a></td><td>${d.short}</td><td>夜機返台</td></tr>`);
+  const sec=document.createElement('section');sec.className='day';sec.id='d8';
+  sec.innerHTML=`<div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}<br>${d.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div></div>
+   <div class="map" id="map8"></div>
+   <div class="maplinks"><span>點數字標記看店名；紅色虛線為移動順序示意</span><a target="_blank" rel="noopener" id="gm8">整天路線・Google 地圖 ↗</a></div>
+   <div class="banner d8tips" style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px">${d.tips.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('')}</div>
+   <ol class="stops">${d.stops.map(s=>`<li class="stop">${s.art()}<div class="b"><div class="t"><span class="num ${s.start||s.end?'r':''}" style="width:24px;height:24px;font-size:12px;margin-right:6px">${s.k}</span>${s.t}</div><h4><a href="${G(s.q)}" target="_blank" rel="noopener">${s.name}</a>${s.stay?`<span class="stay">${s.stay}</span>`:''}</h4><p>${s.p}</p>${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>`;
+  days.appendChild(sec);
+  const pts=d.stops.map(s=>({ll:s.ll,label:s.start?'起':s.end?'終':String(+s.k),sq:s.start||s.end,tip:s.k+'・'+s.name}));
+  const m=routeMap('map8',pts.slice(0,-1).concat([{...pts.at(-1),ll:[pts.at(-1).ll[0]-0.0012,pts.at(-1).ll[1]+0.0016]}]));
+  document.getElementById('gm8').href=dirUrl(d.stops.slice(0,-1).map(s=>s.q).concat([d.stops.at(-1).q]));
+})();
+
+/* 總覽地圖 */
+routeMap('map-ov',[{ll:[35.7720,140.3929],label:'✈',sq:true,tip:'成田機場'},...HOTELS.map((h,i)=>({ll:h.ll,label:i+1,tip:`第 ${i+1} 晚・${h.n}`})),{ll:[35.7720,140.3929],label:'✈',sq:true,tip:'成田機場（回程）'}]);
+document.getElementById('ovgm').href=dirUrl(['成田国際空港',...HOTELS.map(h=>h.q)]);
+
+/* 簡圖 / 地圖 切換 */
+const minis={};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.seg button');if(!b)return;
+  const vis=b.closest('.vis'),card=b.closest('.spot');
+  vis.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));
+  const showMap=b.dataset.v==='map';vis.classList.toggle('show-map',showMap);
+  if(showMap){const el=vis.querySelector('.mini');
+    if(!minis[el.id]){const [, d, i]=el.id.match(/mini(\d)_(\d)/);const s=DAYS[d-1].spots[i];
+      const m=L.map(el,{scrollWheelZoom:false,zoomControl:true,attributionControl:false}).setView(s.ll,15);tiles().addTo(m);
+      L.marker(s.ll,{icon:icon(s._num||'●')}).addTo(m);minis[el.id]=m;}
+    setTimeout(()=>minis[el.id].invalidateSize(),50);}
+});
+</script>
+</body>
+</html>
