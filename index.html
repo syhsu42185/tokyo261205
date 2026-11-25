@@ -410,6 +410,21 @@ details.supply .in{padding:0 14px 14px}
 .hfac span.q{background:#f3f3f3;color:#888}
 .hfh{font-size:12px;font-weight:700;color:var(--navy);margin-top:8px}
 
+/* 上課 */
+.cls{margin-top:8px;background:#fffdf8;border-radius:12px;padding:7px 8px 8px;box-shadow:0 1px 6px rgba(23,48,79,.06)}
+.cls .mh{font-size:11px;font-weight:700;color:var(--navy);margin:0 2px 4px;display:flex;justify-content:space-between}
+.cls .mh small{font-weight:500;color:var(--muted)}
+.cl{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;padding:6px 6px;border-radius:9px;margin-top:4px;font-size:12.5px;line-height:1.4}
+.cl.ok{background:#eaf7ee}.cl.warn{background:#fff4dc}.cl.no{background:#fdecea}
+.cl .tm{font-weight:800;color:var(--navy);white-space:nowrap}
+.cl .tm small{display:block;font-weight:500;color:var(--muted);font-size:10.5px}
+.cl b{color:var(--ink)}
+.cl span{grid-column:2;color:#56657a;font-size:11.5px}
+.cl .md{font-size:10.5px;font-weight:700;border-radius:5px;padding:0 5px;margin-left:4px;background:#fff;color:var(--navy2)}
+.clsum{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.clsum div{border-radius:10px;padding:7px;text-align:center;font-size:11px}
+.clsum b{display:block;font-size:18px}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -489,6 +504,9 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
       <div class="box"><div class="lab">去程 JX804</div><div class="big">15:00 → 成田</div><div class="sm">約 19:00 抵達</div></div>
       <div class="box"><div class="lab">回程 JX805</div><div class="big">12/12 20:10</div><div class="sm">約 23:20 抵桃園</div></div>
     </div>
+    <h2 class="sec">📚 旅途中的課</h2>
+    <div class="clsum" id="clsum"></div>
+    <p style="font-size:12px;color:var(--muted);margin:6px 2px 0">課表是台灣時間，日本時間要＋1 小時。各天頁面有每堂課的判斷。</p>
     <h2 class="sec">八日行程</h2>
     <div class="ovlist" id="ovlist"></div>
     <h2 class="sec">八晚住宿路線</h2>
@@ -808,6 +826,9 @@ document.getElementById('wintergrid').innerHTML=WINTER.map(([n,d,t,img,emo,u])=>
 
 /* ============ 三餐・贈送 ============ */
 const MEALS={"1": [["自理", "機上簡餐", "", "日式花壽司餐盒＋綠茶（贈送宵夜）", "¥1,000"], [], []], "2": [["飯店早餐", "茨城豚味噌陶板燒御膳", "¥2,200", "飯店迎賓會席料理", ""], [], []], "3": [["飯店早餐", "水澤烏龍麵御膳", "¥2,500", "旅館和洋自助餐", ""], ["伊香保溫泉饅頭（每人一顆）"], ["水澤烏龍麵（日本三大烏龍麵）", "輕井澤王子購物廣場"]], "4": [["飯店早餐", "上信越釜飯風味御膳", "¥2,500", "長腳蟹吃到飽＋精緻地元料理", ""], [], ["長腳蟹吃到飽", "JR 小海線高原列車（停駛退 ¥200）"]], "5": [["飯店早餐", "甲斐寶刀麵（ほうとう）御膳", "¥2,500", "飯店和洋自助餐", ""], ["忍野八海名水豆腐或草餅（每人一份）"], []], "6": [["飯店早餐", "日式壽喜燒風味御膳", "¥2,500", "日式迷你懷石料理", ""], ["大涌谷延壽黑玉子（每人一顆）"], ["蘆之湖海盜船（停駛退 ¥500）", "十國峠纜車"]], "7": [["飯店早餐", "日式涮涮鍋吃到飽＋軟飲暢飲", "¥3,000", "B 級美食居酒屋＋酒水一杯", "¥5,000"], [], []], "8": [["飯店早餐", "自由安排（代金每人 ¥2,000）", "", "機上簡餐", ""], [], []]};
+const CLASSES={"1": [["08:30–10:30", "（在台灣）", "國三男 數學・理化", "實體", "warn", "上得到，但 10:30 下課、12:30 要到桃園機場一航集合，很趕"], ["11:00–12:00", "（在台灣）", "小五男 數學", "線上", "no", "前往機場途中，建議調課"], ["14:00–16:00", "（飛機上）", "高一女 數學", "實體", "no", "15:00 起飛，需調課"]], "2": [["09:00–10:30", "10:00–11:30", "國三 理化", "線上", "no", "正在偕樂園參觀，需調課"], ["11:00–12:00", "12:00–13:00", "小四女 數學", "線上", "no", "往日光途中／午餐，需調課"], ["19:00–20:00", "20:00–21:00", "小四女 數學", "線上", "ok", "已在鬼怒川飯店（晚餐後），可上"]], "3": [["20:00–21:00", "21:00–22:00", "國一女 數學", "線上", "ok", "在萬座王子飯店；標高 1,800m 山上網路可能不穩，先測 Wi-Fi 或備手機熱點"]], "4": [["19:00–21:00", "20:00–22:00", "高二男 數學", "實體", "no", "人在日本，需調課；若改線上，20:00 後已在石和飯店"]], "5": [["19:00–20:30", "20:00–21:30", "國一女 數學", "線上", "ok", "在河口湖飯店，可上"]], "6": [], "7": [["19:00–20:00", "20:00–21:00", "小四女 數學", "線上", "warn", "當晚是 B 級美食居酒屋晚餐，時段可能衝突，回品川飯店才能上"]], "8": [["08:30–10:30", "09:30–11:30", "國三男 數學・理化", "實體", "no", "需調課"], ["11:00–12:00", "12:00–13:00", "小五男 數學", "線上", "no", "原宿逛街路線中，需調課"], ["14:00–16:00", "15:00–17:00", "高一女 數學", "實體", "no", "需調課（16:00 要回飯店搭專車去成田）"]]};
+const CLI={ok:'✅',warn:'⚠️',no:'❌'};
+const classHTML=d=>{const a=CLASSES[d]||[];return `<div class="cls"><div class="mh"><span>📚 今天的課（日本時間＝台灣＋1 小時）</span><small>${a.length?a.length+' 堂':'沒課'}</small></div>${a.map(([tw,jp,n,m,st,t])=>`<div class="cl ${st}"><div class="tm">${/^\d/.test(jp)?'🇯🇵 '+jp:jp}<small>🇹🇼 ${tw}</small></div><div><b>${CLI[st]} ${n}</b><i class="md" style="font-style:normal">${m}</i></div><span>${t}</span></div>`).join('')||'<div class="cl ok"><div class="tm">—</div><div><b>✅ 今天沒有課</b></div></div>'}</div>`};
 const mealHTML=d=>{const [[b,l,lp,dn,dp],g,sp]=MEALS[d];const c=(k,t,p)=>`<div class="c ${/自理|自由|機上/.test(t)?'self':''}"><i>${k}</i><b>${t}</b>${p?`<small>餐標 ${p}</small>`:''}</div>`;
   return `<div class="ml"><div class="mh">🍽️ 三餐</div><div class="cells">${c('早',b,'')}${c('午',l,lp)}${c('晚',dn,dp)}</div>${g.length||sp.length?`<div class="gifts">${g.map(x=>`<span class="g">🎁 贈送：${x}</span>`).join('')}${sp.map(x=>`<span class="sp">⭐ 特別安排：${x}</span>`).join('')}</div>`:''}</div>`};
 
@@ -904,7 +925,7 @@ DAYS.forEach(day=>{
        <div class="lks">${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:''}${s.mall?`<button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
-    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="wx" data-d="${day.d}"></div>${mealHTML(day.d)}</div>
+    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="wx" data-d="${day.d}"></div>${mealHTML(day.d)}${classHTML(day.d)}</div>
     ${day.spots.length>1?posterHTML(day.spots.map((s,i)=>({num:s._num,cap:s.name,art:SCENES[s.scene](),photo:s.photo,go:`d${day.d}s${i}`})),`今日路線・${day.spots.length} 個景點`):''}
     <div class="map"></div>
     <div class="maplinks"><span>點數字跳到該景點</span><a target="_blank" rel="noopener" href="${dirUrl([day.start.q||HOTELS[day.hotel-1].q,...withLL.map(o=>o.s.q),h.q])}">整天路線・Google ↗</a></div>
@@ -936,7 +957,7 @@ DAYS.forEach(day=>{
   ovl.insertAdjacentHTML('beforeend',`<a href="#d8"><span class="dd" style="color:var(--red)">D8<small>12/12</small></span><span><span class="ss">${d.short}</span><br><span class="hh">夜機返台</span><span class="ow" data-d="8"></span></span><span class="ar">›</span></a>`);
   const el=document.createElement('div');el.className='view';el.id=key;
   el.innerHTML=`<div class="wrap">
-   <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}</div><div class="wx" data-d="8"></div>${mealHTML(8)}</div>
+   <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}</div><div class="wx" data-d="8"></div>${mealHTML(8)}${classHTML(8)}</div>
    ${posterHTML(d.stops.map((s,i)=>({num:s.k,cls:s.start||s.end?'r':'',tm:s.t,cap:s.name,art:s.art(),go:`d8s${i}`})),'今日路線・12 站')}
    <div class="map"></div>
    <div class="maplinks"><span>點數字跳到該站</span><a target="_blank" rel="noopener" href="${dirUrl(d.stops.map(s=>s.q))}">整天路線・Google ↗</a></div>
@@ -991,6 +1012,7 @@ async function loadFinds(){
   }catch(e){}
 }
 loadFinds();
+{const all=Object.values(CLASSES).flat(),c=k=>all.filter(x=>x[4]===k).length;document.getElementById('clsum').innerHTML=`<div style="background:#fdecea"><b>${c('no')}</b>❌ 需調課</div><div style="background:#fff4dc"><b>${c('warn')}</b>⚠️ 時間很趕／可能衝突</div><div style="background:#eaf7ee"><b>${c('ok')}</b>✅ 可在飯店上</div>`;}
 
 /* ============ 刷卡建議＋記帳（資料只存在這台手機的瀏覽器） ============ */
 (()=>{
