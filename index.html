@@ -279,6 +279,9 @@ details.supply .in{padding:0 14px 14px}
 .credits{font-size:11px;color:var(--muted);line-height:1.7}
 .credits a{color:var(--muted)}
 
+.shops.ch .shh{color:#b8456e}
+.stop .shops{margin-top:6px}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -330,6 +333,10 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
   .smap{height:320px}
 }
 @media (max-width:380px){ .info{grid-template-columns:1fr} }
+/* Day 8 列表：單欄、全部展開（放最後以覆蓋前面規則） */
+.stops .stop{grid-template-columns:1fr;cursor:default}
+.stops .stop p{display:block;-webkit-line-clamp:unset;overflow:visible}
+.stops .stop .more{display:flex;gap:12px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -377,6 +384,9 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
   <h2 class="sec">⛩️ 御朱印一覽</h2>
   <div class="gsl" id="gslist"></div>
   <p style="font-size:12px;color:var(--muted);margin:6px 2px 0">授與時間多為 9:00–16:00 前後，冬季可能提早結束；初穗料一般 ¥300–500。記得帶御朱印帳，沒有的話多數寺社也有販售。以現場為準。</p>
+  <h2 class="sec">🧸 Chiikawa・Pokémon 限定</h2>
+  <div class="gsl" id="chlist"></div>
+  <p style="font-size:12px;color:var(--muted);margin:6px 2px 0">ご當地ちいかわ多在土產店、休息站販售，各店款式不同、常缺貨；標「未確認」的是網路整理資訊，現場為準。</p>
   <h2 class="sec">冬季須知</h2>
   <div class="grid2">
     <div class="tip"><h3>冬季穿搭</h3><p>奧日光、清里、萬座都在標高 1,200m 以上，12 月經常是零下。洋蔥式穿法：發熱衣＋毛衣＋防風羽絨外套。</p><p>防滑鞋底（石階、參道、湖邊會結冰）、手套、毛帽、暖暖包、護唇膏與乳液。</p></div>
@@ -611,8 +621,11 @@ document.addEventListener('click',e=>{const t=e.target.closest('.pt');if(!t)retu
 const PHOTOS={"narita": {"src": "img/narita.jpg", "by": "名無し野電車区", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Narita_International_Airport_Terminal_1.JPG"}, "kairakuen": {"src": "img/kairakuen.jpg", "by": "Σ64", "lic": "CC BY 4.0", "page": "https://commons.wikimedia.org/wiki/File:Kairaku-en,_Ibaraki_24.jpg"}, "toshogu": {"src": "img/toshogu.jpg", "by": "Jpatokal", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Nikko_Toshogu_Yomeimon_Gate_2024.jpg"}, "chuzenji": {"src": "img/chuzenji.jpg", "by": "Uraomote yamaneko", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Mount_nantai_and_lake_chuzenji.jpg"}, "ikaho": {"src": "img/ikaho.jpg", "by": "matsukaz", "lic": "CC BY 2.1 jp", "page": "https://commons.wikimedia.org/wiki/File:Ikaho_Onsen_03.jpg"}, "mizusawa": {"src": "img/mizusawa.jpg", "by": "NY066", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Mizusawa-Kannon_Shibukawa.JPG"}, "karuizawaOutlet": {"src": "img/karuizawaOutlet.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:KPSP06s3200.jpg"}, "shiraito": {"src": "img/shiraito.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:Karuizawa_shiraito-no-taki03s3200.jpg"}, "kyukaru": {"src": "img/kyukaru.jpg", "by": "663highland", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:220930_St._Paul%27s_Catholic_Church_Karuizawa_Nagano_pref_Japan01s3.jpg"}, "moegi": {"src": "img/moegi.jpg", "by": "663highland", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:160826_Kiyosato_Moeginomura_Hokuto_Yamanashi_pref_Japan39s3.jpg"}, "koumi": {"src": "img/koumi.jpg", "by": "Mister0124", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:JR_Koumi_Line_Nobeyama_Station_building.jpg"}, "nenba": {"src": "img/nenba.jpg", "by": "ja:User:Masanori88", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Saiko-iyashinosato-nenba1.JPG"}, "oishi": {"src": "img/oishi.jpg", "by": "Alpsdake", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Mount_Fuji_from_Oishi_Park.jpg"}, "sengen": {"src": "img/sengen.jpg", "by": "江戸村のとくぞう", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Kitaguchi_Hongu_Fuji_Sengen_jinja_Torii.jpg"}, "oshino": {"src": "img/oshino.jpg", "by": "663highland", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:231028_Waku-ike_Oshino_Hakkai_springs_Oshino_Yamanashi_pref_Japan01s3.jpg"}, "owakudani": {"src": "img/owakudani.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:161223_Owakudani_Hakone_Japan09s3.jpg"}, "pirate": {"src": "img/pirate.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:161223_Lake_Ashi_Hakone_Japan03n.jpg"}, "mishima": {"src": "img/mishima.jpg", "by": "くろふね", "lic": "CC BY 3.0", "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%89%E5%B3%B6%E3%82%B9%E3%82%AB%E3%82%A4%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%AF_-_panoramio_(4).jpg"}, "jikkoku": {"src": "img/jikkoku.jpg", "by": "Nesnad", "lic": "CC BY 4.0", "page": "https://commons.wikimedia.org/wiki/File:Jukkokutoge_Cable_Car_2024_March_3_various_23_48_49_725000.jpeg"}, "odawara": {"src": "img/odawara.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:161223_Odawara_Castle_Odawara_Japan01s3.jpg"}, "odaiba": {"src": "img/odaiba.jpg", "by": "ITA-ATU", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Diver-City_Tokyo_as_see_from_FCG_Building.jpg"}};
 const GOSHUIN={"kairakuen": [["常磐神社", "偕樂園旁，祭祀德川光圀・齊昭", "常磐神社 水戸"]], "toshogu": [["日光東照宮", "本社社務所；登上奧宮另有一款", "日光東照宮"], ["日光二荒山神社", "東照宮旁步行約 5 分（時間夠再去）", "日光二荒山神社"], ["日光山輪王寺", "三佛堂，東照宮旁", "日光山輪王寺"]], "chuzenji": [["二荒山神社 中宮祠", "中禪寺湖畔", "二荒山神社 中宮祠"], ["中禪寺（立木觀音）", "湖東岸，坂東三十三觀音第 18 番", "中禅寺 立木観音"]], "ikaho": [["伊香保神社", "石段最頂端；冬季可能只有預先寫好的「書置」", "伊香保神社"]], "mizusawa": [["水澤寺", "坂東三十三觀音第 16 番，納經所", "水澤寺"]], "sengen": [["北口本宮冨士淺間神社", "社務所；也有富士山圖案的御朱印帳", "北口本宮冨士浅間神社"]], "pirate": [["箱根神社", "元箱根港旁，平和鳥居的本社；同處有九頭龍神社新宮", "箱根神社"]], "odawara": [["報德二宮神社", "小田原城址公園內，祭祀二宮尊德", "報徳二宮神社"], ["小田原城「御城印」", "城的紀念印，天守閣一帶販售（今天不登天守，購買方式現場確認）", "小田原城 天守閣"]]};
 const GOSHUIN_EXTRA=[[8, "明治神宮", "原宿站旁，Day 8 若有空檔可順路（行程表未排）", "明治神宮"]];
+const CHARA={"toshogu": [["ご當地ちいかわ 日光限定「三猿」", "東照宮三猿造型鑰匙圈；參道土產店可留意（販售店未確認）", "ご当地ちいかわ 日光 三猿", "web"]], "ikaho": [["ポケふた「閃電鳥（サンダー）」", "2026/10 新設的寶可夢人孔蓋，伊香保纜車「不如歸站」前，石段街附近", "伊香保ロープウェイ 不如帰駅", "map"], ["ご當地ちいかわ 群馬限定", "據網友整理，石段街「すみよしや」有達摩款（未確認）", "すみよしや 伊香保", "map"]], "karuizawaOutlet": [["ご當地ちいかわ 信州限定", "蘋果造型吊飾，長野一帶土產店可留意（販售店未確認）", "ご当地ちいかわ 信州 りんご", "web"]], "owakudani": [["ご當地ちいかわ 大涌谷限定「黑玉子」", "神奈川限定款；大涌谷土產店可留意（販售店未確認）", "ご当地ちいかわ 大涌谷 黒たまご", "web"]], "mishima": [["ご當地ちいかわ 富士山限定", "抱著富士山的兔兔吊飾，2026/6 起在東京・靜岡土產店販售", "ご当地ちいかわ 富士山 うさぎ", "web"]]};
+const D8CH={"4": [["ちいかわらんど 原宿店", "Kiddy Land 原宿 1F（表參道上，離這站很近），11:00–20:00；人多時可能要入店預約", "キデイランド原宿店", "map"]], "7": [["ポケモンセンターシブヤ", "同一棟 PARCO 6F！同層還有 Nintendo TOKYO；週末人多", "ポケモンセンターシブヤ", "map"]], "11": [["ポケモンストア 成田空港店", "第 1 航廈南翼 4F；星宇通常在第 2 航廈，需搭航廈間免費接駁，時間夠再去", "ポケモンストア 成田空港店", "map"]]};
+const chHTML=a=>a?`<div class="shops ch"><div class="shh">🧸 Chiikawa・Pokémon 限定</div>${a.map(([n,t,q,k])=>`<a href="${k==='web'?'https://www.google.com/search?q='+encodeURIComponent(q):G(q)}" target="_blank" rel="noopener"><b>${n}</b><span>${t}</span></a>`).join('')}</div>`:'';
 const SHOPS={"kairakuen": [["好文亭", "德川齊昭建的木造樓閣，3 樓眺望千波湖（園內・另購票）", "偕楽園 好文亭"], ["亀印製菓", "水戶銘菓「吉原殿中」老店", "亀印製菓 水戸"], ["天狗納豆", "水戶納豆老牌，稻草包裝很有特色", "天狗納豆 水戸"]], "toshogu": [["海老屋長造", "明治年間創業的日光湯波（豆皮）老店", "海老屋長造 日光"], ["ひしや", "手工日光羊羹，量少常賣完", "ひしや 日光 羊羹"]], "chuzenji": [["華嚴瀑布", "日本三名瀑，湖邊車程約 2 分（時間夠再去）", "華厳滝"]], "ikaho": [["勝月堂", "茶色「湯乃花饅頭」元祖，石段旁", "勝月堂 伊香保"], ["清芳亭", "伊香保溫泉饅頭老店", "清芳亭 伊香保"], ["河鹿橋", "紅色太鼓橋，石段頂再走約 10 分", "河鹿橋 伊香保"]], "mizusawa": [["田丸屋", "400 多年歷史的水澤烏龍麵老店", "田丸屋 水沢うどん"], ["大澤屋", "規模最大的水澤烏龍麵店，伴手禮乾麵多", "大澤屋 水沢うどん"], ["始祖 清水屋", "自稱水澤烏龍麵始祖", "始祖 清水屋 水沢"]], "kyukaru": [["ミカド珈琲", "招牌摩卡霜淇淋", "ミカド珈琲 軽井沢旧道店"], ["沢屋", "輕井澤果醬名店", "沢屋 旧軽井沢店"], ["腸詰屋 1 號店", "手工香腸、火腿", "腸詰屋 軽井沢1号店"], ["フランスベーカリー", "約翰藍儂常去的老麵包店", "フランスベーカリー 軽井沢"], ["浅野屋", "1933 年創業的麵包老店", "浅野屋 旧軽井沢本店"]], "moegi": [["ROCK", "咖哩＋八岳在地啤酒", "萌木の村 ROCK"], ["ホール・オブ・ホールズ", "音樂盒博物館（自費）", "ホール・オブ・ホールズ 萌木の村"]], "koumi": [["JR 鐵道最高地點", "標高 1,375m 紀念碑（列車行經）", "JR鉄道最高地点"]], "oishi": [["河口湖自然生活館", "藍莓霜淇淋、果醬", "河口湖自然生活館"]], "oshino": [["渡辺食品", "艾草草餅名店", "渡辺食品 忍野"], ["豆腐処 浅野屋", "名水豆腐", "豆腐処 浅野屋 忍野"]], "owakudani": [["大涌谷くろたまご館", "黑玉子、伴手禮", "大涌谷くろたまご館"], ["玉子茶屋", "現煮黑玉子", "大涌谷 玉子茶屋"]], "pirate": [["箱根神社 平和の鳥居", "湖上紅鳥居，船上看最清楚", "箱根神社 平和の鳥居"]], "mishima": [["スカイガーデン", "園區伴手禮店，富士山造型點心", "三島スカイウォーク スカイガーデン"]], "odawara": [["籠清 本店", "1814 年創業的魚板老舖", "籠清 本店 小田原"], ["ちん里う本店", "小田原梅干老店，車站旁", "ちん里う本店 小田原"], ["守谷のパン", "百年紅豆麵包", "守谷のパン 小田原"]], "odaiba": [["お台場海浜公園", "彩虹橋夜景", "お台場海浜公園"], ["自由女神像", "台場夜景拍照點", "自由の女神像 お台場"]]};
-DAYS.forEach(d=>d.spots.forEach(s=>{s.shops=SHOPS[s.scene];s.gs=GOSHUIN[s.scene];s.photo=PHOTOS[s.scene]}));
+DAYS.forEach(d=>d.spots.forEach(s=>{s.shops=SHOPS[s.scene];s.gs=GOSHUIN[s.scene];s.photo=PHOTOS[s.scene];s.ch=CHARA[s.scene]}));
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -701,6 +714,7 @@ DAYS.forEach(day=>{
        <p>${s.desc}</p><dl class="kv">${s.kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
        ${s.shops?`<div class="shops"><div class="shh">📍 特色店家・點名稱開 Google 地圖</div>${s.shops.map(([n,t,q])=>`<a href="${G(q)}" target="_blank" rel="noopener"><b>${n}</b><span>${t}</span></a>`).join('')}</div>`:''}
        ${s.gs?`<div class="shops gs"><div class="shh">⛩️ 御朱印</div>${s.gs.map(([n,t,q])=>`<a href="${G(q)}" target="_blank" rel="noopener"><b>${n}</b><span>${t}</span></a>`).join('')}</div>`:''}
+       ${chHTML(s.ch)}
        <div class="lks">${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:''}${s.mall?`<button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
@@ -744,7 +758,7 @@ DAYS.forEach(day=>{
      <div class="t"><span class="num ${s.start||s.end?'r':''}">${s.k}</span>${s.t}${s.stay?`<span class="stay">${s.stay}</span>`:''}</div>
      <h4>${s.name}</h4><p>${s.p}</p>
      <div class="more"><a href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>${d.stops[i+1]?`<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(s.q)}&destination=${encodeURIComponent(d.stops[i+1].q)}&travelmode=transit" target="_blank" rel="noopener">到下一站怎麼走 ↗</a>`:''}</div>
-     ${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>
+     ${chHTML(D8CH[i])}${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>
    
    ${pager(pv,nx)}</div>`;
   daysEl.appendChild(el);
@@ -758,6 +772,8 @@ DAYS.forEach(day=>{
 addView('tips','須知','',document.getElementById('tips'));
 document.getElementById('gslist').innerHTML=[...DAYS.flatMap(d=>d.spots.filter(s=>s.gs).flatMap(s=>s.gs.map(g=>[d.d,...g,s.name]))),...GOSHUIN_EXTRA.map(g=>[...g,''])]
   .map(([d,n,t,q,sp])=>`<div class="r"><span class="dd">D${d}</span><span><a href="${G(q)}" target="_blank" rel="noopener">${n}</a>${sp?`<span style="color:var(--muted);font-size:12px">・${sp}</span>`:''}<small>${t}</small></span></div>`).join('');
+document.getElementById('chlist').innerHTML=[...DAYS.flatMap(d=>d.spots.filter(s=>s.ch).flatMap(s=>s.ch.map(c=>[d.d,...c,s.name]))),...Object.entries(D8CH).flatMap(([i,a])=>a.map(c=>[8,...c,D8.stops[i].name]))]
+  .map(([d,n,t,q,k,sp])=>`<div class="r"><span class="dd">D${d}</span><span><a href="${k==='web'?'https://www.google.com/search?q='+encodeURIComponent(q):G(q)}" target="_blank" rel="noopener">${n}</a><span style="color:var(--muted);font-size:12px">・${sp}</span><small>${t}</small></span></div>`).join('');
 document.getElementById('credits').innerHTML='<br>景點照片來自 Wikimedia Commons（依各授權條款使用）：'+DAYS.filter(d=>d.spots.length>1).flatMap(d=>d.spots.filter(s=>s.photo).map(s=>`<a href="${s.photo.page}" target="_blank" rel="noopener">${s.name}</a>（${s.photo.by}，${s.photo.lic}）`)).join('、');
 document.getElementById('tips').querySelector('.wrap').insertAdjacentHTML('beforeend',pager(nb('tips')[0],null));
 
