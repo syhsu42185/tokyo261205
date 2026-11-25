@@ -405,6 +405,11 @@ details.supply .in{padding:0 14px 14px}
 #pay .opts button{border:0;background:var(--navy2);color:#fff;font:inherit;font-size:12px;padding:4px 8px;border-radius:6px}
 #pay .btns .btn{border:0;cursor:pointer;font:inherit;font-size:12.5px}
 
+.hfac{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.hfac span{font-size:12px;background:#eef3f8;color:var(--ink);border-radius:8px;padding:3px 8px;line-height:1.4}
+.hfac span.q{background:#f3f3f3;color:#888}
+.hfh{font-size:12px;font-weight:700;color:var(--navy);margin-top:8px}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -779,6 +784,8 @@ const shopCard=([n,t,q])=>`<a class="mc shop" href="${G(q)}" target="_blank" rel
 const gsCard=([n,t,q,how],day)=>{const g=GTAG[how]||GTAG['未確認'];return `<a class="mc gs" href="${G(q)}" target="_blank" rel="noopener"><span class="gsmini"><span class="v">${n.replace(/（.*?）|「.*?」/g,'').slice(0,5)}</span><span class="st">奉拝</span></span><span class="tx"><span>${day?`<i class="dpill">D${day}</i>`:''}<i class="gtag ${g[1]}">${g[0]}</i></span><b>${n}</b><span>${t}</span></span></a>`};
 const chCard=([n,t,q,k],day)=>{const ty=chType(n),lid=/ポケふた/.test(n);return `<a class="mc ${ty} ${lid?'lid':''}" ${t.startsWith('❌')?'style="opacity:.55"':''} href="${chLink(q,k)}" target="_blank" rel="noopener"><span class="ic">${ty==='ck'?'🐹':''}</span><span class="tx">${day?`<span><i class="dpill">D${day}</i></span>`:''}<b>${n}</b><span>${t}</span></span></a>`};
 const chHTML=a=>a?rail('pk','🔴 Pokémon',a.filter(x=>chType(x[0])==='pk').map(x=>chCard(x)))+rail('ck','🐹 Chiikawa',a.filter(x=>chType(x[0])==='ck').map(x=>chCard(x))):'';
+const HOTELFAC={"0": [["♨️", "大浴場（附桑拿）", 1], ["🏊", "室內泳池", 1], ["🏋️", "健身房", 1], ["🚐", "免費接駁：成田機場⇄飯店，也到 JR／京成成田站（時刻看官網）", 1], ["🧊", "客房冰箱（空的，無 Mini bar）", 1], ["🍳", "早餐「ガーデニア」6:00 起；頂樓日本料理「あづま」", 1], ["🧺", "洗衣服務（是否投幣式未確認）", 0]], "1": [["♨️", "大浴場 14:00–翌 10:00（弱鹼性溫泉）", 1], ["🌿", "露天風呂（男女別／時段交替）", 1], ["🧖", "桑拿", 1], ["🛁", "包租浴池「ほおずき亭」（另付費）", 1], ["🧺", "投幣洗衣", 1], ["🏓", "桌球", 1], ["🎤", "卡拉 OK（付費）", 1], ["☕", "咖啡店", 1], ["🛍️", "館內商店 15:00–21:30", 1], ["🏊", "戶外泳池（夏季限定，12 月沒開）", 1], ["🧊", "客房冰箱", 0]], "2": [["♨️", "乳白色硫磺泉 5:00–24:00（銀飾先拿下）", 1], ["🌿", "隔壁萬座高原飯店「石庭露天風呂」住客免費", 1], ["👘", "露天混浴可買湯浴衣：男 ¥700／女 ¥1,400", 1], ["🛍️", "1F 紀念品店 8:30–20:00（山上沒超商）", 1], ["🎿", "滑雪用品出租", 1], ["🧺", "洗衣（是否投幣式未確認）", 0], ["🧊", "客房冰箱", 0]], "3": [["♨️", "大浴場「渓流」「清流」＋日本庭園露天", 1], ["⏰", "男 15:00–翌 10:00；女 15:00–25:00、5:00–10:00", 1], ["🔄", "姊妹館溫泉免費湯巡り", 1], ["🚐", "免費接送 JR 石和溫泉站", 1], ["🧊", "客房冰箱（空的）", 1], ["📶", "客房網路", 1], ["🛏️", "和室為主，有掘りごたつ（下沉式暖桌）", 1], ["🧺", "投幣洗衣", 0]], "4": [["♨️", "溫泉「フォレストスパ」要另付費（約 ¥1,000），部分房型才可用", 1], ["🌿", "露天風呂", 1], ["🏊", "室內泳池", 1], ["🧖", "桑拿（男：乾式／女：霧氣）", 1], ["🧊", "客房冰箱、熱水壺、吹風機、Wi-Fi", 1], ["🚐", "接駁：河口湖站⇄飯店，1 小時 1 班、9 人座，需事先聯絡", 1], ["🎾", "網球場、桌球、撞球、兒童區", 1], ["🛍️", "館內商店（附近最近的超商要 2km）", 1], ["⏰", "退房 10:00", 1]], "5": [["♨️", "大浴場＋露天 13:00–25:00、5:00–10:00（鹼性單純泉）", 1], ["🎤", "卡拉 OK", 1], ["🍺", "館內居酒屋", 1], ["🎳", "隔 3 間有直營保齡球館", 1], ["🏪", "正對面就是 7-11", 1], ["🏊", "戶外泳池（冬季應未開放）", 1], ["🚶", "無接駁，伊東站步行約 10 分", 1], ["🧊", "客房冰箱", 0], ["🧺", "投幣洗衣", 0]], "6": [["🏋️", "健身房（住客付費使用）", 1], ["🚐", "品川站高輪口免費接駁巴士約 5 分（班次看官網）", 1], ["📶", "客房 Wi-Fi", 1], ["⛰️", "飯店在坡上，走路去超商回程是上坡", 1], ["🍸", "Mini bar", 0]]};
+const hfacHTML=i=>HOTELFAC[i]?`<div class="hfh">🏨 飯店設施</div><div class="hfac">${HOTELFAC[i].map(([e,t,ok])=>`<span class="${ok?'':'q'}">${e} ${t}${ok?'':' ❔'}</span>`).join('')}</div>`:'';
 const SHOPS={"kairakuen": [["好文亭", "德川齊昭建的木造樓閣，3 樓眺望千波湖（園內・另購票）", "偕楽園 好文亭"], ["亀印製菓", "水戶銘菓「吉原殿中」老店", "亀印製菓 水戸"], ["天狗納豆", "水戶納豆老牌，稻草包裝很有特色", "天狗納豆 水戸"]], "toshogu": [["海老屋長造", "明治年間創業的日光湯波（豆皮）老店", "海老屋長造 日光"], ["ひしや", "手工日光羊羹，量少常賣完", "ひしや 日光 羊羹"]], "chuzenji": [["華嚴瀑布", "日本三名瀑，湖邊車程約 2 分（時間夠再去）", "華厳滝"]], "ikaho": [["勝月堂", "茶色「湯乃花饅頭」元祖，石段旁", "勝月堂 伊香保"], ["清芳亭", "伊香保溫泉饅頭老店", "清芳亭 伊香保"], ["河鹿橋", "紅色太鼓橋，石段頂再走約 10 分", "河鹿橋 伊香保"]], "mizusawa": [["田丸屋", "400 多年歷史的水澤烏龍麵老店", "田丸屋 水沢うどん"], ["大澤屋", "規模最大的水澤烏龍麵店，伴手禮乾麵多", "大澤屋 水沢うどん"], ["始祖 清水屋", "自稱水澤烏龍麵始祖", "始祖 清水屋 水沢"]], "kyukaru": [["ミカド珈琲", "招牌摩卡霜淇淋", "ミカド珈琲 軽井沢旧道店"], ["沢屋", "輕井澤果醬名店", "沢屋 旧軽井沢店"], ["腸詰屋 1 號店", "手工香腸、火腿", "腸詰屋 軽井沢1号店"], ["フランスベーカリー", "約翰藍儂常去的老麵包店", "フランスベーカリー 軽井沢"], ["浅野屋", "1933 年創業的麵包老店", "浅野屋 旧軽井沢本店"]], "moegi": [["ROCK", "咖哩＋八岳在地啤酒", "萌木の村 ROCK"], ["ホール・オブ・ホールズ", "音樂盒博物館（自費）", "ホール・オブ・ホールズ 萌木の村"]], "koumi": [["JR 鐵道最高地點", "標高 1,375m 紀念碑（列車行經）", "JR鉄道最高地点"]], "oishi": [["河口湖自然生活館", "藍莓霜淇淋、果醬", "河口湖自然生活館"]], "oshino": [["渡辺食品", "艾草草餅名店", "渡辺食品 忍野"], ["豆腐処 浅野屋", "名水豆腐", "豆腐処 浅野屋 忍野"]], "owakudani": [["大涌谷くろたまご館", "黑玉子、伴手禮", "大涌谷くろたまご館"], ["玉子茶屋", "現煮黑玉子", "大涌谷 玉子茶屋"]], "pirate": [["箱根神社 平和の鳥居", "湖上紅鳥居，船上看最清楚", "箱根神社 平和の鳥居"]], "mishima": [["スカイガーデン", "園區伴手禮店，富士山造型點心", "三島スカイウォーク スカイガーデン"]], "odawara": [["籠清 本店", "1814 年創業的魚板老舖", "籠清 本店 小田原"], ["ちん里う本店", "小田原梅干老店，車站旁", "ちん里う本店 小田原"], ["守谷のパン", "百年紅豆麵包", "守谷のパン 小田原"]], "odaiba": [["お台場海浜公園", "彩虹橋夜景", "お台場海浜公園"], ["自由女神像", "台場夜景拍照點", "自由の女神像 お台場"]]};
 DAYS.forEach(d=>d.spots.forEach(s=>{s.shops=SHOPS[s.scene];s.gs=GOSHUIN[s.scene];s.photo=PHOTOS[s.scene];s.ch=CHARA[s.scene]}));
 
@@ -907,6 +914,7 @@ DAYS.forEach(day=>{
       <div class="night" id="d${day.d}night"><div class="nh">🌙 晚上</div>
         ${mealOf('晚').map(m=>`<div class="nrow"><b>晚餐</b><span>${m}</span></div>`).join('')}
         <div class="nrow"><b>住宿</b><a href="${G(h.q)}" target="_blank" rel="noopener">${h.n}</a></div>
+        ${hfacHTML(day.hotel)}
         ${day.banner?`<div class="banner"><b>${day.banner[0]}</b>${day.banner[1]}</div>`:''}
         ${supplyHTML(day.supply,day.hotel)}
       </div>
