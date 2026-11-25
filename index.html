@@ -178,6 +178,58 @@ details.supply .in{padding:0 14px 14px}
 .sheet li .c{grid-column:1/3;font-size:12px;color:var(--muted)}
 .sheet li .tf{font-size:10px;font-weight:700;color:var(--fmt);background:var(--fm);border-radius:5px;padding:0 5px;margin-left:6px;vertical-align:1px}
 
+/* ===== 精簡版面（時間軸） ===== */
+.map{height:170px}
+.dayhead{padding:12px 0 6px}
+.wx{margin-top:8px;padding:6px 8px 7px}
+.wx .wh{font-size:10.5px;margin-bottom:3px}
+.wx .wh b{font-size:11px}
+.wx .cells{gap:5px}
+.wx .c{padding:4px 2px 5px}
+.wx .c .p{font-size:10.5px}
+.wx .v{display:flex;justify-content:center;align-items:baseline;gap:4px;margin-top:1px;white-space:nowrap}
+.wx .v .e{font-size:15px}
+.wx .v .t{font-size:15px;font-weight:700;color:var(--navy)}
+.wx .v .t.cold{color:#2a6fd1}
+.wx .v .r{font-size:11px;color:#2a6fd1;font-weight:700}
+.ovlist .ow{display:block;font-size:11.5px;color:var(--navy);font-weight:700;margin-top:1px}
+.ovlist .ow .cold{color:#2a6fd1}
+.tl{margin-top:10px}
+.tl .startrow{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:0 0 2px 2px}
+.tl .startrow .num{width:24px;height:24px;font-size:12px;border-radius:7px;background:#fff;color:var(--navy);border:2px solid var(--navy)}
+.tl .spot{display:grid;grid-template-columns:112px 1fr;gap:10px;padding:10px;background:#fff;border-radius:14px;margin:8px 0;box-shadow:0 1px 6px rgba(23,48,79,.06);transition:box-shadow .3s}
+.tl .spot.flash{box-shadow:0 0 0 3px var(--red)}
+.tl .vis{width:112px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;align-self:start}
+.tl .vis svg{position:static}
+.tl .spot .txt{padding:0;min-width:0}
+.tl .spot h3{font-size:16.5px;gap:6px}
+.tl .spot h3 .num{width:22px;height:22px;font-size:12px}
+.tl .spot .sub{display:block;font-size:11.5px;margin-top:1px}
+.tl .spot p{font-size:13px;margin:4px 0 5px;line-height:1.55}
+.tl .kv{font-size:12.5px;gap:1px 7px;line-height:1.5}
+.tl .lks{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:5px}
+.tl .gm{margin:0;font-size:12px}
+.tl .mallbtn{margin:0;font-size:12px;padding:5px 10px}
+.night{background:#fff;border:2px solid var(--navy);border-radius:14px;padding:10px 12px 12px;margin-top:10px}
+.night .nh{font-family:"Noto Serif TC",serif;font-weight:700;color:var(--navy);font-size:16px;margin-bottom:4px}
+.night .nrow{font-size:13.5px;padding:2px 0;display:flex;gap:8px}
+.night .nrow b{color:var(--red);flex:none}
+.night .nrow a{font-weight:700;color:var(--navy)}
+.night .banner{margin:8px 0 0;font-size:13px}
+.night .supply{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px}
+.night .supply .sh b{font-size:14px;color:var(--navy)}
+.night .supply .sh small{display:block;font-size:12px;color:var(--muted);line-height:1.45;margin-bottom:6px}
+.night .smap{height:180px}
+.stop p{display:block;-webkit-line-clamp:unset}
+.stop .more{display:flex;gap:12px;flex-wrap:wrap}
+.stop{cursor:default}
+@media (min-width:760px){
+  .map{height:280px}
+  .tl .spot{grid-template-columns:220px 1fr;display:grid}
+  .tl .vis{width:220px;min-height:0;aspect-ratio:16/9}
+  .night .smap{height:260px}
+}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -240,7 +292,7 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
     <div class="wrap">
       <div class="eyebrow">WINTER TRAVEL BOOKLET · 2026.12.05 – 12.12</div>
       <h1>東京深度八日<br>冬日旅遊小書</h1>
-      <p>日光・伊香保・輕井澤・清里・富士五湖・箱根・三島・關東五溫泉，最後一天東京潮流朝聖。上方選日期，景點左右滑。</p>
+      <p>日光・伊香保・輕井澤・清里・富士五湖・箱根・三島・關東五溫泉，最後一天東京潮流朝聖。上方選日期，每天一頁看完。</p>
       <div class="pills"><span class="pill red">團號 26JTD05JXS</span><span class="pill">星宇 JX804 / JX805</span><span class="pill">雄獅旅遊</span></div>
     </div>
   </header>
@@ -453,12 +505,15 @@ function wxFromApi(arr){if(!Array.isArray(arr))arr=[arr];const out={};let i=0;
     out[d].push([Math.round(h.temperature_2m[j]*10)/10,pp.length?Math.max(...pp):null,wc.length?Math.max(...wc):null]);}}
   return out}
 function renderWx(){
-  document.querySelectorAll('.wx[data-d]').forEach(el=>{const d=+el.dataset.d,fc=WX&&WX[d];let anyFc=false;
-    const cells=[0,1,2].map(k=>{const c=CLIM[d][k],f=fc&&fc[k];if(f)anyFc=true;
-      const t=f?f[0]:c[1],p=f?f[1]:c[2];
-      return `<div class="c"><div class="p"><b>${WXL[k]}</b> ${c[0]}</div><div class="e">${f?wxEmoji(f[2]):(p>=30?'🌂':'🌡️')}</div><div class="t ${t<=0?'cold':''}">${Math.round(t)}°</div><div class="r">☔ ${p==null?'–':p+'%'}</div>${f?'':'<div class="s">往年平均</div>'}</div>`}).join('');
-    const src=anyFc?`<span class="src live">${WXSRC==='live'?'即時預報':'預報 '+WXUPD}</span>`:`<span class="src">往年平均・約出發前 15 天起改為預報</span>`;
-    el.innerHTML=`<div class="wh"><b>天氣 ${WXH.map(h=>h+':00').join(' / ')}</b>${src}</div><div class="cells">${cells}</div>`;});
+  const cellOf=(d,k)=>{const c=CLIM[d][k],f=WX&&WX[d]&&WX[d][k];return {f,place:c[0],t:f?f[0]:c[1],p:f?f[1]:c[2],e:f?wxEmoji(f[2]):(c[2]>=30?'🌂':'🌡️')}};
+  document.querySelectorAll('.wx[data-d]').forEach(el=>{const d=+el.dataset.d;let anyFc=false;
+    const cells=[0,1,2].map(k=>{const x=cellOf(d,k);if(x.f)anyFc=true;
+      return `<div class="c"><div class="p"><b>${WXL[k]}</b> ${x.place}</div><div class="v"><span class="e">${x.e}</span><span class="t ${x.t<=0?'cold':''}">${Math.round(x.t)}°</span><span class="r">☔${x.p==null?'–':x.p+'%'}</span></div></div>`}).join('');
+    const src=anyFc?`<span class="src live">${WXSRC==='live'?'即時預報':'預報 '+WXUPD}</span>`:`<span class="src">往年平均</span>`;
+    el.innerHTML=`<div class="wh"><b>天氣 8 / 12 / 18 時</b>${src}</div><div class="cells">${cells}</div>`;});
+  document.querySelectorAll('.ow[data-d]').forEach(el=>{const d=+el.dataset.d,xs=[0,1,2].map(k=>cellOf(d,k));
+    const ts=xs.map(x=>Math.round(x.t)),lo=Math.min(...ts),hi=Math.max(...ts),pm=Math.max(...xs.map(x=>x.p||0));
+    el.innerHTML=`${xs[1].e} <span class="${lo<=0?'cold':''}">${lo}°</span>~${hi}°　☔${pm}%${xs.some(x=>x.f)?'':'<span style="color:var(--muted);font-weight:500">（往年）</span>'}`;});
 }
 async function loadWx(){
   renderWx();
@@ -526,13 +581,11 @@ function supplyMap(el,hi){
 }
 const legendHTML=`<div class="legend"><span><i class="s711">7</i>7-11</span><span><i class="slaw">L</i>Lawson</span><span><i class="sfm">F</i>全家</span><span><i class="ssm">超</i>超市</span><span><i class="soth">コ</i>其他超商</span><span>虛線圈＝500m / 1km</span></div>`;
 
-const supplyHTML=(s,hi)=>{const h=HOTELS[hi];const cnt=(STORES[hi]||[]).length;return `<details class="supply" data-h="${hi}">
- <summary><span class="st">今晚補給站</span><b>${h.n}</b><small>${s.note}</small><span class="tg">地圖＋清單</span></summary>
- <div class="in"><div class="smap"></div>${legendHTML}
+const supplyHTML=(s,hi)=>{const h=HOTELS[hi];const cnt=(STORES[hi]||[]).length;return `<div class="supply" data-h="${hi}"><div class="sh"><b>🏪 今晚補給站</b><small>${s.note}</small></div><div class="smap"></div>${legendHTML}
  ${cnt?'':'<p class="warn" style="font-size:13px;margin:4px 0">地圖上附近 3km 內沒有任何超商或超市。</p>'}
  ${h.est?'<p style="font-size:12px;color:var(--muted);margin:2px 0 6px">※ 這間飯店在開放地圖上沒有資料，「宿」的位置是依小書的店家距離推估。</p>':''}
  ${s.rows.map(r=>`<div class="srow"><span class="tag ${T[r[0]]}">${r[0]}</span><span>${r[4]?`<a href="${G(r[4])}" target="_blank" rel="noopener">${r[1]}</a>`:r[1]}</span><span class="d">${r[2]}</span><span class="h">${r[3]}</span></div>`).join('')}
- <div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent('コンビニ')}/@${h.ll[0]},${h.ll[1]},16z">📍 Google 找周邊超商 ↗</a><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent('スーパー')}/@${h.ll[0]},${h.ll[1]},15z">📍 找周邊超市 ↗</a></div></div></details>`};
+ <div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent('コンビニ')}/@${h.ll[0]},${h.ll[1]},16z">📍 Google 找周邊超商 ↗</a><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent('スーパー')}/@${h.ll[0]},${h.ll[1]},15z">📍 找周邊超市 ↗</a></div></div>`};
 
 /* 分頁 */
 const chips=document.getElementById('chips'),daysEl=document.getElementById('days');
@@ -572,38 +625,44 @@ DAYS.forEach(day=>{
   const h=HOTELS[day.hotel];let n=0;
   day.spots.forEach(s=>s._num=s.noNum?'':++n);
   const key='d'+day.d,[pv,nx]=nb(key);
-  ovl.insertAdjacentHTML('beforeend',`<a href="#${key}"><span class="dd">D${day.d}<small>${day.date.slice(0,5)}</small></span><span><span class="ss">${day.short}</span><br><span class="hh">宿 ${h.n}</span></span><span class="ar">›</span></a>`);
+  ovl.insertAdjacentHTML('beforeend',`<a href="#${key}"><span class="dd">D${day.d}<small>${day.date.slice(0,5)}</small></span><span><span class="ss">${day.short}</span><br><span class="hh">宿 ${h.n}</span><span class="ow" data-d="${day.d}"></span></span><span class="ar">›</span></a>`);
   const el=document.createElement('div');el.className='view';el.id=key;
-  const cards=day.spots.map((s,i)=>`<article class="spot">
-     <div class="vis">${SCENES[s.scene]()}${s.ll?`<div class="mini"></div><div class="seg"><button class="on" data-v="sk">簡圖</button><button data-v="map" data-d="${day.d}" data-i="${i}">地圖</button></div>`:''}</div>
-     <div class="txt"><h3>${s._num?`<span class="num">${s._num}</span>`:''}${s.name}<span class="sub">${s.sub}</span></h3>
+  const mealOf=k=>day.meals.filter(m=>m.startsWith(k)).map(m=>m.split('｜')[1]);
+  const items=day.spots.map((s,i)=>`<article class="spot" data-i="${i}">
+     <div class="vis">${SCENES[s.scene]()}</div>
+     <div class="txt"><h3>${s._num?`<span class="num">${s._num}</span>`:''}${s.name}</h3><span class="sub">${s.sub}</span>
        <p>${s.desc}</p><dl class="kv">${s.kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
-       ${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">在 Google 地圖開啟 ↗</a>`:''}${s.mall?`<br><button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></article>`).join('');
+       <div class="lks">${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:''}${s.mall?`<button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
-    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="${day.d}"></div></div>
+    <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.filter(m=>!m.startsWith('晚')).map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="${day.d}"></div></div>
     <div class="map"></div>
     <div class="maplinks"><span>點數字跳到該景點</span><a target="_blank" rel="noopener" href="${dirUrl([day.start.q||HOTELS[day.hotel-1].q,...withLL.map(o=>o.s.q),h.q])}">整天路線・Google ↗</a></div>
-    <div class="carousel"><div class="track">${cards}</div><button class="arr l" aria-label="上一個">‹</button><button class="arr r" aria-label="下一個">›</button>
-      <div class="dots">${day.spots.map((s,i)=>`<button>${s._num||'•'}</button>`).join('')}${day.spots.length>1?'<span class="hint">← 左右滑 →</span>':''}</div></div>
-    ${day.banner?`<div class="banner"><b>${day.banner[0]}</b>${day.banner[1]}</div>`:''}
-    ${supplyHTML(day.supply,day.hotel)}
+    <div class="tl">
+      <div class="startrow"><span class="num">起</span>${day.start.n} 出發</div>
+      ${items}
+      <div class="night"><div class="nh">🌙 晚上</div>
+        ${mealOf('晚').map(m=>`<div class="nrow"><b>晚餐</b><span>${m}</span></div>`).join('')}
+        <div class="nrow"><b>住宿</b><a href="${G(h.q)}" target="_blank" rel="noopener">${h.n}</a></div>
+        ${day.banner?`<div class="banner"><b>${day.banner[0]}</b>${day.banner[1]}</div>`:''}
+        ${supplyHTML(day.supply,day.hotel)}
+      </div>
+    </div>
     ${pager(pv,nx)}</div>`;
   daysEl.appendChild(el);
-  const go=setupCarousel(el.querySelector('.carousel'));
-  const det=el.querySelector('details.supply');
+  const cards=[...el.querySelectorAll('.tl .spot')];
   addView(key,'D'+day.d,day.date.slice(0,5),el,v=>{
     const pts=[{ll:day.start.ll,label:'起',sq:true,tip:'起・'+day.start.n},...withLL.map(o=>({ll:o.s.ll,label:o.s._num,tip:o.s._num+'・'+o.s.name,idx:o.i})),{ll:h.ll,label:'宿',sq:true,tip:'宿・'+h.n}];
-    v.maps.push(routeMap(el.querySelector('.map'),pts,i=>{go(i);el.querySelector('.carousel').scrollIntoView({behavior:'smooth',block:'start'})}));
+    v.maps.push(routeMap(el.querySelector('.map'),pts,i=>{const c=cards[i];c.scrollIntoView({behavior:'smooth',block:'center'});c.classList.add('flash');setTimeout(()=>c.classList.remove('flash'),1500)}));
+    const sm=el.querySelector('.supply .smap');
+    const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();v.maps.push(supplyMap(sm,day.hotel))}},{rootMargin:'200px'});io.observe(sm);
   });
-  det.addEventListener('toggle',()=>{if(!det.open)return;const v=VIEWS.find(x=>x.key===key);
-    if(!det._m){det._m=supplyMap(det.querySelector('.smap'),day.hotel);v.maps.push(det._m)}else det._m.invalidateSize();});
 });
 
 /* Day 8 */
 (()=>{
   const d=D8,key='d8',[pv,nx]=nb(key);
-  ovl.insertAdjacentHTML('beforeend',`<a href="#d8"><span class="dd" style="color:var(--red)">D8<small>12/12</small></span><span><span class="ss">${d.short}</span><br><span class="hh">夜機返台</span></span><span class="ar">›</span></a>`);
+  ovl.insertAdjacentHTML('beforeend',`<a href="#d8"><span class="dd" style="color:var(--red)">D8<small>12/12</small></span><span><span class="ss">${d.short}</span><br><span class="hh">夜機返台</span><span class="ow" data-d="8"></span></span><span class="ar">›</span></a>`);
   const el=document.createElement('div');el.className='view';el.id=key;
   el.innerHTML=`<div class="wrap">
    <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}<br>${d.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="8"></div></div>
@@ -615,11 +674,11 @@ DAYS.forEach(day=>{
      <h4>${s.name}</h4><p>${s.p}</p>
      <div class="more"><a href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>${d.stops[i+1]?`<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(s.q)}&destination=${encodeURIComponent(d.stops[i+1].q)}&travelmode=transit" target="_blank" rel="noopener">到下一站怎麼走 ↗</a>`:''}</div>
      ${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>
-   <p style="font-size:11px;color:var(--muted);margin:4px 2px">點任一站可展開完整說明與導航</p>
+   
    ${pager(pv,nx)}</div>`;
   daysEl.appendChild(el);
   const stops=[...el.querySelectorAll('.stop')];
-  stops.forEach(li=>li.addEventListener('click',e=>{if(e.target.closest('a'))return;li.classList.toggle('open')}));
+  
   addView(key,'D8','12/12',el,v=>{
     const pts=d.stops.map((s,i)=>({ll:s.end?[s.ll[0]-0.0012,s.ll[1]+0.0016]:s.ll,label:s.start?'起':s.end?'終':String(+s.k),sq:s.start||s.end,tip:s.k+'・'+s.name,idx:i}));
     v.maps.push(routeMap(el.querySelector('.map'),pts,i=>{const li=stops[i];li.classList.add('open','flash');li.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>li.classList.remove('flash'),1500)}));
