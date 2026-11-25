@@ -230,6 +230,35 @@ details.supply .in{padding:0 14px 14px}
   .night .smap{height:260px}
 }
 
+/* ===== 插畫路線海報 ===== */
+:root{--bg:#f3eee5;--paper:#fbf5ea;--paper2:#f6ecd9;--brown:#5a3d2b;--line:#e2d8c6}
+.poster{background:var(--paper2);background-image:radial-gradient(rgba(140,100,60,.06) 1px,transparent 1px);background-size:6px 6px;border:1px solid #e3d3b6;border-radius:16px;padding:10px 10px 12px;margin-top:10px;box-shadow:0 2px 10px rgba(90,61,43,.08);position:relative}
+.poster .ph{display:flex;justify-content:space-between;align-items:baseline;font-family:"Noto Serif TC",serif;font-weight:700;color:var(--brown);font-size:15px;border-bottom:1.5px dashed #d6c19c;padding:0 4px 6px;margin-bottom:10px}
+.poster .ph small{font-family:"Noto Sans TC";font-weight:500;font-size:11px;color:#9a7b5c}
+.ptiles{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px}
+.pt{position:relative;display:block;background:var(--paper);border-radius:12px;padding:5px 5px 7px;box-shadow:0 1px 4px rgba(90,61,43,.18);cursor:pointer;text-decoration:none;color:inherit;-webkit-user-select:none;user-select:none}
+.pt:active{transform:scale(.98)}
+.pt .im{border-radius:8px;overflow:hidden;aspect-ratio:16/9;background:var(--ice)}
+.pt .im svg{display:block;width:100%;height:100%}
+.pt .bd{position:absolute;top:-7px;left:-7px;z-index:2;box-shadow:0 1px 3px rgba(0,0,0,.3);border:2px solid var(--paper)}
+.pt .bd.sq{border-radius:8px;background:#fff;color:var(--navy);border:2px solid var(--navy)}
+.pt .tm{font-size:11px;color:#a5492f;font-weight:700;text-align:center;margin-top:4px;line-height:1.2}
+.pt .cap{font-family:"Noto Serif TC",serif;font-weight:700;font-size:13.5px;color:#3b2a1e;margin-top:3px;line-height:1.3;text-align:center;overflow-wrap:anywhere}
+.pt.wide{grid-column:1/-1}
+.pt.wide .im{aspect-ratio:16/7}
+.pt.l:not(:last-child)::after{content:"➜";position:absolute;right:-13px;top:32%;color:var(--red);font-size:13px;font-weight:700}
+.pt.r:not(:last-child)::after{content:"↙";position:absolute;left:-12px;bottom:-16px;color:var(--red);font-size:15px;font-weight:700}
+.tl .spot{grid-template-columns:1fr !important}
+.tl .spot h3{font-size:17px}
+.stop{grid-template-columns:1fr}
+.night.flash{box-shadow:0 0 0 3px var(--red)}
+.ovlist a,.spot,.stop,.tip,.pager a,.wx,.info .box{background:#fffdf8}
+@media (min-width:760px){
+  .ptiles{grid-template-columns:repeat(4,1fr)}
+  .pt.wide{grid-column:auto}.pt.wide .im{aspect-ratio:16/9}
+  .pt.l:not(:last-child)::after,.pt.r:not(:last-child)::after{content:"➜";left:auto;right:-13px;top:32%;bottom:auto;font-size:13px}
+}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -292,7 +321,7 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
     <div class="wrap">
       <div class="eyebrow">WINTER TRAVEL BOOKLET · 2026.12.05 – 12.12</div>
       <h1>東京深度八日<br>冬日旅遊小書</h1>
-      <p>日光・伊香保・輕井澤・清里・富士五湖・箱根・三島・關東五溫泉，最後一天東京潮流朝聖。上方選日期，每天一頁看完。</p>
+      <p>日光・伊香保・輕井澤・清里・富士五湖・箱根・三島・關東五溫泉，最後一天東京潮流朝聖。上方選日期，每天一張路線插畫海報。</p>
       <div class="pills"><span class="pill red">團號 26JTD05JXS</span><span class="pill">星宇 JX804 / JX805</span><span class="pill">雄獅旅遊</span></div>
     </div>
   </header>
@@ -545,6 +574,17 @@ sh('shX').onclick=closeMall;sh('sheet').addEventListener('click',e=>{if(e.target
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMall()});
 document.addEventListener('click',e=>{const b=e.target.closest('.mallbtn');if(b)openMall(b.dataset.m)});
 
+
+/* ============ 路線海報 ============ */
+const nightScene=()=>svg([sky('#16294a','#41618e'),`<circle cx="262" cy="40" r="14" fill="#fdf3c8"/><circle cx="268" cy="36" r="12" fill="#2a4370"/>`,snow(16,21),ground(140,'#e9eef4'),bldg(90,140,140,66,'#f2e6cf','#ffd27a',3,6),`<polygon points="78,76 160,50 242,76" fill="#3a4654"/>`,steam(66,140,40),steam(258,140,46)]);
+function posterHTML(tiles,title){
+  const n=tiles.length;
+  return `<div class="poster"><div class="ph"><span>${title}</span><small>點圖看說明 ↓</small></div><div class="ptiles">${tiles.map((t,i)=>{const wide=n%2===1&&i===n-1;
+    return `<a class="pt ${wide?'wide':''} ${i%2?'r':'l'}" data-go="${t.go}">${t.num?`<span class="num bd ${t.cls||''}">${t.num}</span>`:''}<div class="im">${t.art}</div>${t.tm?`<div class="tm">${t.tm}</div>`:''}<div class="cap">${t.cap}</div></a>`}).join('')}</div></div>`;
+}
+document.addEventListener('click',e=>{const t=e.target.closest('.pt');if(!t)return;e.preventDefault();const el=document.getElementById(t.dataset.go);if(!el)return;
+  el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600);});
+
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -628,20 +668,20 @@ DAYS.forEach(day=>{
   ovl.insertAdjacentHTML('beforeend',`<a href="#${key}"><span class="dd">D${day.d}<small>${day.date.slice(0,5)}</small></span><span><span class="ss">${day.short}</span><br><span class="hh">宿 ${h.n}</span><span class="ow" data-d="${day.d}"></span></span><span class="ar">›</span></a>`);
   const el=document.createElement('div');el.className='view';el.id=key;
   const mealOf=k=>day.meals.filter(m=>m.startsWith(k)).map(m=>m.split('｜')[1]);
-  const items=day.spots.map((s,i)=>`<article class="spot" data-i="${i}">
-     <div class="vis">${SCENES[s.scene]()}</div>
+  const items=day.spots.map((s,i)=>`<article class="spot" id="d${day.d}s${i}" data-i="${i}">
      <div class="txt"><h3>${s._num?`<span class="num">${s._num}</span>`:''}${s.name}</h3><span class="sub">${s.sub}</span>
        <p>${s.desc}</p><dl class="kv">${s.kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
        <div class="lks">${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:''}${s.mall?`<button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
     <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.filter(m=>!m.startsWith('晚')).map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="${day.d}"></div></div>
+    ${posterHTML([...day.spots.map((s,i)=>({num:s._num,cap:s.name,art:SCENES[s.scene](),go:`d${day.d}s${i}`})),{num:'宿',cls:'sq',cap:h.n,art:nightScene(),go:`d${day.d}night`}],`今日路線・${day.spots.length} 個景點＋住宿`)}
     <div class="map"></div>
     <div class="maplinks"><span>點數字跳到該景點</span><a target="_blank" rel="noopener" href="${dirUrl([day.start.q||HOTELS[day.hotel-1].q,...withLL.map(o=>o.s.q),h.q])}">整天路線・Google ↗</a></div>
     <div class="tl">
       <div class="startrow"><span class="num">起</span>${day.start.n} 出發</div>
       ${items}
-      <div class="night"><div class="nh">🌙 晚上</div>
+      <div class="night" id="d${day.d}night"><div class="nh">🌙 晚上</div>
         ${mealOf('晚').map(m=>`<div class="nrow"><b>晚餐</b><span>${m}</span></div>`).join('')}
         <div class="nrow"><b>住宿</b><a href="${G(h.q)}" target="_blank" rel="noopener">${h.n}</a></div>
         ${day.banner?`<div class="banner"><b>${day.banner[0]}</b>${day.banner[1]}</div>`:''}
@@ -666,10 +706,11 @@ DAYS.forEach(day=>{
   const el=document.createElement('div');el.className='view';el.id=key;
   el.innerHTML=`<div class="wrap">
    <div class="dayhead"><div class="daytag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="meals">${d.sub}<br>${d.meals.map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="8"></div></div>
+   ${posterHTML(d.stops.map((s,i)=>({num:s.k,cls:s.start||s.end?'r':'',tm:s.t,cap:s.name,art:s.art(),go:`d8s${i}`})),'今日路線・12 站')}
    <div class="map"></div>
    <div class="maplinks"><span>點數字跳到該站</span><a target="_blank" rel="noopener" href="${dirUrl(d.stops.map(s=>s.q))}">整天路線・Google ↗</a></div>
    <div class="banner tips4">${d.tips.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('')}</div>
-   <ol class="stops">${d.stops.map((s,i)=>`<li class="stop" data-i="${i}"><div class="th">${s.art()}</div><div class="b">
+   <ol class="stops">${d.stops.map((s,i)=>`<li class="stop" id="d8s${i}" data-i="${i}"><div class="b">
      <div class="t"><span class="num ${s.start||s.end?'r':''}">${s.k}</span>${s.t}${s.stay?`<span class="stay">${s.stay}</span>`:''}</div>
      <h4>${s.name}</h4><p>${s.p}</p>
      <div class="more"><a href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>${d.stops[i+1]?`<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(s.q)}&destination=${encodeURIComponent(d.stops[i+1].q)}&travelmode=transit" target="_blank" rel="noopener">到下一站怎麼走 ↗</a>`:''}</div>
