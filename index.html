@@ -259,6 +259,12 @@ details.supply .in{padding:0 14px 14px}
   .pt.l:not(:last-child)::after,.pt.r:not(:last-child)::after{content:"➜";left:auto;right:-13px;top:32%;bottom:auto;font-size:13px}
 }
 
+.shops{margin-top:7px;border-top:1px dashed var(--line);padding-top:6px}
+.shops .shh{font-size:11.5px;font-weight:700;color:var(--brown,#5a3d2b);margin-bottom:3px}
+.shops a{display:flex;gap:8px;align-items:baseline;text-decoration:none;padding:4px 0;font-size:13px;line-height:1.4}
+.shops a b{flex:none;color:var(--navy);border-bottom:1px dashed var(--navy)}
+.shops a span{color:var(--muted);font-size:12px;min-width:0}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -585,6 +591,8 @@ function posterHTML(tiles,title){
 document.addEventListener('click',e=>{const t=e.target.closest('.pt');if(!t)return;e.preventDefault();const el=document.getElementById(t.dataset.go);if(!el)return;
   el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600);});
 
+const SHOPS={"kairakuen": [["好文亭", "德川齊昭建的木造樓閣，3 樓眺望千波湖（園內・另購票）", "偕楽園 好文亭"], ["亀印製菓", "水戶銘菓「吉原殿中」老店", "亀印製菓 水戸"], ["天狗納豆", "水戶納豆老牌，稻草包裝很有特色", "天狗納豆 水戸"]], "toshogu": [["海老屋長造", "明治年間創業的日光湯波（豆皮）老店", "海老屋長造 日光"], ["ひしや", "手工日光羊羹，量少常賣完", "ひしや 日光 羊羹"]], "chuzenji": [["華嚴瀑布", "日本三名瀑，湖邊車程約 2 分（時間夠再去）", "華厳滝"]], "ikaho": [["勝月堂", "茶色「湯乃花饅頭」元祖，石段旁", "勝月堂 伊香保"], ["清芳亭", "伊香保溫泉饅頭老店", "清芳亭 伊香保"], ["河鹿橋", "紅色太鼓橋，石段頂再走約 10 分", "河鹿橋 伊香保"]], "mizusawa": [["田丸屋", "400 多年歷史的水澤烏龍麵老店", "田丸屋 水沢うどん"], ["大澤屋", "規模最大的水澤烏龍麵店，伴手禮乾麵多", "大澤屋 水沢うどん"], ["始祖 清水屋", "自稱水澤烏龍麵始祖", "始祖 清水屋 水沢"]], "kyukaru": [["ミカド珈琲", "招牌摩卡霜淇淋", "ミカド珈琲 軽井沢旧道店"], ["沢屋", "輕井澤果醬名店", "沢屋 旧軽井沢店"], ["腸詰屋 1 號店", "手工香腸、火腿", "腸詰屋 軽井沢1号店"], ["フランスベーカリー", "約翰藍儂常去的老麵包店", "フランスベーカリー 軽井沢"], ["浅野屋", "1933 年創業的麵包老店", "浅野屋 旧軽井沢本店"]], "moegi": [["ROCK", "咖哩＋八岳在地啤酒", "萌木の村 ROCK"], ["ホール・オブ・ホールズ", "音樂盒博物館（自費）", "ホール・オブ・ホールズ 萌木の村"]], "koumi": [["JR 鐵道最高地點", "標高 1,375m 紀念碑（列車行經）", "JR鉄道最高地点"]], "oishi": [["河口湖自然生活館", "藍莓霜淇淋、果醬", "河口湖自然生活館"]], "oshino": [["渡辺食品", "艾草草餅名店", "渡辺食品 忍野"], ["豆腐処 浅野屋", "名水豆腐", "豆腐処 浅野屋 忍野"]], "owakudani": [["大涌谷くろたまご館", "黑玉子、伴手禮", "大涌谷くろたまご館"], ["玉子茶屋", "現煮黑玉子", "大涌谷 玉子茶屋"]], "pirate": [["箱根神社 平和の鳥居", "湖上紅鳥居，船上看最清楚", "箱根神社 平和の鳥居"]], "mishima": [["スカイガーデン", "園區伴手禮店，富士山造型點心", "三島スカイウォーク スカイガーデン"]], "odawara": [["籠清 本店", "1814 年創業的魚板老舖", "籠清 本店 小田原"], ["ちん里う本店", "小田原梅干老店，車站旁", "ちん里う本店 小田原"], ["守谷のパン", "百年紅豆麵包", "守谷のパン 小田原"]], "odaiba": [["お台場海浜公園", "彩虹橋夜景", "お台場海浜公園"], ["自由女神像", "台場夜景拍照點", "自由の女神像 お台場"]]};
+DAYS.forEach(d=>d.spots.forEach(s=>s.shops=SHOPS[s.scene]));
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -671,11 +679,12 @@ DAYS.forEach(day=>{
   const items=day.spots.map((s,i)=>`<article class="spot" id="d${day.d}s${i}" data-i="${i}">
      <div class="txt"><h3>${s._num?`<span class="num">${s._num}</span>`:''}${s.name}</h3><span class="sub">${s.sub}</span>
        <p>${s.desc}</p><dl class="kv">${s.kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+       ${s.shops?`<div class="shops"><div class="shh">📍 特色店家・點名稱開 Google 地圖</div>${s.shops.map(([n,t,q])=>`<a href="${G(q)}" target="_blank" rel="noopener"><b>${n}</b><span>${t}</span></a>`).join('')}</div>`:''}
        <div class="lks">${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:''}${s.mall?`<button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
     <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.filter(m=>!m.startsWith('晚')).map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="${day.d}"></div></div>
-    ${posterHTML([...day.spots.map((s,i)=>({num:s._num,cap:s.name,art:SCENES[s.scene](),go:`d${day.d}s${i}`})),{num:'宿',cls:'sq',cap:h.n,art:nightScene(),go:`d${day.d}night`}],`今日路線・${day.spots.length} 個景點＋住宿`)}
+    ${day.spots.length>1?posterHTML(day.spots.map((s,i)=>({num:s._num,cap:s.name,art:SCENES[s.scene](),go:`d${day.d}s${i}`})),`今日路線・${day.spots.length} 個景點`):''}
     <div class="map"></div>
     <div class="maplinks"><span>點數字跳到該景點</span><a target="_blank" rel="noopener" href="${dirUrl([day.start.q||HOTELS[day.hotel-1].q,...withLL.map(o=>o.s.q),h.q])}">整天路線・Google ↗</a></div>
     <div class="tl">
