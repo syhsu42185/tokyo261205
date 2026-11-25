@@ -1,0 +1,128 @@
+<!-- 由 scripts/build_book.py 附加到 index.html 後面產生 book.html（A5 列印版） -->
+<style>
+@page{size:148mm 210mm;margin:0}
+body.book{background:#fff!important}
+body.book>*:not(#book){display:none!important}
+#book{font-family:"Noto Sans TC",sans-serif;color:#1c2b3d;font-size:8.6pt;line-height:1.5}
+#book .pg{width:148mm;height:210mm;padding:10mm 9mm 9mm;box-sizing:border-box;position:relative;overflow:hidden;page-break-after:always;break-after:page;background:#fff}
+#book .pg.paper{background:#fbf5ea}
+#book .fo{position:absolute;bottom:4mm;left:0;right:0;text-align:center;font-size:7pt;color:#9a8a75}
+#book h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:26pt;line-height:1.15;margin:0;color:#17304f}
+#book h2{font-family:"Noto Serif TC",serif;font-size:15pt;margin:0 0 1mm;color:#17304f;line-height:1.25}
+#book h3{font-family:"Noto Serif TC",serif;font-size:10.5pt;margin:0;color:#17304f;display:flex;align-items:center;gap:1.5mm}
+#book .tag{color:#c8413b;font-weight:700;letter-spacing:.1em;font-size:8pt}
+#book .num{display:inline-grid;place-items:center;width:4.6mm;height:4.6mm;border-radius:50%;background:#17304f;color:#fff;font:700 7pt "Noto Sans TC";flex:none}
+#book .bmap{height:62mm;border-radius:3mm;overflow:hidden;border:.3mm solid #d5dfea;margin:2mm 0}
+#book .bmap.big{height:78mm}
+#book .meal{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5mm;margin:2mm 0}
+#book .meal div{background:#f3eee5;border-radius:2mm;padding:1.2mm 2mm;font-size:7.8pt;line-height:1.35}
+#book .meal i{font-style:normal;font-weight:700;color:#fff;background:#24466e;border-radius:1mm;padding:0 1.2mm;font-size:7pt;margin-right:1mm}
+#book .meal small{display:block;color:#b26b00;font-weight:700;font-size:7pt}
+#book .gift{font-size:7.6pt;margin:1mm 0;color:#9a5b00}
+#book .gift b{color:#b3261e}
+#book .tiles{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-top:2mm}
+#book .tiles.t1{grid-template-columns:1fr}
+#book .tl{position:relative}
+#book .tl img,#book .tl svg{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:2mm}
+#book .tl .num{position:absolute;top:-1.2mm;left:-1.2mm;border:.5mm solid #fbf5ea}
+#book .tl div{font-family:"Noto Serif TC",serif;font-weight:700;font-size:8pt;text-align:center;margin-top:.6mm}
+#book .sp{border-bottom:.3mm dashed #d5dfea;padding:1.6mm 0}
+#book .sp p{margin:.6mm 0;font-size:8pt}
+#book .kv{display:grid;grid-template-columns:auto 1fr;gap:0 2mm;font-size:7.8pt;margin:0}
+#book .kv dt{color:#c8413b;font-weight:700}
+#book .kv dd{margin:0}
+#book .mini{font-size:7.4pt;color:#56657a;margin-top:.6mm}
+#book .mini b{color:#17304f}
+#book .night{border:.4mm solid #17304f;border-radius:2.5mm;padding:2mm 2.5mm;margin-top:2mm;font-size:7.8pt}
+#book .night h3{margin-bottom:1mm}
+#book .night .fac{color:#46566a}
+#book .sup div{display:flex;justify-content:space-between;gap:2mm;border-bottom:.2mm dotted #d5dfea;padding:.4mm 0}
+#book .sup span:last-child{color:#7d8690;white-space:nowrap}
+#book .cover{background:#17304f;color:#fff;display:flex;flex-direction:column;justify-content:flex-end}
+#book .cover h1{color:#fff;font-size:34pt}
+#book .cover .eb{letter-spacing:.2em;font-size:8pt;color:#9fb6d3}
+#book .cover p{color:#d6e2f0;font-size:9pt}
+#book .cover img{position:absolute;top:0;left:0;width:100%;height:58%;object-fit:cover;opacity:.9}
+#book .ov div.r{display:grid;grid-template-columns:13mm 1fr;gap:2mm;padding:.8mm 0;font-size:8pt;line-height:1.4;border-bottom:.3mm dashed #d5dfea}
+#book .ov b{color:#c8413b}
+#book .st8{display:grid;grid-template-columns:22mm 1fr;gap:2mm;padding:1.3mm 0;border-bottom:.3mm dashed #d5dfea}
+#book .st8 svg{width:22mm;height:12.4mm;border-radius:1.5mm}
+#book .st8 b{color:#17304f}
+#book .st8 small{display:block;color:#7d8690}
+#book .note{font-size:7.4pt;color:#7d8690}
+#book .lf-num{width:18px;height:18px;font-size:10px}
+#book .leaflet-control-container{display:none}
+</style>
+<div id="book"></div>
+<script>
+(()=>{
+document.body.classList.add('book');
+const B=document.getElementById('book');let pno=0;
+const page=(html,cls='')=>{pno++;B.insertAdjacentHTML('beforeend',`<section class="pg ${cls}">${html}${cls.includes('cover')?'':`<div class="fo">東京深度八日・冬日旅遊小書　${pno}</div>`}</section>`);return B.lastElementChild};
+const mealBox=d=>{const [[b,l,lp,dn,dp],g,sp]=MEALS[d];
+  return `<div class="meal"><div><i>早</i>${b}</div><div><i>午</i>${l}${lp?`<small>餐標 ${lp}</small>`:''}</div><div><i>晚</i>${dn}${dp?`<small>餐標 ${dp}</small>`:''}</div></div>`+
+  (g.length||sp.length?`<div class="gift">${g.map(x=>`🎁 <b>贈送</b> ${x}`).join('　')}${sp.length?'　':''}${sp.map(x=>`⭐ ${x}`).join('　')}</div>`:'')};
+const tile=s=>`<div class="tl">${s._num?`<span class="num">${s._num}</span>`:''}${s.photo?`<img src="${s.photo.src}">`:SCENES[s.scene]()}<div>${s.name}</div></div>`;
+const maps=[];
+const mkMap=(el,pts)=>maps.push(()=>{const m=L.map(el,{zoomControl:false,attributionControl:false,fadeAnimation:false,zoomAnimation:false});
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(m);
+  L.polyline(pts.map(p=>p.ll),{color:'#c8413b',weight:3,dashArray:'6 6'}).addTo(m);
+  pts.forEach(p=>L.marker(p.ll,{icon:L.divIcon({className:'',html:`<div class="lf-num ${p.sq?'sq':''}">${p.label}</div>`,iconSize:[18,18],iconAnchor:[9,9]})}).addTo(m));
+  m.fitBounds(L.latLngBounds(pts.map(p=>p.ll)),{padding:[18,18],maxZoom:15});});
+
+/* 封面 */
+page(`<img src="img/oishi.jpg"><div class="eb">WINTER TRAVEL BOOKLET · 2026.12.05 – 12.12</div><h1>東京深度八日<br>冬日旅遊小書</h1><p>日光・伊香保・輕井澤・清里・富士五湖・箱根・三島・東京<br>團號 26JTD05JXS・星宇 JX804／JX805</p>`,'cover');
+
+/* 總覽 */
+const ov=page(`<div class="tag">OVERVIEW</div><h2>八日行程與住宿</h2>
+ <div class="mini">集合 12/05（六）12:30 桃園一航星宇 5 號櫃台・JX804 15:00 → 成田約 19:00・回程 JX805 12/12 20:10 成田 → 約 23:20 桃園</div>
+ <div class="bmap big"></div>
+ <div class="ov">${DAYS.map(d=>`<div class="r"><b>D${d.d} ${d.date.slice(0,5)}</b><span>${d.short}<br><span class="note">宿 ${HOTELS[d.hotel].n}</span></span></div>`).join('')}<div class="r"><b>D8 12/12</b><span>${D8.short}</span></div></div>`,'paper');
+mkMap(ov.querySelector('.bmap'),[{ll:[35.772,140.3929],label:'✈',sq:true},...HOTELS.map((h,i)=>({ll:h.ll,label:i+1}))]);
+
+/* 每日 */
+DAYS.forEach(day=>{
+  const h=HOTELS[day.hotel];
+  const wl=day.spots.filter(s=>s.ll&&s._num);
+  const p1=page(`<div class="tag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2>${mealBox(day.d)}
+    <div class="bmap"></div>
+    <div class="tiles ${day.spots.length===1?'t1':''}">${day.spots.map(tile).join('')}</div>`,'paper');
+  mkMap(p1.querySelector('.bmap'),[{ll:day.start.ll,label:'起',sq:true},...wl.map(s=>({ll:s.ll,label:s._num})),{ll:h.ll,label:'宿',sq:true}]);
+  const spots=day.spots.map(s=>`<div class="sp"><h3>${s._num?`<span class="num">${s._num}</span>`:''}${s.name}<span class="note" style="font-family:'Noto Sans TC';font-weight:400">${s.sub}</span></h3>
+     <p>${s.desc}</p><dl class="kv">${s.kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+     ${s.shops?`<div class="mini">📍 ${s.shops.map(x=>`<b>${x[0]}</b> ${x[1]}`).join('｜')}</div>`:''}
+     ${s.gs?`<div class="mini">⛩️ ${s.gs.map(x=>`<b>${x[0]}</b>（${x[3]}）`).join('、')}</div>`:''}
+     ${s.ch?`<div class="mini">🧸 ${s.ch.map(x=>`<b>${x[0]}</b> ${x[1]}`).join('｜')}</div>`:''}</div>`).join('');
+  const fac=(HOTELFAC[day.hotel]||[]).filter(x=>x[2]).map(x=>x[0]+' '+x[1]).join('・');
+  const sup=day.supply.rows.slice(0,4).map(r=>`<div><span>${r[0]}　${r[1].replace(/<[^>]+>/g,'')}</span><span>${r[2]}　${r[3]}</span></div>`).join('');
+  const night=`<div class="night"><h3>🌙 晚上・${h.n}</h3>${day.banner?`<div class="gift"><b>${day.banner[0]}</b> ${day.banner[1]}</div>`:''}<div class="fac">${fac}</div><div class="sup" style="margin-top:1mm"><b>🏪 補給站</b>　<span class="note">${day.supply.note}</span>${sup}</div></div>`;
+  const p2=page(`<div class="tag">DAY ${day.d} · 景點</div>${spots}${night}`);
+  // 太長就把晚上移到下一頁
+  if(p2.scrollHeight>p2.clientHeight+2){p2.querySelector('.night').remove();
+    if(p2.scrollHeight>p2.clientHeight+2){p2.style.overflow='visible'}
+    page(`<div class="tag">DAY ${day.d} · 晚上</div>${night}`);}
+});
+
+/* D8 */
+const d=D8;
+const p8=page(`<div class="tag">DAY 8 · ${d.date}</div><h2>${d.title}</h2><div class="mini">${d.sub}</div>${mealBox(8)}<div class="bmap"></div>
+  <div class="gift">${d.tips.map(([a,b])=>`<b>${a}</b> ${b}`).join('　')}</div>`,'paper');
+mkMap(p8.querySelector('.bmap'),d.stops.map(s=>({ll:s.ll,label:s.start?'起':s.end?'終':String(+s.k),sq:s.start||s.end})));
+const half=Math.ceil(d.stops.length/2);
+[d.stops.slice(0,half),d.stops.slice(half)].forEach((L8,j)=>page(`<div class="tag">DAY 8 · 路線 ${j+1}/2</div>${L8.map(s=>`<div class="st8">${s.art()}<div><b>${s.k} ${s.name}</b>　<span class="note">${s.t}${s.stay?'・'+s.stay:''}</span><div style="font-size:7.6pt">${s.p}</div>${s.nx?`<small>下一站 ↓ ${s.nx}</small>`:''}</div></div>`).join('')}`));
+
+/* 封底 */
+page(`<div class="tag">NOTES</div><h2>旅途備忘</h2>
+ <div class="mini" style="font-size:8pt;line-height:1.7">
+ ・領隊與送機人員電話請看雄獅說明會資料。<br>・日本打台灣：010＋886＋區碼去 0＋號碼。<br>
+ ・冬季：奧日光、清里、萬座常在零下，防滑鞋、手套、暖暖包。<br>・溫泉：先沖洗再入池，毛巾不入池；硫磺泉先取下銀飾。<br>
+ ・刷卡：結帳一律選「日圓」付款。<br>・免稅：同店同日滿 ¥5,000（未稅），帶護照。<br>
+ ・網頁版（天氣、刷卡、記帳、每日更新限定）：syhsu42185.github.io/tokyo261205</div>
+ <div style="margin-top:6mm;border-top:.3mm dashed #d5dfea;padding-top:3mm" class="note">景點照片：Wikimedia Commons（各照片作者與授權列於網頁版「須知」頁底）。地圖 © OpenStreetMap contributors。</div>`,'paper');
+
+// 補成 4 的倍數（騎馬釘）
+while(pno%4)page('<div class="note" style="margin-top:80mm;text-align:center">MEMO</div>');
+document.documentElement.dataset.pages=pno;
+requestAnimationFrame(()=>{maps.forEach(f=>f());setTimeout(()=>document.documentElement.dataset.ready='1',5000)});
+})();
+</script>
