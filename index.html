@@ -425,6 +425,44 @@ details.supply .in{padding:0 14px 14px}
 .clsum div{border-radius:10px;padding:7px;text-align:center;font-size:11px}
 .clsum b{display:block;font-size:18px}
 
+#pay .prem{background:#fff4dc;border:1.5px solid #f0c36a;border-radius:12px;padding:8px 12px;margin-top:12px;font-size:13px}
+#pay .prem summary{font-weight:700;color:#7a4a00;cursor:pointer}
+#pay .prem summary i{font-style:normal;font-size:11px;background:#c8413b;color:#fff;border-radius:6px;padding:1px 6px;margin-left:4px}
+#pay .prem label{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px dashed #f0d9a8;line-height:1.5}
+#pay .prem label.dn{color:#8a97a8;text-decoration:line-through}
+#pay .prem input{margin-top:3px;flex:none;width:18px;height:18px}
+#pay .pform{background:#fffdf8;border-radius:14px;padding:10px 12px;box-shadow:0 1px 6px rgba(23,48,79,.06)}
+#pay #pStore{width:100%;font:inherit;font-size:18px;font-weight:700;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--navy)}
+#pay .prow{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+#pay .prow span{font-size:20px;font-weight:800;color:var(--navy)}
+#pay .prow input{flex:1;min-width:120px;font:inherit;font-size:18px;font-weight:700;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px}
+#pay .prow em{width:100%;font-style:normal;font-size:11.5px;color:var(--muted)}
+#pay .pcat{font-size:12px;color:var(--muted);margin:10px 2px 6px}
+#pay .pcat select{font:inherit;font-size:13px;padding:3px 6px;border-radius:8px;border:1px solid var(--line);max-width:100%}
+#pay .ptip{font-size:12.5px;background:#eef3f8;border-radius:10px;padding:7px 10px;margin-bottom:6px}
+#pay .pbest{background:#f0fbf4;border:2px solid var(--c);border-radius:14px;padding:12px 14px}
+#pay .pb1{font-size:17px;color:var(--navy);display:flex;align-items:baseline;gap:6px}
+#pay .pb1 b{font-size:20px}
+#pay .pb1 span{margin-left:auto;font-size:26px;font-weight:800;color:#1f7a43}
+#pay .pb2{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+#pay .pb3{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-weight:700;color:#b26b00}
+#pay .plog{border:0;background:var(--navy);color:#fff;font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:10px;cursor:pointer}
+#pay .plog.sm{padding:3px 9px;font-size:11.5px;border-radius:7px}
+#pay .pothers{margin-top:6px}
+#pay .po{display:grid;grid-template-columns:12px 1fr auto auto;gap:2px 8px;align-items:center;padding:6px 4px;border-bottom:1px dashed var(--line);font-size:13px}
+#pay .po.over{opacity:.45}
+#pay .po b{color:var(--navy);font-weight:500}
+#pay .po em{font-style:normal;font-weight:700;color:#1f7a43}
+#pay .po small{grid-column:2/5;font-size:11px;color:var(--muted)}
+#pay .pcaps{display:flex;flex-wrap:wrap;gap:5px;font-size:11.5px;margin-top:8px;align-items:center;color:var(--muted)}
+#pay .pcaps i{font-style:normal;background:#fff1d6;color:#9a5b00;border-radius:999px;padding:2px 8px}
+#pay .ld{display:flex;justify-content:space-between}
+#pay .ld em{font-style:normal;color:var(--muted);font-weight:500}
+#pay .li{grid-template-columns:1fr auto 26px}
+#pay .li small{display:flex;align-items:center;gap:4px}
+#pay .psets{margin-top:16px;background:#fffdf8;border-radius:12px;padding:10px 12px}
+#pay .psets summary{font-weight:700;color:var(--navy);cursor:pointer}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -1018,156 +1056,195 @@ loadFinds();
 (()=>{
 const LS='tk_pay_v1';
 const CATS={
- drug:['💊','藥妝（松本清・唐吉訶德・大國）'],
- kmfood:['🍔','熊本熊指定餐飲（Shake Shack・一蘭・松屋・すき家・壽司郎・鳥貴族…）'],
- apparel:['👕','UNIQLO・GU・mont-bell・無印良品'],
- elec:['📷','BicCamera・Yodobashi'],
- edion:['🔌','EDION（愛電王）'],
- suica:['🚃','Suica／PASMO 儲值'],
- prince:['🏨','王子飯店（Prince Hotel）'],
+ drug:['💊','熊本熊指定藥妝（松本清・唐吉訶德・大國）'],
+ kmfood:['🍔','熊本熊指定餐飲'],
+ apparel:['👕','熊本熊指定服飾（UNIQLO・GU・mont-bell・無印）'],
+ elec:['📷','熊本熊指定家電（BicCamera・Yodobashi）'],
+ kmmall:['🏬','熊本熊指定商場（三井 Outlet・LaLaport）'],
+ jr:['🚄','JR 購票（熊本熊指定）'],
+ suica:['🚃','Suica／PASMO 儲值（熊本熊指定）'],
+ prince:['🏨','王子飯店（熊本熊指定）'],
+ edion:['🔌','EDION 愛電王（CUBE 領券加碼）'],
  conv:['🏪','便利商店'],
- food:['🍜','一般餐廳・土產店・小店'],
- mall:['🛍️','百貨・Outlet・其他品牌店'],
  duty:['🧾','免稅店'],
  qr:['📱','PayPay／條碼支付'],
+ mall:['🛍️','一般店（品牌店・餐廳・土產）'],
 };
-const KM6=['drug','kmfood','apparel','elec','suica','prince'];
+// 店名關鍵字 → 類型（小寫比對）
+const STORES=[
+ ['drug',['松本清','マツモトキヨシ','matsumoto','matsukiyo','マツキヨ','唐吉','ドン・キホーテ','ドンキ','donki','don quijote','大國','大国','ダイコク','daikoku']],
+ ['kmfood',['shake shack','シェイクシャック','一蘭','ichiran','松屋','matsuya','すき家','sukiya','壽司郎','スシロー','sushiro','藏壽司','くら寿司','kura sushi','鳥貴族','torikizoku','敘敘苑','叙々苑','jojoen','牛角','gyukaku','勝烈亭','今半','doutor','ドトール','羅多倫','fuglen','力丸','六歌仙']],
+ ['apparel',['uniqlo','ユニクロ','gu ','ジーユー','mont-bell','montbell','モンベル','無印','muji','alpen','アルペン']],
+ ['elec',['bic','ビック','yodobashi','ヨドバシ']],
+ ['edion',['edion','エディオン','愛電王']],
+ ['kmmall',['三井outlet','三井 outlet','mitsui','lalaport','ららぽーと','三井購物']],
+ ['jr',['jr','新幹線','みどりの窓口','車票','jr東日本']],
+ ['suica',['suica','pasmo','西瓜卡','儲值','チャージ']],
+ ['prince',['prince hotel','プリンスホテル','王子飯店','萬座','万座']],
+ ['conv',['7-11','711','seven','セブン','lawson','ローソン','family','ファミマ','famima','全家','ministop','ミニストップ','daily yamazaki','デイリー']],
+ ['duty',['免稅','免税','duty free','光伸','laox','ラオックス']],
+ ['qr',['paypay','ペイペイ','line pay','條碼','qr']],
+];
+const NOTES={ // 特定店名的提醒
+ 'divercity':'DiverCity 是三井的商場，但帳單名稱多半是各店店名，通常不算熊本熊「三井」指定',
+ 'ダイバーシティ':'DiverCity 是三井的商場，但帳單名稱多半是各店店名',
+ 'くろたまご':'大涌谷くろたまご館：網友提醒不能用電子支付，帶現金',
+ '黒たまご':'大涌谷くろたまご館：網友提醒不能用電子支付，帶現金',
+ 'parco':'PARCO 內各店分開結帳，依店名判斷（例：PARCO 內 HUMAN MADE＝一般店）',
+};
+const guess=name=>{const n=(' '+name+' ').toLowerCase();for(const[c,ks]of STORES)if(ks.some(k=>n.includes(k.toLowerCase())))return c;return 'mall'};
+const noteFor=name=>{const n=name.toLowerCase();for(const k in NOTES)if(n.includes(k.toLowerCase()))return NOTES[k];return ''};
+const KM6=['drug','kmfood','apparel','elec','kmmall','jr','suica','prince'];
 const CARDS=[
  {id:'uni',name:'中信 uniopen',color:'#0a7d4f'},
  {id:'km',name:'玉山 熊本熊卡',color:'#111'},
- {id:'cube',name:'國泰 CUBE',color:'#1f8a70'},
- {id:'rich',name:'台新 Richart',color:'#c8102e'},
  {id:'ucard',name:'玉山 Unicard',color:'#3b5ba5'},
+ {id:'rich',name:'台新 Richart',color:'#c8102e'},
+ {id:'cube',name:'國泰 CUBE',color:'#1f8a70'},
 ];
+const cardName=id=>id==='cash'?'現金':(CARDS.find(c=>c.id===id)||{name:id}).name;
 const DEF={rate:0.21,limits:{uni:0,km:0,cube:0,rich:0,ucard:0},used:{uni:0,km:0,cube:0,rich:0,ucard:0},
   capUsed:{uni8:0,km6:0,edion:0},kmReg:false,cubePlan:true,richL2:true,ucardRate:4.5,log:[],v:2};
 let S;
 try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){S=JSON.parse(JSON.stringify(DEF))}
 const save=()=>{try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}};
 if(!S.v||S.v<2){S.richL2=true;S.ucardRate=4.5;S.v=2;save();}
-const CAP={uni8:6250,km6:8333,edion:5970}; // 加碼可刷金額（NT$）
-const capLeft=k=>Math.max(0,CAP[k]-S.capUsed[k]-S.log.filter(x=>x.caps&&x.caps[k]).reduce((a,x)=>a+x.caps[k],0));
+const CAP={uni8:6250,km6:8333,edion:5970};
+const capLeft=k=>Math.max(0,CAP[k]-(S.capUsed[k]||0)-S.log.filter(x=>x.caps&&x.caps[k]).reduce((a,x)=>a+x.caps[k],0));
 const spentOn=id=>S.log.filter(x=>x.card===id).reduce((a,x)=>a+x.twd,0);
-const limitLeft=id=>S.limits[id]?S.limits[id]-S.used[id]-spentOn(id):null;
+const limitLeft=id=>S.limits[id]?S.limits[id]-(S.used[id]||0)-spentOn(id):null;
 const toTWD=y=>Math.round(y*S.rate*1.015);
+const fmt=n=>Math.round(n).toLocaleString();
 
-// 回傳 {rate:有效%, reward, caps:{k:amt}, notes:[]}
 function calc(card,cat,twd){
-  const n=[];let r=0;const caps={};
-  const add=(pct,amt)=>{r+=amt*pct/100};
+  const n=[];let r=0;const caps={};const add=(p,a)=>{r+=a*p/100};
   if(card==='uni'){
     if(cat==='qr'){add(2,twd);n.push('條碼支付不算海外實體，只有 2%')}
     else{add(3,twd);const c=Math.min(twd,capLeft('uni8'));if(c>0){add(8,c);caps.uni8=c}
-      n.push(c<twd?`加碼 8% 只剩 NT$${capLeft('uni8')} 額度，超過部分 3%`:'海外實體 3%＋加碼 8%（每月 500 點）');}
+      n.push(c<twd?(c?`加碼 8% 只剩 NT$${fmt(capLeft('uni8'))}，超過部分 3%`:'本月加碼 8% 已用完，只剩 3%'):'海外實體 3%＋加碼 8%');}
   }else if(card==='km'){
-    if(cat==='qr'){add(0,twd);n.push('綁玉山 Wallet 用 PayPay 不算日本 2.5%／8.5%，另有 PayPay 活動請看玉山頁面')}
+    if(cat==='qr'){n.push('綁玉山 Wallet 用 PayPay 不算日本回饋')}
     else{add(2.5,twd);
-      if(KM6.includes(cat)){if(!S.kmReg)n.push('⚠️ 你還沒勾「已登錄」，指定店加碼 6% 拿不到');
+      if(KM6.includes(cat)){if(!S.kmReg)n.push('⚠️ 未勾「已登錄」，指定店加碼 6% 拿不到');
         else{const c=Math.min(twd,capLeft('km6'));if(c>0){add(6,c);caps.km6=c}
-          n.push(c<twd?`指定店加碼 6% 只剩 NT$${capLeft('km6')} 額度`:'日本 2.5%＋指定店加碼 6%');}
-        n.push('帳單店名要看得出是該店；開在百貨/車站內可能不算');}
-      else n.push('日本一般消費 2.5%，無上限');}
+          n.push(c<twd?(c?`指定店加碼 6% 只剩 NT$${fmt(capLeft('km6'))}`:'指定店加碼已用完，只剩 2.5%'):'日本 2.5%＋指定店 6%');}
+        n.push('帳單店名要看得出是該店（開在百貨／車站內可能不算）');}
+      else n.push('日本一般 2.5%');}
   }else if(card==='cube'){
-    if(!S.cubePlan){add(0.3,twd);n.push('⚠️ 沒切「趣旅行」只有 0.3%，出國前在 App 切換')}
-    else{add(3,twd);n.push('趣旅行 海外 3%');
-      if(cat==='edion'){const c=Math.min(twd,capLeft('edion'));if(c>0){add(6.7,c);caps.edion=c}n.push('EDION 加碼 6.7%（需先在 App 領券，上限 400 點）')}}
-  }else if(card==='rich'){
-    if(S.richL2){add(3.3,twd);n.push('玩旅刷 海外 3.3%（需切換到「玩旅刷」）')}else{add(1.3,twd);n.push('⚠️ 未達 Level 2（台新帳戶自動扣繳）只有 1.3%')}
-  }else if(card==='ucard'){add(+S.ucardRate||0,twd);n.push(`UP選 ${S.ucardRate}%（你在 App 看到的數字；需維持 UP選訂閱、帳單 e 化＋玉山帳戶扣繳）`)}
-  const left=limitLeft(card);
-  if(left!==null&&left<twd)n.unshift(`❗ 信用額度只剩 NT$${left.toLocaleString()}，不夠刷這筆`);
-  return {rate:twd?r/twd*100:0,reward:Math.floor(r),caps,notes:n,over:left!==null&&left<twd};
+    if(!S.cubePlan){add(0.3,twd);n.push('⚠️ 沒切「趣旅行」只有 0.3%')}
+    else{add(3,twd);n.push('趣旅行 3%');if(cat==='edion'){const c=Math.min(twd,capLeft('edion'));if(c>0){add(6.7,c);caps.edion=c}n.push('EDION 加碼 6.7%（先在 App 領券）')}}
+  }else if(card==='rich'){if(S.richL2){add(3.3,twd);n.push('玩旅刷 3.3%')}else{add(1.3,twd);n.push('⚠️ 未達 Level 2 只有 1.3%')}}
+  else if(card==='ucard'){add(+S.ucardRate||0,twd);n.push(`UP選 ${S.ucardRate}%`)}
+  const left=limitLeft(card),over=left!==null&&left<twd;
+  if(over)n.unshift(`❗ 額度只剩 NT$${fmt(left)}，不夠`);
+  return {rate:twd?r/twd*100:0,reward:Math.floor(r),caps,notes:n,over};
 }
-
-const el=document.getElementById('pay');
-// 今日行程對應的地點快捷
-const TODAY_PLACES={
- 1:[['成田機場便利商店','conv'],['飯店 1F 全家','conv']],
- 2:[['偕樂園・東照宮土產','food'],['鬼怒川超商','conv']],
- 3:[['伊香保溫泉饅頭店','food'],['輕井澤 Outlet 品牌店','mall'],['Outlet 內 UNIQLO／mont-bell','apparel'],['萬座王子飯店（館內消費）','prince']],
- 4:[['舊輕井澤銀座小店','food'],['萌木之村','food'],['石和溫泉超商','conv']],
- 5:[['河口湖・忍野八海土產','food'],['MaxValu 超市','food']],
- 6:[['大涌谷くろたまご館（帶現金）','food'],['三島 Skywalk 伴手禮','food'],['伊東 7-11','conv']],
- 7:[['光伸免稅店','duty'],['台場 DiverCity 品牌店','mall'],['DiverCity 內 UNIQLO／GU','apparel'],['品川全家','conv']],
- 8:[['FAMIMA PARK','conv'],['HUMAN MADE／Stüssy／ADERERROR','mall'],['mont-bell 澀谷','apparel'],['Shake Shack','kmfood'],['ポケモンセンター（PARCO）','mall'],['Suica 儲值','suica']],
+const TODAY={
+ 1:['成田機場 7-11','全家（飯店 1F）'],2:['偕樂園 土產店','東照宮 土產店','Lawson 鬼怒川'],
+ 3:['伊香保 溫泉饅頭','輕井澤王子購物廣場','mont-bell（Outlet）','萬座王子飯店'],
+ 4:['舊輕井澤 ミカド珈琲','萌木之村','7-11 石和'],5:['忍野八海 土產','MaxValu','全家 河口湖'],
+ 6:['大涌谷くろたまご館','三島 Skywalk 伴手禮','7-11 伊東'],
+ 7:['光伸免稅店','DiverCity','UNIQLO','全家 品川'],
+ 8:['FAMIMA PARK','HUMAN MADE','lululemon','ADERERROR','Stüssy','ポケモンセンター','mont-bell','Shake Shack','Suica 儲值'],
 };
-const tripDay=()=>{const d=new Date(),t=new Date(d.getTime()+(d.getTimezoneOffset()+540)*60000);const s=t.getFullYear()*10000+(t.getMonth()+1)*100+t.getDate();
-  return s>=20261205&&s<=20261212?s-20261204:0};
-let cur={cat:'drug',place:'',jpy:''};
+const tripDay=()=>{const d=new Date(),t=new Date(d.getTime()+(d.getTimezoneOffset()+540)*60000);const s=t.getFullYear()*10000+(t.getMonth()+1)*100+t.getDate();return s>=20261205&&s<=20261212?s-20261204:0};
+let cur={store:'',jpy:'',cat:null};
+const el=document.getElementById('pay');
+el.innerHTML=`<div class="wrap">
+ <div id="pRem"></div>
+ <h2 class="sec">💳 這間店刷哪張？</h2>
+ <div class="pform">
+  <input id="pStore" placeholder="輸入店名，例：ADERERROR、松本清、7-11" autocomplete="off">
+  <div class="prow"><span>¥</span><input id="pJpy" type="number" inputmode="numeric" placeholder="金額"><em id="pTwd"></em></div>
+  <div class="ppl" id="pToday"></div>
+ </div>
+ <div id="pRes"></div>
+ <h2 class="sec">📒 記帳</h2>
+ <div id="pLog"></div>
+ <details class="psets"><summary>⚙️ 額度與設定</summary><div id="pSet"></div></details>
+</div>`;
+const $=id=>document.getElementById(id);
+const day=tripDay();
+$('pToday').innerHTML=(day?`<span class="pnote">D${day} 行程上的店：</span>`:'<span class="pnote">常用：</span>')+(TODAY[day]||['松本清','7-11','Shake Shack','UNIQLO','HUMAN MADE','Suica 儲值']).map(p=>`<button class="pp" data-s="${p}">${p}</button>`).join('');
 
-function render(){
-  const day=tripDay();
-  const places=(day?TODAY_PLACES[day]:[]).map(([p,c])=>`<button class="pp" data-place="${p}" data-cat="${c}">${CATS[c][0]} ${p}</button>`).join('');
-  const yen=+cur.jpy||0,twd=toTWD(yen);
-  const ranks=CARDS.map(c=>({c,...calc(c.id,cur.cat,twd||1000)})).sort((a,b)=>(a.over-b.over)||(b.rate-a.rate));
-  const tot=S.log.reduce((a,x)=>a+x.twd,0),rew=S.log.reduce((a,x)=>a+x.reward,0),totY=S.log.reduce((a,x)=>a+x.jpy,0);
+
+const REM=[
+ ['km','kmReg','熊本熊卡：到玉山網站「登錄」2026 下半年日本活動，沒登錄拿不到指定店 6%（藥妝、Shake Shack、mont-bell、Suica 儲值等）'],
+ ['uc',null,'Unicard 4.5%：確認 12 月仍訂閱「UP選」，並維持帳單 e 化＋玉山帳戶自動扣繳，少一項就拿不到 4.5%'],
+ ['rich','richL2','Richart 3.3%：App 切到「玩旅刷」，並維持台新帳戶自動扣繳（Level 2），否則只有 1.3%'],
+ ['cube','cubePlan','CUBE 3%：App 切到「趣旅行」；要去 EDION 前先在 App 領「日本愛電王加碼」券'],
+ ['uni',null,'uniopen 11%：免登錄，但每月加碼只到約 NT$6,250，用完自動降到 3%（這裡會自動幫你算）'],
+ ['dcc',null,'所有卡：店員問「日圓還是台幣」一律選日圓，選台幣（DCC）會被多收匯差；國外手續費 1.5% 照收'],
+];
+S.chk=S.chk||{};
+function renderRem(){const done=REM.filter(([k,f])=>f?S[f]:S.chk[k]).length;
+  $('pRem').innerHTML=`<details class="prem" ${done<REM.length?'open':''}><summary>📌 出發前確認 <b>${done}/${REM.length}</b>${done<REM.length?' <i>還有沒做的</i>':' ✅'}</summary>${REM.map(([k,f,t])=>`<label class="${(f?S[f]:S.chk[k])?'dn':''}"><input type="checkbox" data-rem="${k}" ${(f?S[f]:S.chk[k])?'checked':''}> ${t}</label>`).join('')}</details>`}
+function renderRes(){
+  const yen=+cur.jpy||0,twd=toTWD(yen),base=twd||1000;
+  $('pTwd').textContent=yen?`≈ NT$${fmt(twd)}（含 1.5% 手續費）`:'';
+  if(!cur.store.trim()&&!yen){$('pRes').innerHTML='<div class="pnote">輸入店名（和金額），這裡會告訴你刷哪張。</div>';return}
+  const cat=cur.cat||guess(cur.store);
+  const rk=CARDS.map(c=>({c,...calc(c.id,cat,base)})).sort((a,b)=>(a.over-b.over)||(b.rate-a.rate));
+  const b=rk[0],tip=noteFor(cur.store);
+  $('pRes').innerHTML=`<div class="pcat">辨識為 <select id="pCat">${Object.entries(CATS).map(([k,[e,t]])=>`<option value="${k}" ${k===cat?'selected':''}>${e} ${t}</option>`).join('')}</select></div>
+   ${tip?`<div class="ptip">💡 ${tip}</div>`:''}
+   <div class="pbest" style="--c:${b.c.color}"><div class="pb1">👍 刷 <b>${b.c.name}</b><span>${b.rate.toFixed(1)}%</span></div>
+     <div class="pb2">${b.notes.join('・')}</div>
+     ${yen?`<div class="pb3"><span>回饋約 NT$${fmt(b.reward)}</span><button class="plog" data-card="${b.c.id}">刷了，記一筆</button></div>`:'<div class="pb2">（輸入金額後可以直接記帳）</div>'}</div>
+   <div class="pothers">${rk.slice(1).map(r=>`<div class="po ${r.over?'over':''}"><span class="cdot" style="background:${r.c.color}"></span><b>${r.c.name}</b><em>${r.rate.toFixed(1)}%</em>${yen?`<button class="plog sm" data-card="${r.c.id}">記</button>`:''}<small>${r.notes.join('・')}</small></div>`).join('')}</div>`;
+}
+function renderLog(){
+  const tot=S.log.reduce((a,x)=>a+x.twd,0),rew=S.log.reduce((a,x)=>a+x.reward,0),ty=S.log.reduce((a,x)=>a+x.jpy,0);
   const byDay={};S.log.forEach((x,i)=>{(byDay[x.date]=byDay[x.date]||[]).push([x,i])});
-  el.innerHTML=`<div class="wrap">
-  <h2 class="sec">💳 現在刷哪張？</h2>
-  ${day?`<div class="pnote">今天是 D${day}，行程上的地方：</div><div class="ppl">${places}</div>`:'<div class="pnote">出發後（12/5–12/12）這裡會自動列出當天行程上的地點。</div>'}
-  <div class="catg">${Object.entries(CATS).map(([k,[e,t]])=>`<button class="ct ${k===cur.cat?'on':''}" data-cat="${k}">${e} ${t.split('（')[0]}</button>`).join('')}</div>
-  <div class="amt"><span>¥</span><input id="payJpy" type="number" inputmode="numeric" placeholder="金額（日圓）" value="${cur.jpy}"><em>${yen?`≈ NT$${twd.toLocaleString()}（含 1.5% 手續費・匯率 ${S.rate}）`:'先輸入金額，未輸入以 NT$1,000 試算'}</em></div>
-  <div class="pnote">📍 ${cur.place||CATS[cur.cat][1]}</div>
-  <div class="rank">${ranks.map((r,i)=>`<div class="rk ${i===0&&!r.over?'best':''} ${r.over?'over':''}">
-     <div class="rh2"><span class="cdot" style="background:${r.c.color}"></span><b>${r.c.name}</b><span class="pct">${r.rate.toFixed(1)}%</span></div>
-     <div class="rn">${r.notes.join('<br>')}</div>
-     ${yen?`<div class="ra"><span>預估回饋 NT$${r.reward}</span><button class="logbtn" data-card="${r.c.id}">用這張刷了 → 記帳</button></div>`:''}</div>`).join('')}</div>
-
-  <h2 class="sec">📒 記帳</h2>
-  <div class="sum"><div><b>¥${totY.toLocaleString()}</b><span>總消費</span></div><div><b>NT$${tot.toLocaleString()}</b><span>約台幣</span></div><div><b>NT$${rew.toLocaleString()}</b><span>預估回饋</span></div></div>
-  <div class="cardsum">${CARDS.map(c=>{const sp=spentOn(c.id),lf=limitLeft(c.id),lim=S.limits[c.id];const pct=lim?Math.min(100,(S.used[c.id]+sp)/lim*100):0;
-     return `<div class="cs"><div class="csh"><span class="cdot" style="background:${c.color}"></span>${c.name}<b>NT$${sp.toLocaleString()}</b></div>${lim?`<div class="bar"><i style="width:${pct}%;background:${pct>85?'#c8413b':c.color}"></i></div><small>額度剩 NT$${lf.toLocaleString()} / ${lim.toLocaleString()}</small>`:'<small>未設定額度（到下方設定）</small>'}</div>`}).join('')}</div>
-  <div class="caps">加碼額度剩餘：uniopen 8% NT$${capLeft('uni8').toLocaleString()}／熊本熊 6% NT$${capLeft('km6').toLocaleString()}／CUBE EDION NT$${capLeft('edion').toLocaleString()}</div>
-  <div class="logl">${Object.keys(byDay).sort().reverse().map(d=>`<div class="ld">${d}</div>`+byDay[d].reverse().map(([x,i])=>`<div class="li"><span>${CATS[x.cat][0]}</span><div><b>${x.place||CATS[x.cat][1].split('（')[0]}</b><small>${x.card==='cash'?'現金':CARDS.find(c=>c.id===x.card).name}・回饋 NT$${x.reward}</small></div><em>¥${x.jpy.toLocaleString()}<small>NT$${x.twd.toLocaleString()}</small></em><button class="del" data-i="${i}">×</button></div>`).join('')).join('')||'<div class="pnote">還沒有紀錄。選情境、輸入金額，按「用這張刷了」就會記下來。</div>'}</div>
-  <details class="manual"><summary>＋ 手動記一筆（現金或其他）</summary>
-    <div class="mf"><input id="mPlace" placeholder="地點／品項"><input id="mJpy" type="number" inputmode="numeric" placeholder="¥ 金額"><select id="mCard"><option value="cash">現金</option>${CARDS.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select><button id="mAdd">記下</button></div></details>
-
-  <h2 class="sec">⚙️ 額度與設定</h2>
-  <div class="setg">${CARDS.map(c=>`<div class="st"><b><span class="cdot" style="background:${c.color}"></span>${c.name}</b><label>信用額度 NT$<input data-lim="${c.id}" type="number" inputmode="numeric" value="${S.limits[c.id]||''}"></label><label>出發前已用 NT$<input data-used="${c.id}" type="number" inputmode="numeric" value="${S.used[c.id]||''}"></label></div>`).join('')}</div>
+  $('pLog').innerHTML=`<div class="sum"><div><b>¥${fmt(ty)}</b><span>總消費</span></div><div><b>NT$${fmt(tot)}</b><span>約台幣</span></div><div><b>NT$${fmt(rew)}</b><span>預估回饋</span></div></div>
+   <div class="pcaps"><span>加碼額度剩：</span><i>uniopen NT$${fmt(capLeft('uni8'))}</i><i>熊本熊 NT$${fmt(capLeft('km6'))}</i>${CARDS.filter(c=>S.limits[c.id]).map(c=>`<i>${c.name.split(' ')[1]} 額度剩 NT$${fmt(limitLeft(c.id))}</i>`).join('')}</div>
+   ${Object.keys(byDay).sort().reverse().map(d=>{const L=byDay[d];const st=L.reduce((a,[x])=>a+x.jpy,0);
+     return `<div class="ld"><span>${d.slice(5).replace('-','/')}</span><em>¥${fmt(st)}</em></div>`+L.slice().reverse().map(([x,i])=>`<div class="li"><div><b>${x.place||CATS[x.cat][1]}</b><small><span class="cdot" style="background:${(CARDS.find(c=>c.id===x.card)||{color:'#999'}).color}"></span>${cardName(x.card)}${x.reward?`・回饋 NT$${x.reward}`:''}</small></div><em>¥${fmt(x.jpy)}<small>NT$${fmt(x.twd)}</small></em><button class="del" data-i="${i}">×</button></div>`).join('')}).join('')||'<div class="pnote">還沒有紀錄。上面輸入店名和金額，按「刷了，記一筆」。</div>'}
+   <details class="manual"><summary>＋ 記一筆現金</summary><div class="mf"><input id="mPlace" placeholder="店名／品項"><input id="mJpy" type="number" inputmode="numeric" placeholder="¥"><button id="mAdd">記下</button></div></details>`;
+}
+function renderSet(){
+  $('pSet').innerHTML=`<div class="setg">${CARDS.map(c=>`<div class="st"><b><span class="cdot" style="background:${c.color}"></span>${c.name}</b><label>信用額度 NT$<input data-lim="${c.id}" type="number" inputmode="numeric" value="${S.limits[c.id]||''}"></label><label>出發前已用 NT$<input data-used="${c.id}" type="number" inputmode="numeric" value="${S.used[c.id]||''}"></label></div>`).join('')}</div>
   <div class="opts">
-   <label><input type="checkbox" id="oKm" ${S.kmReg?'checked':''}> 熊本熊卡已在玉山網站「登錄」2026 下半年日本活動（沒登錄拿不到 6%）</label>
-   <label><input type="checkbox" id="oCube" ${S.cubePlan?'checked':''}> CUBE 已在 App 切換為「趣旅行」</label>
-   <label><input type="checkbox" id="oRich" ${S.richL2?'checked':''}> Richart 已設台新帳戶自動扣繳（Level 2）並切到「玩旅刷」</label>
-   <label>Unicard 在日本的回饋率（你 App 顯示 4.5%）<input id="oUc" type="number" step="0.1" value="${S.ucardRate}"> %</label>
-   <label>本月出發前已用掉的加碼額度：uniopen NT$<input id="cU" type="number" value="${S.capUsed.uni8||''}">　熊本熊 NT$<input id="cK" type="number" value="${S.capUsed.km6||''}"></label>
-   <label>匯率（1 日圓＝台幣）<input id="oRate" type="number" step="0.0001" value="${S.rate}"> <button id="rateBtn">抓最新匯率</button></label>
+   <label><input type="checkbox" id="oKm" ${S.kmReg?'checked':''}> 熊本熊卡已「登錄」2026 下半年日本活動</label>
+   <label><input type="checkbox" id="oCube" ${S.cubePlan?'checked':''}> CUBE 已切「趣旅行」</label>
+   <label><input type="checkbox" id="oRich" ${S.richL2?'checked':''}> Richart 3.3%（Level 2＋玩旅刷）</label>
+   <label>Unicard 日本回饋 <input id="oUc" type="number" step="0.1" value="${S.ucardRate}"> %</label>
+   <label>本月出發前已用加碼：uniopen NT$<input id="cU" type="number" value="${S.capUsed.uni8||''}"> 熊本熊 NT$<input id="cK" type="number" value="${S.capUsed.km6||''}"></label>
+   <label>匯率（1 日圓＝台幣）<input id="oRate" type="number" step="0.0001" value="${S.rate}"></label>
   </div>
   <div class="btns"><button class="btn" id="expBtn">匯出備份</button><label class="btn">匯入備份<input id="impF" type="file" accept=".json" hidden></label><button class="btn" id="clrBtn" style="background:#8a97a8">清除記帳</button></div>
-  <p class="buynote">記帳只存在這支手機的瀏覽器（不會上傳）。iPhone 建議「加入主畫面」再用，資料較不會被清掉；換手機或清除 Safari 資料前先「匯出備份」。<br>回饋規則依 2026/11 查詢的官方與整理資訊：uniopen 海外實體 3%＋加碼 8%（每月上限 500 點）；熊本熊 日本 2.5%＋指定店 6%（每期上限 NT$500，需登錄，2026/7/1–12/31）；CUBE 趣旅行 3%、EDION 券加碼 6.7%；Richart 玩旅刷 3.3%（Level 2）；Unicard UP選 4.5%（依你 App 顯示）。各卡皆收 1.5% 國外交易手續費。實際以銀行公告與帳單為準。</p>
-  </div>`;
+  <p class="buynote">記帳只存在這支手機的瀏覽器，不會上傳；建議「加入主畫面」使用，換手機前先匯出備份。回饋規則依 2026/11 查詢：uniopen 海外實體 3%＋加碼 8%（每月 500 點）；熊本熊 日本 2.5%＋指定店 6%（每期 NT$500，需登錄）；Unicard UP選 4.5%；Richart 玩旅刷 3.3%；CUBE 趣旅行 3%、EDION 券 6.7%。皆收 1.5% 國外手續費，實際以銀行為準。</p>`;
 }
-function bind(){
-  el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-    if(b.dataset.cat&&!b.classList.contains('logbtn')){cur.cat=b.dataset.cat;cur.place=b.dataset.place||'';render();return}
-    if(b.classList.contains('logbtn')){const yen=+cur.jpy;if(!yen)return;const twd=toTWD(yen);const r=calc(b.dataset.card,cur.cat,twd);
-      S.log.push({date:new Date().toLocaleDateString('sv-SE'),place:cur.place,cat:cur.cat,jpy:yen,twd,card:b.dataset.card,reward:r.reward,caps:r.caps});cur.jpy='';save();render();return}
-    if(b.classList.contains('del')){if(confirm('刪除這筆？')){S.log.splice(+b.dataset.i,1);save();render()}return}
-    if(b.id==='mAdd'){const yen=+document.getElementById('mJpy').value;if(!yen)return;const card=document.getElementById('mCard').value;const twd=toTWD(yen);
-      const r=card==='cash'?{reward:0,caps:{}}:calc(card,'food',twd);S.log.push({date:new Date().toLocaleDateString('sv-SE'),place:document.getElementById('mPlace').value,cat:'food',jpy:yen,twd,card:card==='cash'?'cash':card,reward:r.reward,caps:r.caps});save();render();return}
-    if(b.id==='rateBtn'){fetch('https://open.er-api.com/v6/latest/JPY').then(r=>r.json()).then(j=>{if(j.rates&&j.rates.TWD){S.rate=+j.rates.TWD.toFixed(4);save();render()}}).catch(()=>alert('抓不到匯率，請手動輸入'));return}
-    if(b.id==='expBtn'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='tokyo-pay-backup.json';a.click();return}
-    if(b.id==='clrBtn'){if(confirm('清除全部記帳紀錄？（額度設定會保留）')){S.log=[];save();render()}return}
-  });
-  el.addEventListener('input',e=>{const t=e.target;
-    if(t.id==='payJpy'){cur.jpy=t.value;const p=t.selectionStart;render();const n=document.getElementById('payJpy');n.focus();try{n.setSelectionRange(p,p)}catch(_){};return}
-    if(t.dataset.lim){S.limits[t.dataset.lim]=+t.value||0;save();return}
-    if(t.dataset.used){S.used[t.dataset.used]=+t.value||0;save();return}
-    if(t.id==='oUc'){S.ucardRate=+t.value||0;save();return}
-    if(t.id==='oRate'){S.rate=+t.value||S.rate;S.rateManual=true;save();return}
-    if(t.id==='cU'){S.capUsed.uni8=+t.value||0;save();return}
-    if(t.id==='cK'){S.capUsed.km6=+t.value||0;save();return}
-  });
-  el.addEventListener('change',e=>{const t=e.target;
-    if(t.id==='oKm'){S.kmReg=t.checked;save();render()}
-    if(t.id==='oCube'){S.cubePlan=t.checked;save();render()}
-    if(t.id==='oRich'){S.richL2=t.checked;save();render()}
-    if(['oUc','oRate','cU','cK'].includes(t.id)||t.dataset.lim||t.dataset.used)render();
-    if(t.id==='impF'&&t.files[0]){t.files[0].text().then(x=>{try{S=Object.assign({},DEF,JSON.parse(x));save();render()}catch(_){alert('檔案格式不對')}})}
-  });
-}
-render();bind();
-// 自動抓匯率（失敗就用預設）
-fetch('https://open.er-api.com/v6/latest/JPY').then(r=>r.json()).then(j=>{if(j.rates&&j.rates.TWD&&!S.rateManual){S.rate=+j.rates.TWD.toFixed(4);save();render()}}).catch(()=>{});
+const all=()=>{renderRem();renderRes();renderLog();renderSet()};
+el.addEventListener('input',e=>{const t=e.target;
+  if(t.id==='pStore'){cur.store=t.value;cur.cat=null;renderRes();return}
+  if(t.id==='pJpy'){cur.jpy=t.value;renderRes();return}
+  if(t.dataset.lim){S.limits[t.dataset.lim]=+t.value||0;save();return}
+  if(t.dataset.used){S.used[t.dataset.used]=+t.value||0;save();return}
+  if(t.id==='oUc'){S.ucardRate=+t.value||0;save();return}
+  if(t.id==='oRate'){S.rate=+t.value||S.rate;S.rateManual=true;save();return}
+  if(t.id==='cU'){S.capUsed.uni8=+t.value||0;save();return}
+  if(t.id==='cK'){S.capUsed.km6=+t.value||0;save();return}});
+el.addEventListener('change',e=>{const t=e.target;
+  if(t.dataset.rem){const it=REM.find(r=>r[0]===t.dataset.rem);if(it[1])S[it[1]]=t.checked;else S.chk[it[0]]=t.checked;save();renderRem();renderRes();renderSet();return}
+  if(t.id==='pCat'){cur.cat=t.value;renderRes();return}
+  if(t.id==='oKm'){S.kmReg=t.checked;save();renderRes();renderRem();return}
+  if(t.id==='oCube'){S.cubePlan=t.checked;save();renderRes();renderRem();return}
+  if(t.id==='oRich'){S.richL2=t.checked;save();renderRes();renderRem();return}
+  if(t.dataset.lim||t.dataset.used||['oUc','oRate','cU','cK'].includes(t.id)){renderRes();renderLog();return}
+  if(t.id==='impF'&&t.files[0]){t.files[0].text().then(x=>{try{S=Object.assign({},DEF,JSON.parse(x));save();all()}catch(_){alert('檔案格式不對')}})}});
+el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.s){cur.store=b.dataset.s;cur.cat=null;$('pStore').value=cur.store;renderRes();$('pJpy').focus();return}
+  if(b.classList.contains('plog')){const yen=+cur.jpy;if(!yen)return;const twd=toTWD(yen),cat=cur.cat||guess(cur.store),r=calc(b.dataset.card,cat,twd);
+    S.log.push({date:new Date().toLocaleDateString('sv-SE'),place:cur.store.trim(),cat,jpy:yen,twd,card:b.dataset.card,reward:r.reward,caps:r.caps});save();
+    cur={store:'',jpy:'',cat:null};$('pStore').value='';$('pJpy').value='';renderRes();renderLog();
+    $('pLog').scrollIntoView({behavior:'smooth',block:'start'});return}
+  if(b.classList.contains('del')){if(confirm('刪除這筆？')){S.log.splice(+b.dataset.i,1);save();renderRes();renderLog()}return}
+  if(b.id==='mAdd'){const yen=+$('mJpy').value;if(!yen)return;S.log.push({date:new Date().toLocaleDateString('sv-SE'),place:$('mPlace').value,cat:'mall',jpy:yen,twd:toTWD(yen),card:'cash',reward:0,caps:{}});save();renderLog();return}
+  if(b.id==='expBtn'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='tokyo-pay-backup.json';a.click();return}
+  if(b.id==='clrBtn'){if(confirm('清除全部記帳紀錄？（設定會保留）')){S.log=[];save();renderRes();renderLog()}return}});
+all();
+fetch('https://open.er-api.com/v6/latest/JPY').then(r=>r.json()).then(j=>{if(j.rates&&j.rates.TWD&&!S.rateManual){S.rate=+j.rates.TWD.toFixed(4);save();renderRes();renderLog();renderSet()}}).catch(()=>{});
 })();
 
 
