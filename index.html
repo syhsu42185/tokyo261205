@@ -425,6 +425,7 @@ details.supply .in{padding:0 14px 14px}
 .clsum div{border-radius:10px;padding:7px;text-align:center;font-size:11px}
 .clsum b{display:block;font-size:18px}
 
+#pay .rm{color:#9a5b00!important;font-weight:500}
 #pay .prem{background:#fff4dc;border:1.5px solid #f0c36a;border-radius:12px;padding:8px 12px;margin-top:12px;font-size:13px}
 #pay .prem summary{font-weight:700;color:#7a4a00;cursor:pointer}
 #pay .prem summary i{font-style:normal;font-size:11px;background:#c8413b;color:#fff;border-radius:6px;padding:1px 6px;margin-left:4px}
@@ -1109,6 +1110,8 @@ let S;
 try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){S=JSON.parse(JSON.stringify(DEF))}
 const save=()=>{try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}};
 if(!S.v||S.v<2){S.richL2=true;S.ucardRate=4.5;S.v=2;save();}
+if(S.v<3){S.kmReg=true;S.cubePlan=true;S.richL2=true;S.v=3;save();}
+const REMTXT={uni:'免登錄；每月加碼約 NT$6,250，用完自動降到 3%',km:'記得出發前到玉山網站「登錄」2026 下半年日本活動，才有指定店 6%',ucard:'記得 12 月仍訂閱「UP選」，並維持帳單 e 化＋玉山帳戶自動扣繳',rich:'記得 App 切到「玩旅刷」，並維持台新帳戶自動扣繳（Level 2）',cube:'記得 App 切到「趣旅行」；去 EDION 前先在 App 領加碼券'};
 const CAP={uni8:6250,km6:8333,edion:5970};
 const capLeft=k=>Math.max(0,CAP[k]-(S.capUsed[k]||0)-S.log.filter(x=>x.caps&&x.caps[k]).reduce((a,x)=>a+x.caps[k],0));
 const spentOn=id=>S.log.filter(x=>x.card===id).reduce((a,x)=>a+x.twd,0);
@@ -1125,7 +1128,7 @@ function calc(card,cat,twd){
   }else if(card==='km'){
     if(cat==='qr'){n.push('綁玉山 Wallet 用 PayPay 不算日本回饋')}
     else{add(2.5,twd);
-      if(KM6.includes(cat)){if(!S.kmReg)n.push('⚠️ 未勾「已登錄」，指定店加碼 6% 拿不到');
+      if(KM6.includes(cat)){if(!S.kmReg)n.push('⚠️ 指定店加碼 6% 需先登錄');
         else{const c=Math.min(twd,capLeft('km6'));if(c>0){add(6,c);caps.km6=c}
           n.push(c<twd?(c?`指定店加碼 6% 只剩 NT$${fmt(capLeft('km6'))}`:'指定店加碼已用完，只剩 2.5%'):'日本 2.5%＋指定店 6%');}
         n.push('帳單店名要看得出是該店（開在百貨／車站內可能不算）');}
@@ -1151,7 +1154,7 @@ const tripDay=()=>{const d=new Date(),t=new Date(d.getTime()+(d.getTimezoneOffse
 let cur={store:'',jpy:'',cat:null};
 const el=document.getElementById('pay');
 el.innerHTML=`<div class="wrap">
- <div id="pRem"></div>
+ <div id="pRem" hidden></div>
  <h2 class="sec">💳 這間店刷哪張？</h2>
  <div class="pform">
   <input id="pStore" placeholder="輸入店名，例：ADERERROR、松本清、7-11" autocomplete="off">
@@ -1189,9 +1192,9 @@ function renderRes(){
   $('pRes').innerHTML=`<div class="pcat">辨識為 <select id="pCat">${Object.entries(CATS).map(([k,[e,t]])=>`<option value="${k}" ${k===cat?'selected':''}>${e} ${t}</option>`).join('')}</select></div>
    ${tip?`<div class="ptip">💡 ${tip}</div>`:''}
    <div class="pbest" style="--c:${b.c.color}"><div class="pb1">👍 刷 <b>${b.c.name}</b><span>${b.rate.toFixed(1)}%</span></div>
-     <div class="pb2">${b.notes.join('・')}</div>
+     <div class="pb2">${b.notes.join('・')}</div><div class="pb2 rm">📌 ${REMTXT[b.c.id]}</div><div class="pb2 rm">💴 結帳時選「日圓」付款，不要選台幣（DCC 會多收匯差）</div>
      ${yen?`<div class="pb3"><span>回饋約 NT$${fmt(b.reward)}</span><button class="plog" data-card="${b.c.id}">刷了，記一筆</button></div>`:'<div class="pb2">（輸入金額後可以直接記帳）</div>'}</div>
-   <div class="pothers">${rk.slice(1).map(r=>`<div class="po ${r.over?'over':''}"><span class="cdot" style="background:${r.c.color}"></span><b>${r.c.name}</b><em>${r.rate.toFixed(1)}%</em>${yen?`<button class="plog sm" data-card="${r.c.id}">記</button>`:''}<small>${r.notes.join('・')}</small></div>`).join('')}</div>`;
+   <div class="pothers">${rk.slice(1).map(r=>`<div class="po ${r.over?'over':''}"><span class="cdot" style="background:${r.c.color}"></span><b>${r.c.name}</b><em>${r.rate.toFixed(1)}%</em>${yen?`<button class="plog sm" data-card="${r.c.id}">記</button>`:''}<small>${r.notes.join('・')}<br><span class="rm">📌 ${REMTXT[r.c.id]}</span></small></div>`).join('')}</div>`;
 }
 function renderLog(){
   const tot=S.log.reduce((a,x)=>a+x.twd,0),rew=S.log.reduce((a,x)=>a+x.reward,0),ty=S.log.reduce((a,x)=>a+x.jpy,0);
@@ -1205,9 +1208,6 @@ function renderLog(){
 function renderSet(){
   $('pSet').innerHTML=`<div class="setg">${CARDS.map(c=>`<div class="st"><b><span class="cdot" style="background:${c.color}"></span>${c.name}</b><label>信用額度 NT$<input data-lim="${c.id}" type="number" inputmode="numeric" value="${S.limits[c.id]||''}"></label><label>出發前已用 NT$<input data-used="${c.id}" type="number" inputmode="numeric" value="${S.used[c.id]||''}"></label></div>`).join('')}</div>
   <div class="opts">
-   <label><input type="checkbox" id="oKm" ${S.kmReg?'checked':''}> 熊本熊卡已「登錄」2026 下半年日本活動</label>
-   <label><input type="checkbox" id="oCube" ${S.cubePlan?'checked':''}> CUBE 已切「趣旅行」</label>
-   <label><input type="checkbox" id="oRich" ${S.richL2?'checked':''}> Richart 3.3%（Level 2＋玩旅刷）</label>
    <label>Unicard 日本回饋 <input id="oUc" type="number" step="0.1" value="${S.ucardRate}"> %</label>
    <label>本月出發前已用加碼：uniopen NT$<input id="cU" type="number" value="${S.capUsed.uni8||''}"> 熊本熊 NT$<input id="cK" type="number" value="${S.capUsed.km6||''}"></label>
    <label>匯率（1 日圓＝台幣）<input id="oRate" type="number" step="0.0001" value="${S.rate}"></label>
@@ -1215,7 +1215,7 @@ function renderSet(){
   <div class="btns"><button class="btn" id="expBtn">匯出備份</button><label class="btn">匯入備份<input id="impF" type="file" accept=".json" hidden></label><button class="btn" id="clrBtn" style="background:#8a97a8">清除記帳</button></div>
   <p class="buynote">記帳只存在這支手機的瀏覽器，不會上傳；建議「加入主畫面」使用，換手機前先匯出備份。回饋規則依 2026/11 查詢：uniopen 海外實體 3%＋加碼 8%（每月 500 點）；熊本熊 日本 2.5%＋指定店 6%（每期 NT$500，需登錄）；Unicard UP選 4.5%；Richart 玩旅刷 3.3%；CUBE 趣旅行 3%、EDION 券 6.7%。皆收 1.5% 國外手續費，實際以銀行為準。</p>`;
 }
-const all=()=>{renderRem();renderRes();renderLog();renderSet()};
+const all=()=>{renderRes();renderLog();renderSet()};
 el.addEventListener('input',e=>{const t=e.target;
   if(t.id==='pStore'){cur.store=t.value;cur.cat=null;renderRes();return}
   if(t.id==='pJpy'){cur.jpy=t.value;renderRes();return}
