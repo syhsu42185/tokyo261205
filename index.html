@@ -1040,10 +1040,11 @@ const CARDS=[
  {id:'ucard',name:'玉山 Unicard',color:'#3b5ba5'},
 ];
 const DEF={rate:0.21,limits:{uni:0,km:0,cube:0,rich:0,ucard:0},used:{uni:0,km:0,cube:0,rich:0,ucard:0},
-  capUsed:{uni8:0,km6:0,edion:0},kmReg:false,cubePlan:true,richL2:false,ucardRate:1,log:[]};
+  capUsed:{uni8:0,km6:0,edion:0},kmReg:false,cubePlan:true,richL2:true,ucardRate:4.5,log:[],v:2};
 let S;
 try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(e){S=JSON.parse(JSON.stringify(DEF))}
 const save=()=>{try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}};
+if(!S.v||S.v<2){S.richL2=true;S.ucardRate=4.5;S.v=2;save();}
 const CAP={uni8:6250,km6:8333,edion:5970}; // 加碼可刷金額（NT$）
 const capLeft=k=>Math.max(0,CAP[k]-S.capUsed[k]-S.log.filter(x=>x.caps&&x.caps[k]).reduce((a,x)=>a+x.caps[k],0));
 const spentOn=id=>S.log.filter(x=>x.card===id).reduce((a,x)=>a+x.twd,0);
@@ -1072,7 +1073,7 @@ function calc(card,cat,twd){
       if(cat==='edion'){const c=Math.min(twd,capLeft('edion'));if(c>0){add(6.7,c);caps.edion=c}n.push('EDION 加碼 6.7%（需先在 App 領券，上限 400 點）')}}
   }else if(card==='rich'){
     if(S.richL2){add(3.3,twd);n.push('玩旅刷 海外 3.3%（需切換到「玩旅刷」）')}else{add(1.3,twd);n.push('⚠️ 未達 Level 2（台新帳戶自動扣繳）只有 1.3%')}
-  }else if(card==='ucard'){add(+S.ucardRate||0,twd);n.push(`依你設定的 ${S.ucardRate}%（請在 App 確認方案是否含日本）`)}
+  }else if(card==='ucard'){add(+S.ucardRate||0,twd);n.push(`UP選 ${S.ucardRate}%（你在 App 看到的數字；需維持 UP選訂閱、帳單 e 化＋玉山帳戶扣繳）`)}
   const left=limitLeft(card);
   if(left!==null&&left<twd)n.unshift(`❗ 信用額度只剩 NT$${left.toLocaleString()}，不夠刷這筆`);
   return {rate:twd?r/twd*100:0,reward:Math.floor(r),caps,notes:n,over:left!==null&&left<twd};
@@ -1127,12 +1128,12 @@ function render(){
    <label><input type="checkbox" id="oKm" ${S.kmReg?'checked':''}> 熊本熊卡已在玉山網站「登錄」2026 下半年日本活動（沒登錄拿不到 6%）</label>
    <label><input type="checkbox" id="oCube" ${S.cubePlan?'checked':''}> CUBE 已在 App 切換為「趣旅行」</label>
    <label><input type="checkbox" id="oRich" ${S.richL2?'checked':''}> Richart 已設台新帳戶自動扣繳（Level 2）並切到「玩旅刷」</label>
-   <label>Unicard 在日本的回饋率（依你的方案）<input id="oUc" type="number" step="0.1" value="${S.ucardRate}"> %</label>
+   <label>Unicard 在日本的回饋率（你 App 顯示 4.5%）<input id="oUc" type="number" step="0.1" value="${S.ucardRate}"> %</label>
    <label>本月出發前已用掉的加碼額度：uniopen NT$<input id="cU" type="number" value="${S.capUsed.uni8||''}">　熊本熊 NT$<input id="cK" type="number" value="${S.capUsed.km6||''}"></label>
    <label>匯率（1 日圓＝台幣）<input id="oRate" type="number" step="0.0001" value="${S.rate}"> <button id="rateBtn">抓最新匯率</button></label>
   </div>
   <div class="btns"><button class="btn" id="expBtn">匯出備份</button><label class="btn">匯入備份<input id="impF" type="file" accept=".json" hidden></label><button class="btn" id="clrBtn" style="background:#8a97a8">清除記帳</button></div>
-  <p class="buynote">記帳只存在這支手機的瀏覽器（不會上傳）。iPhone 建議「加入主畫面」再用，資料較不會被清掉；換手機或清除 Safari 資料前先「匯出備份」。<br>回饋規則依 2026/11 查詢的官方與整理資訊：uniopen 海外實體 3%＋加碼 8%（每月上限 500 點）；熊本熊 日本 2.5%＋指定店 6%（每期上限 NT$500，需登錄，2026/7/1–12/31）；CUBE 趣旅行 3%、EDION 券加碼 6.7%；Richart 玩旅刷 3.3%（Level 2）。各卡皆收 1.5% 國外交易手續費。實際以銀行公告與帳單為準。</p>
+  <p class="buynote">記帳只存在這支手機的瀏覽器（不會上傳）。iPhone 建議「加入主畫面」再用，資料較不會被清掉；換手機或清除 Safari 資料前先「匯出備份」。<br>回饋規則依 2026/11 查詢的官方與整理資訊：uniopen 海外實體 3%＋加碼 8%（每月上限 500 點）；熊本熊 日本 2.5%＋指定店 6%（每期上限 NT$500，需登錄，2026/7/1–12/31）；CUBE 趣旅行 3%、EDION 券加碼 6.7%；Richart 玩旅刷 3.3%（Level 2）；Unicard UP選 4.5%（依你 App 顯示）。各卡皆收 1.5% 國外交易手續費。實際以銀行公告與帳單為準。</p>
   </div>`;
 }
 function bind(){
