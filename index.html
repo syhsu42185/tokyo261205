@@ -290,6 +290,21 @@ details.supply .in{padding:0 14px 14px}
 .finds .f .w{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:#d4880f;border-radius:5px;padding:0 6px;margin-right:5px;vertical-align:1px}
 .finds .f span{display:block;color:var(--muted);font-size:12px}
 
+/* 必買 */
+.buygrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bi{display:flex;flex-direction:column;background:#fffdf8;border-radius:12px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 1px 6px rgba(23,48,79,.07)}
+.bi .ph{position:relative;aspect-ratio:1/1;background:#fff;display:grid;place-items:center;font-size:44px}
+.bi .ph img{width:100%;height:100%;object-fit:contain;padding:6px}
+.bi .ph .tg{position:absolute;left:6px;top:6px;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:6px}
+.bi .bd{padding:8px 10px 10px;display:flex;flex-direction:column;gap:2px;flex:1}
+.bi .nm{font-weight:700;color:var(--navy);font-size:13.5px;line-height:1.35}
+.bi .ds{font-size:12px;color:var(--muted);line-height:1.45}
+.bi .mt{display:flex;justify-content:space-between;align-items:baseline;margin-top:auto;padding-top:4px;font-size:12px}
+.bi .mt b{color:var(--red);font-size:13.5px}
+.bi .mt span{color:#b26b00;font-weight:700;font-size:11px;text-align:right}
+.buynote{font-size:12px;color:var(--muted);margin:8px 2px 0;line-height:1.6}
+@media (min-width:760px){.buygrid{grid-template-columns:repeat(4,1fr)}}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -376,6 +391,14 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
 
 <div id="days"></div>
 
+<div class="view" id="buy"><div class="wrap">
+  <h2 class="sec">🏪 超商新品（你在日本 12/5–12/12 買得到）</h2>
+  <div class="buygrid" id="cvsgrid"></div>
+  <p class="buynote">✂️ 金の生チョコレート、抹茶聖誕樹布丁蛋糕（12/15 起）、チョコっとマシュマロ冰淇淋（12/22 起）都在你回國後才開賣，沒有列入。<br>新品多為「順次發售」，各店上架時間與數量不同，熱門品項可能售完。</p>
+  <h2 class="sec">💊 藥妝必買（冬季實用・常年熱銷）</h2>
+  <div class="buygrid" id="druggrid"></div>
+  <p class="buynote">免稅：同店同日購物滿 ¥5,000（未稅），帶護照；消耗品免稅後需密封、出境前不能拆。藥品帶回台灣有數量限制，大量購買前請查財政部關務署規定。<br>圖片來自各品牌／超商官網，點卡片看官方頁面；沒有圖片的品項以圖示代替。價格為含稅參考價，各店可能不同。</p>
+</div></div>
 <div class="view" id="tips"><div class="wrap">
   <h2 class="sec">補給站總覽</h2>
   <div class="tscroll"><table class="ov">
@@ -635,6 +658,15 @@ const D8CH={"4": [["ちいかわらんど 原宿店", "Kiddy Land 原宿 1F（�
 const chHTML=a=>a?`<div class="shops ch"><div class="shh">🧸 Chiikawa・Pokémon 限定</div>${a.map(([n,t,q,k])=>`<a href="${k==='web'?'https://www.google.com/search?q='+encodeURIComponent(q):G(q)}" target="_blank" rel="noopener"><b>${n}</b><span>${t}</span></a>`).join('')}</div>`:'';
 const SHOPS={"kairakuen": [["好文亭", "德川齊昭建的木造樓閣，3 樓眺望千波湖（園內・另購票）", "偕楽園 好文亭"], ["亀印製菓", "水戶銘菓「吉原殿中」老店", "亀印製菓 水戸"], ["天狗納豆", "水戶納豆老牌，稻草包裝很有特色", "天狗納豆 水戸"]], "toshogu": [["海老屋長造", "明治年間創業的日光湯波（豆皮）老店", "海老屋長造 日光"], ["ひしや", "手工日光羊羹，量少常賣完", "ひしや 日光 羊羹"]], "chuzenji": [["華嚴瀑布", "日本三名瀑，湖邊車程約 2 分（時間夠再去）", "華厳滝"]], "ikaho": [["勝月堂", "茶色「湯乃花饅頭」元祖，石段旁", "勝月堂 伊香保"], ["清芳亭", "伊香保溫泉饅頭老店", "清芳亭 伊香保"], ["河鹿橋", "紅色太鼓橋，石段頂再走約 10 分", "河鹿橋 伊香保"]], "mizusawa": [["田丸屋", "400 多年歷史的水澤烏龍麵老店", "田丸屋 水沢うどん"], ["大澤屋", "規模最大的水澤烏龍麵店，伴手禮乾麵多", "大澤屋 水沢うどん"], ["始祖 清水屋", "自稱水澤烏龍麵始祖", "始祖 清水屋 水沢"]], "kyukaru": [["ミカド珈琲", "招牌摩卡霜淇淋", "ミカド珈琲 軽井沢旧道店"], ["沢屋", "輕井澤果醬名店", "沢屋 旧軽井沢店"], ["腸詰屋 1 號店", "手工香腸、火腿", "腸詰屋 軽井沢1号店"], ["フランスベーカリー", "約翰藍儂常去的老麵包店", "フランスベーカリー 軽井沢"], ["浅野屋", "1933 年創業的麵包老店", "浅野屋 旧軽井沢本店"]], "moegi": [["ROCK", "咖哩＋八岳在地啤酒", "萌木の村 ROCK"], ["ホール・オブ・ホールズ", "音樂盒博物館（自費）", "ホール・オブ・ホールズ 萌木の村"]], "koumi": [["JR 鐵道最高地點", "標高 1,375m 紀念碑（列車行經）", "JR鉄道最高地点"]], "oishi": [["河口湖自然生活館", "藍莓霜淇淋、果醬", "河口湖自然生活館"]], "oshino": [["渡辺食品", "艾草草餅名店", "渡辺食品 忍野"], ["豆腐処 浅野屋", "名水豆腐", "豆腐処 浅野屋 忍野"]], "owakudani": [["大涌谷くろたまご館", "黑玉子、伴手禮", "大涌谷くろたまご館"], ["玉子茶屋", "現煮黑玉子", "大涌谷 玉子茶屋"]], "pirate": [["箱根神社 平和の鳥居", "湖上紅鳥居，船上看最清楚", "箱根神社 平和の鳥居"]], "mishima": [["スカイガーデン", "園區伴手禮店，富士山造型點心", "三島スカイウォーク スカイガーデン"]], "odawara": [["籠清 本店", "1814 年創業的魚板老舖", "籠清 本店 小田原"], ["ちん里う本店", "小田原梅干老店，車站旁", "ちん里う本店 小田原"], ["守谷のパン", "百年紅豆麵包", "守谷のパン 小田原"]], "odaiba": [["お台場海浜公園", "彩虹橋夜景", "お台場海浜公園"], ["自由女神像", "台場夜景拍照點", "自由の女神像 お台場"]]};
 DAYS.forEach(d=>d.spots.forEach(s=>{s.shops=SHOPS[s.scene];s.gs=GOSHUIN[s.scene];s.photo=PHOTOS[s.scene];s.ch=CHARA[s.scene]}));
+
+/* ============ 必買 ============ */
+const CVS=[["7-11", "21時にアイス 贅沢いちご／チョコクッキー", "「夜パフェ」專門店聯名杯裝冰淇淋，兩種口味", "¥462", "12/1 起", "https://www.sej.co.jp/var/rev0/0013/7373/2.jpeg", "🍨", "https://www.sej.co.jp/company/news_release/news/2026/202611201100.html"], ["7-11", "ミニかまくら", "聖誕「雪屋」造型小蛋糕，草莓醬＋北海道鮮奶油", "¥518", "12/1 起", "https://www.sej.co.jp/var/rev0/0013/7375/1261119171334.jpg", "🍰", "https://www.sej.co.jp/company/news_release/news/2026/202611201100.html"], ["7-11", "クリームまみれのカスタードシュー", "整顆泡芙泡在卡士達醬裡的「背德甜點」", "¥430", "12/8 起", "https://www.sej.co.jp/var/rev0/0013/7379/1261119171442.jpg", "🧁", "https://www.sej.co.jp/company/news_release/news/2026/202611201100.html"], ["7-11", "マカロンアイス ホワイトチョコ", "馬卡龍冰淇淋系列首款白巧克力口味", "¥322", "12/8 起", "https://www.sej.co.jp/var/rev0/0013/7378/5.jpeg", "🍦", "https://www.sej.co.jp/company/news_release/news/2026/202611201100.html"], ["7-11", "チョコプレッツェル ピスタチオ／キャラメル", "巧克力職人土屋公二監修，鹹甜脆餅", "¥300", "12/8 起", "https://www.sej.co.jp/var/rev0/0013/7376/1261119171358.jpg", "🥨", "https://www.sej.co.jp/company/news_release/news/2026/202611201100.html"], ["7-11", "金のチョコがけバウムクーヘン", "頂級「金」系列冬季限定巧克力年輪蛋糕", "¥322", "11/17 起・冬季限定", "https://www.sej.co.jp/var/rev0/0013/7382/8.jpg", "🍫", "https://www.sej.co.jp/company/news_release/news/2026/202611201100.html"], ["7-11", "ハーゲンダッツ 抹茶ショコラタルト", "Häagen-Dazs「Spécialité Japonaise」抹茶巧克力塔", "¥475", "11/24 起・售完為止", "https://www.sej.co.jp/var/rev0/0013/7386/11.jpeg", "🍵", "https://www.sej.co.jp/company/news_release/news/2026/202611201100.html"], ["Lawson", "からあげクン 黄金チキン味／レッド味", "冬季回歸的炸雞塊；12/1–12/7 加量 1 顆，12/8–12/14 買就送飲料兌換券", "¥298", "12/1 起", "", "🍗", "https://convenicheck.com/news/news_lawson/141772/"], ["全家", "「BE:FIRST」コラボ 抹茶のタルト", "BE:FIRST 的 MANATO 監修雙層抹茶塔", "¥298", "11/24 起・售完為止", "", "🍵", "https://news.mynavi.jp/article/20261124-5381026/"], ["全家", "いちごとミルクのスティックケーキ", "全家限定草莓牛奶條狀蛋糕", "¥165", "11/24 起・售完為止", "", "🍓", "https://news.mynavi.jp/article/20261124-5381026/"]];
+const DRUG=[["休足時間", "Lion 足部清涼貼，走一整天睡前貼", "#腳痠", "https://doc.lion.co.jp/uploads/grn/product/normal_image/341/012-01.png", "🦶", "https://www.lion.co.jp/ja/products/brand/series/17"], ["ロイヒつぼ膏", "溫感穴位小貼布，冬天肩頸腰痠好用", "#痠痛", "", "🩹", "https://www.matsukiyococokara-online.com/store/catalog/product/view/id/4987167007263"], ["めぐりズム 蒸気でホットアイマスク", "花王蒸氣眼罩，飛機上、溫泉旅館睡前", "#放鬆", "https://www.kao.co.jp/content/dam/sites/kao/www-kao-co-jp/megrhythm/global/og_megrhythm_202609.png", "😴", "https://www.kao.co.jp/megrhythm/"], ["パブロン（感冒藥系列）", "大正製藥綜合感冒藥，常見有 ゴールドA、SゴールドW 等款", "#感冒", "https://brand.taisho.co.jp/content/dam/selfmedication/jp/ja/pabron/web/top/2025/sgw_kv_202509_sp.png", "🤧", "https://brand.taisho.co.jp/pabron/"], ["龍角散ダイレクト", "免配水的喉嚨顆粒，乾冷天氣喉嚨不適", "#喉嚨", "", "🍑", "https://www.matsukiyococokara-online.com/store/catalog/product/view/id/4987240210733"], ["サンテFX", "參天製藥清涼眼藥水，眼睛疲勞", "#眼睛", "https://www.santen.com/content/dam/santen/japan/brand-pages/healthcare/eye/products/brand/sante_fx/fy_brand/img/ogp_brand01.png", "👁️", "https://www.santen.co.jp/ja/healthcare/eye/products/otc/sante_fx/"], ["アリナミンEXプラス", "合利他命，疲勞、肩頸痠痛", "#疲勞", "https://alinamin.jp/static/image/ogp.png", "💊", "https://alinamin.jp/"], ["EVE（イブ）", "SS 製藥止痛藥，頭痛、生理痛", "#止痛", "https://images.microcms-assets.io/assets/5cd0cfb38d8449fe993f92b8c6c2c085/6167ddc844d54c049fa8195a4e7b4343/eve_common_ogp.jpg", "💊", "https://www.ssp.co.jp/eve/"], ["肌ラボ 極潤", "玻尿酸保濕化妝水，乾燥冬天必備", "#保濕", "https://jp.rohto.com/-/media/com/hadalabo/ogp/33_hadalabotop.jpg?sc_lang=ja-jp", "💧", "https://jp.rohto.com/hadalabo/"], ["メラノCC 薬用しみ集中対策美容液", "樂敦維他命 C 美容液，CP 值高", "#美白", "", "🍊", "https://www.matsukiyococokara-online.com/store/catalog/product/view/id/4987241168583"]];
+const TGC={'7-11':'t711','Lawson':'tlaw','全家':'tfm'};
+const ph=(img,emo)=>img?`<img loading="lazy" src="${img}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createTextNode('${emo}'))">`:emo;
+document.getElementById('cvsgrid').innerHTML=CVS.map(([c,n,d,p,w,img,emo,u])=>`<a class="bi" href="${u}" target="_blank" rel="noopener"><div class="ph">${ph(img,emo)}<span class="tag ${TGC[c]} tg">${c}</span></div><div class="bd"><div class="nm">${n}</div><div class="ds">${d}</div><div class="mt"><b>${p}</b><span>${w}</span></div></div></a>`).join('');
+document.getElementById('druggrid').innerHTML=DRUG.map(([n,d,t,img,emo,u])=>`<a class="bi" href="${u}" target="_blank" rel="noopener"><div class="ph">${ph(img,emo)}<span class="tag tsm tg">${t}</span></div><div class="bd"><div class="nm">${n}</div><div class="ds">${d}</div></div></a>`).join('');
+
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -689,7 +721,7 @@ function show(key){
   if(!v.done){v.done=true;v.init&&v.init(v)}else v.maps.forEach(m=>m.invalidateSize());
 }
 const pager=(prev,next)=>`<nav class="pager">${prev?`<a href="#${prev[0]}"><small>上一頁</small>‹ ${prev[1]}</a>`:'<a class="none"></a>'}${next?`<a class="nx" href="#${next[0]}"><small>下一頁</small>${next[1]} ›</a>`:'<a class="none"></a>'}</nav>`;
-const ORDER=[['overview','總覽'],...DAYS.map(d=>['d'+d.d,'D'+d.d+' '+d.date.slice(0,5)]),['d8','D8 12/12'],['tips','須知']];
+const ORDER=[['overview','總覽'],...DAYS.map(d=>['d'+d.d,'D'+d.d+' '+d.date.slice(0,5)]),['d8','D8 12/12'],['tips','須知'],['buy','必買']];
 const nb=k=>{const i=ORDER.findIndex(o=>o[0]===k);return [ORDER[i-1],ORDER[i+1]]};
 
 /* 總覽 */
@@ -785,7 +817,9 @@ document.getElementById('gslist').innerHTML=[...DAYS.flatMap(d=>d.spots.filter(s
 document.getElementById('chlist').innerHTML=[...DAYS.flatMap(d=>d.spots.filter(s=>s.ch).flatMap(s=>s.ch.map(c=>[d.d,...c,s.name]))),...Object.entries(D8CH).flatMap(([i,a])=>a.map(c=>[8,...c,D8.stops[i].name]))]
   .map(([d,n,t,q,k,sp])=>`<div class="r"><span class="dd">D${d}</span><span><a href="${k==='web'?'https://www.google.com/search?q='+encodeURIComponent(q):G(q)}" target="_blank" rel="noopener">${n}</a><span style="color:var(--muted);font-size:12px">・${sp}</span><small>${t}</small></span></div>`).join('');
 document.getElementById('credits').innerHTML='<br>景點照片來自 Wikimedia Commons（依各授權條款使用）：'+DAYS.filter(d=>d.spots.length>1).flatMap(d=>d.spots.filter(s=>s.photo).map(s=>`<a href="${s.photo.page}" target="_blank" rel="noopener">${s.name}</a>（${s.photo.by}，${s.photo.lic}）`)).join('、');
-document.getElementById('tips').querySelector('.wrap').insertAdjacentHTML('beforeend',pager(nb('tips')[0],null));
+document.getElementById('tips').querySelector('.wrap').insertAdjacentHTML('beforeend',pager(nb('tips')[0],nb('tips')[1]));
+addView('buy','必買','',document.getElementById('buy'));
+document.getElementById('buy').querySelector('.wrap').insertAdjacentHTML('beforeend',pager(nb('buy')[0],null));
 
 /* 簡圖 / 地圖 切換 */
 document.addEventListener('click',e=>{
