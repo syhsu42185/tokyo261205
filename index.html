@@ -265,6 +265,20 @@ details.supply .in{padding:0 14px 14px}
 .shops a b{flex:none;color:var(--navy);border-bottom:1px dashed var(--navy)}
 .shops a span{color:var(--muted);font-size:12px;min-width:0}
 
+.pt .im img{display:block;width:100%;height:100%;object-fit:cover}
+.pt .cr{position:absolute;right:9px;bottom:auto;margin-top:-17px;font-size:8.5px;color:#fff;background:rgba(0,0,0,.45);padding:0 4px;border-radius:3px;max-width:85%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.pt .imw{position:relative}
+.pt .imw .cr{position:absolute;right:4px;bottom:3px;margin:0}
+.shops.gs .shh{color:#9b2c24}
+.gsl{background:#fffdf8;border-radius:12px;padding:6px 12px}
+.gsl .r{display:grid;grid-template-columns:44px 1fr;gap:2px 10px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.gsl .r:last-child{border-bottom:0}
+.gsl .r .dd{font-weight:700;color:var(--red);font-size:12.5px}
+.gsl .r a{font-weight:700;color:var(--navy)}
+.gsl .r small{display:block;color:var(--muted);font-size:12px}
+.credits{font-size:11px;color:var(--muted);line-height:1.7}
+.credits a{color:var(--muted)}
+
 /* 上一天 / 下一天 */
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 .pager a{flex:1;text-decoration:none;background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;box-shadow:0 1px 4px rgba(23,48,79,.08)}
@@ -360,6 +374,9 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
     <tr><td>D7 品川</td><td>約 450m</td><td>約 1.1km</td><td>旁邊 50m</td><td>約 350m</td></tr>
   </table></div>
   <p style="font-size:12px;color:var(--muted)">！這兩晚出門不方便：萬座前一站（輕井澤王子購物廣場）、河口湖白天行程中，先把零食飲料買好。</p>
+  <h2 class="sec">⛩️ 御朱印一覽</h2>
+  <div class="gsl" id="gslist"></div>
+  <p style="font-size:12px;color:var(--muted);margin:6px 2px 0">授與時間多為 9:00–16:00 前後，冬季可能提早結束；初穗料一般 ¥300–500。記得帶御朱印帳，沒有的話多數寺社也有販售。以現場為準。</p>
   <h2 class="sec">冬季須知</h2>
   <div class="grid2">
     <div class="tip"><h3>冬季穿搭</h3><p>奧日光、清里、萬座都在標高 1,200m 以上，12 月經常是零下。洋蔥式穿法：發熱衣＋毛衣＋防風羽絨外套。</p><p>防滑鞋底（石階、參道、湖邊會結冰）、手套、毛帽、暖暖包、護唇膏與乳液。</p></div>
@@ -368,7 +385,7 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
     <div class="tip"><h3>超商必買</h3><p><span class="tag t711">7-11</span> 飯糰、7-Premium 甜點</p><p><span class="tag tlaw">Lawson</span> からあげクン炸雞塊、Uchi Café 甜點</p><p><span class="tag tfm">全家</span> ファミチキ炸雞、Famima 咖啡</p></div>
     <div class="tip"><h3>電話撥號</h3><p>日本打台灣：010＋886＋區碼（去 0）＋號碼</p><p>台灣打日本：002＋81＋區碼（去 0）＋號碼</p><p style="color:var(--muted);font-size:12px">領隊與送機人員電話請看紙本小書（網頁公開，不放電話）。</p></div>
   </div>
-  <footer>簡圖為手繪示意，非實景照片。景點座標為大致位置；河口湖 Fuji Premium Resort 位置依小書所列店家距離推估。補給地圖上的店家來自 OpenStreetMap（2026 年 11 月擷取），距離為直線估算，營業時間可能變動，出發前請再確認。地圖 © OpenStreetMap contributors。</footer>
+  <footer>簡圖為手繪示意，非實景照片。景點座標為大致位置；河口湖 Fuji Premium Resort 位置依小書所列店家距離推估。補給地圖上的店家來自 OpenStreetMap（2026 年 11 月擷取），距離為直線估算，營業時間可能變動，出發前請再確認。地圖 © OpenStreetMap contributors。<div class="credits" id="credits"></div></footer>
 </div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -586,13 +603,16 @@ const nightScene=()=>svg([sky('#16294a','#41618e'),`<circle cx="262" cy="40" r="
 function posterHTML(tiles,title){
   const n=tiles.length;
   return `<div class="poster"><div class="ph"><span>${title}</span><small>點圖看說明 ↓</small></div><div class="ptiles">${tiles.map((t,i)=>{const wide=n%2===1&&i===n-1;
-    return `<a class="pt ${wide?'wide':''} ${i%2?'r':'l'}" data-go="${t.go}">${t.num?`<span class="num bd ${t.cls||''}">${t.num}</span>`:''}<div class="im">${t.art}</div>${t.tm?`<div class="tm">${t.tm}</div>`:''}<div class="cap">${t.cap}</div></a>`}).join('')}</div></div>`;
+    return `<a class="pt ${wide?'wide':''} ${i%2?'r':'l'}" data-go="${t.go}">${t.num?`<span class="num bd ${t.cls||''}">${t.num}</span>`:''}<div class="imw"><div class="im">${t.photo?`<img loading="lazy" src="${t.photo.src}" alt="${t.cap}">`:t.art}</div>${t.photo?`<span class="cr">📷 ${t.photo.by}・${t.photo.lic}</span>`:''}</div>${t.tm?`<div class="tm">${t.tm}</div>`:''}<div class="cap">${t.cap}</div></a>`}).join('')}</div></div>`;
 }
 document.addEventListener('click',e=>{const t=e.target.closest('.pt');if(!t)return;e.preventDefault();const el=document.getElementById(t.dataset.go);if(!el)return;
   el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600);});
 
+const PHOTOS={"narita": {"src": "img/narita.jpg", "by": "名無し野電車区", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Narita_International_Airport_Terminal_1.JPG"}, "kairakuen": {"src": "img/kairakuen.jpg", "by": "Σ64", "lic": "CC BY 4.0", "page": "https://commons.wikimedia.org/wiki/File:Kairaku-en,_Ibaraki_24.jpg"}, "toshogu": {"src": "img/toshogu.jpg", "by": "Jpatokal", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Nikko_Toshogu_Yomeimon_Gate_2024.jpg"}, "chuzenji": {"src": "img/chuzenji.jpg", "by": "Uraomote yamaneko", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Mount_nantai_and_lake_chuzenji.jpg"}, "ikaho": {"src": "img/ikaho.jpg", "by": "matsukaz", "lic": "CC BY 2.1 jp", "page": "https://commons.wikimedia.org/wiki/File:Ikaho_Onsen_03.jpg"}, "mizusawa": {"src": "img/mizusawa.jpg", "by": "NY066", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Mizusawa-Kannon_Shibukawa.JPG"}, "karuizawaOutlet": {"src": "img/karuizawaOutlet.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:KPSP06s3200.jpg"}, "shiraito": {"src": "img/shiraito.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:Karuizawa_shiraito-no-taki03s3200.jpg"}, "kyukaru": {"src": "img/kyukaru.jpg", "by": "663highland", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:220930_St._Paul%27s_Catholic_Church_Karuizawa_Nagano_pref_Japan01s3.jpg"}, "moegi": {"src": "img/moegi.jpg", "by": "663highland", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:160826_Kiyosato_Moeginomura_Hokuto_Yamanashi_pref_Japan39s3.jpg"}, "koumi": {"src": "img/koumi.jpg", "by": "Mister0124", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:JR_Koumi_Line_Nobeyama_Station_building.jpg"}, "nenba": {"src": "img/nenba.jpg", "by": "ja:User:Masanori88", "lic": "CC BY-SA 3.0", "page": "https://commons.wikimedia.org/wiki/File:Saiko-iyashinosato-nenba1.JPG"}, "oishi": {"src": "img/oishi.jpg", "by": "Alpsdake", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Mount_Fuji_from_Oishi_Park.jpg"}, "sengen": {"src": "img/sengen.jpg", "by": "江戸村のとくぞう", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Kitaguchi_Hongu_Fuji_Sengen_jinja_Torii.jpg"}, "oshino": {"src": "img/oshino.jpg", "by": "663highland", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:231028_Waku-ike_Oshino_Hakkai_springs_Oshino_Yamanashi_pref_Japan01s3.jpg"}, "owakudani": {"src": "img/owakudani.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:161223_Owakudani_Hakone_Japan09s3.jpg"}, "pirate": {"src": "img/pirate.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:161223_Lake_Ashi_Hakone_Japan03n.jpg"}, "mishima": {"src": "img/mishima.jpg", "by": "くろふね", "lic": "CC BY 3.0", "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%89%E5%B3%B6%E3%82%B9%E3%82%AB%E3%82%A4%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%AF_-_panoramio_(4).jpg"}, "jikkoku": {"src": "img/jikkoku.jpg", "by": "Nesnad", "lic": "CC BY 4.0", "page": "https://commons.wikimedia.org/wiki/File:Jukkokutoge_Cable_Car_2024_March_3_various_23_48_49_725000.jpeg"}, "odawara": {"src": "img/odawara.jpg", "by": "663highland", "lic": "CC BY 2.5", "page": "https://commons.wikimedia.org/wiki/File:161223_Odawara_Castle_Odawara_Japan01s3.jpg"}, "odaiba": {"src": "img/odaiba.jpg", "by": "ITA-ATU", "lic": "CC BY-SA 4.0", "page": "https://commons.wikimedia.org/wiki/File:Diver-City_Tokyo_as_see_from_FCG_Building.jpg"}};
+const GOSHUIN={"kairakuen": [["常磐神社", "偕樂園旁，祭祀德川光圀・齊昭", "常磐神社 水戸"]], "toshogu": [["日光東照宮", "本社社務所；登上奧宮另有一款", "日光東照宮"], ["日光二荒山神社", "東照宮旁步行約 5 分（時間夠再去）", "日光二荒山神社"], ["日光山輪王寺", "三佛堂，東照宮旁", "日光山輪王寺"]], "chuzenji": [["二荒山神社 中宮祠", "中禪寺湖畔", "二荒山神社 中宮祠"], ["中禪寺（立木觀音）", "湖東岸，坂東三十三觀音第 18 番", "中禅寺 立木観音"]], "ikaho": [["伊香保神社", "石段最頂端；冬季可能只有預先寫好的「書置」", "伊香保神社"]], "mizusawa": [["水澤寺", "坂東三十三觀音第 16 番，納經所", "水澤寺"]], "sengen": [["北口本宮冨士淺間神社", "社務所；也有富士山圖案的御朱印帳", "北口本宮冨士浅間神社"]], "pirate": [["箱根神社", "元箱根港旁，平和鳥居的本社；同處有九頭龍神社新宮", "箱根神社"]], "odawara": [["報德二宮神社", "小田原城址公園內，祭祀二宮尊德", "報徳二宮神社"], ["小田原城「御城印」", "城的紀念印，天守閣一帶販售（今天不登天守，購買方式現場確認）", "小田原城 天守閣"]]};
+const GOSHUIN_EXTRA=[[8, "明治神宮", "原宿站旁，Day 8 若有空檔可順路（行程表未排）", "明治神宮"]];
 const SHOPS={"kairakuen": [["好文亭", "德川齊昭建的木造樓閣，3 樓眺望千波湖（園內・另購票）", "偕楽園 好文亭"], ["亀印製菓", "水戶銘菓「吉原殿中」老店", "亀印製菓 水戸"], ["天狗納豆", "水戶納豆老牌，稻草包裝很有特色", "天狗納豆 水戸"]], "toshogu": [["海老屋長造", "明治年間創業的日光湯波（豆皮）老店", "海老屋長造 日光"], ["ひしや", "手工日光羊羹，量少常賣完", "ひしや 日光 羊羹"]], "chuzenji": [["華嚴瀑布", "日本三名瀑，湖邊車程約 2 分（時間夠再去）", "華厳滝"]], "ikaho": [["勝月堂", "茶色「湯乃花饅頭」元祖，石段旁", "勝月堂 伊香保"], ["清芳亭", "伊香保溫泉饅頭老店", "清芳亭 伊香保"], ["河鹿橋", "紅色太鼓橋，石段頂再走約 10 分", "河鹿橋 伊香保"]], "mizusawa": [["田丸屋", "400 多年歷史的水澤烏龍麵老店", "田丸屋 水沢うどん"], ["大澤屋", "規模最大的水澤烏龍麵店，伴手禮乾麵多", "大澤屋 水沢うどん"], ["始祖 清水屋", "自稱水澤烏龍麵始祖", "始祖 清水屋 水沢"]], "kyukaru": [["ミカド珈琲", "招牌摩卡霜淇淋", "ミカド珈琲 軽井沢旧道店"], ["沢屋", "輕井澤果醬名店", "沢屋 旧軽井沢店"], ["腸詰屋 1 號店", "手工香腸、火腿", "腸詰屋 軽井沢1号店"], ["フランスベーカリー", "約翰藍儂常去的老麵包店", "フランスベーカリー 軽井沢"], ["浅野屋", "1933 年創業的麵包老店", "浅野屋 旧軽井沢本店"]], "moegi": [["ROCK", "咖哩＋八岳在地啤酒", "萌木の村 ROCK"], ["ホール・オブ・ホールズ", "音樂盒博物館（自費）", "ホール・オブ・ホールズ 萌木の村"]], "koumi": [["JR 鐵道最高地點", "標高 1,375m 紀念碑（列車行經）", "JR鉄道最高地点"]], "oishi": [["河口湖自然生活館", "藍莓霜淇淋、果醬", "河口湖自然生活館"]], "oshino": [["渡辺食品", "艾草草餅名店", "渡辺食品 忍野"], ["豆腐処 浅野屋", "名水豆腐", "豆腐処 浅野屋 忍野"]], "owakudani": [["大涌谷くろたまご館", "黑玉子、伴手禮", "大涌谷くろたまご館"], ["玉子茶屋", "現煮黑玉子", "大涌谷 玉子茶屋"]], "pirate": [["箱根神社 平和の鳥居", "湖上紅鳥居，船上看最清楚", "箱根神社 平和の鳥居"]], "mishima": [["スカイガーデン", "園區伴手禮店，富士山造型點心", "三島スカイウォーク スカイガーデン"]], "odawara": [["籠清 本店", "1814 年創業的魚板老舖", "籠清 本店 小田原"], ["ちん里う本店", "小田原梅干老店，車站旁", "ちん里う本店 小田原"], ["守谷のパン", "百年紅豆麵包", "守谷のパン 小田原"]], "odaiba": [["お台場海浜公園", "彩虹橋夜景", "お台場海浜公園"], ["自由女神像", "台場夜景拍照點", "自由の女神像 お台場"]]};
-DAYS.forEach(d=>d.spots.forEach(s=>s.shops=SHOPS[s.scene]));
+DAYS.forEach(d=>d.spots.forEach(s=>{s.shops=SHOPS[s.scene];s.gs=GOSHUIN[s.scene];s.photo=PHOTOS[s.scene]}));
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -680,11 +700,12 @@ DAYS.forEach(day=>{
      <div class="txt"><h3>${s._num?`<span class="num">${s._num}</span>`:''}${s.name}</h3><span class="sub">${s.sub}</span>
        <p>${s.desc}</p><dl class="kv">${s.kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
        ${s.shops?`<div class="shops"><div class="shh">📍 特色店家・點名稱開 Google 地圖</div>${s.shops.map(([n,t,q])=>`<a href="${G(q)}" target="_blank" rel="noopener"><b>${n}</b><span>${t}</span></a>`).join('')}</div>`:''}
+       ${s.gs?`<div class="shops gs"><div class="shh">⛩️ 御朱印</div>${s.gs.map(([n,t,q])=>`<a href="${G(q)}" target="_blank" rel="noopener"><b>${n}</b><span>${t}</span></a>`).join('')}</div>`:''}
        <div class="lks">${s.q?`<a class="gm" href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>`:''}${s.mall?`<button class="mallbtn" data-m="${s.mall}">🛍️ 樓層・品牌（${MALLS[s.mall].shops.length}）</button>`:''}</div></div></article>`).join('');
   const withLL=day.spots.map((s,i)=>({s,i})).filter(o=>o.s.ll&&o.s._num);
   el.innerHTML=`<div class="wrap">
     <div class="dayhead"><div class="daytag">DAY ${day.d} · ${day.date}</div><h2>${day.title}</h2><div class="meals">${day.meals.filter(m=>!m.startsWith('晚')).map(m=>{const [a,b]=m.split('｜');return `<span>${a}｜<b>${b}</b></span>`}).join('')}</div><div class="wx" data-d="${day.d}"></div></div>
-    ${day.spots.length>1?posterHTML(day.spots.map((s,i)=>({num:s._num,cap:s.name,art:SCENES[s.scene](),go:`d${day.d}s${i}`})),`今日路線・${day.spots.length} 個景點`):''}
+    ${day.spots.length>1?posterHTML(day.spots.map((s,i)=>({num:s._num,cap:s.name,art:SCENES[s.scene](),photo:s.photo,go:`d${day.d}s${i}`})),`今日路線・${day.spots.length} 個景點`):''}
     <div class="map"></div>
     <div class="maplinks"><span>點數字跳到該景點</span><a target="_blank" rel="noopener" href="${dirUrl([day.start.q||HOTELS[day.hotel-1].q,...withLL.map(o=>o.s.q),h.q])}">整天路線・Google ↗</a></div>
     <div class="tl">
@@ -735,6 +756,9 @@ DAYS.forEach(day=>{
   },'d8');
 })();
 addView('tips','須知','',document.getElementById('tips'));
+document.getElementById('gslist').innerHTML=[...DAYS.flatMap(d=>d.spots.filter(s=>s.gs).flatMap(s=>s.gs.map(g=>[d.d,...g,s.name]))),...GOSHUIN_EXTRA.map(g=>[...g,''])]
+  .map(([d,n,t,q,sp])=>`<div class="r"><span class="dd">D${d}</span><span><a href="${G(q)}" target="_blank" rel="noopener">${n}</a>${sp?`<span style="color:var(--muted);font-size:12px">・${sp}</span>`:''}<small>${t}</small></span></div>`).join('');
+document.getElementById('credits').innerHTML='<br>景點照片來自 Wikimedia Commons（依各授權條款使用）：'+DAYS.filter(d=>d.spots.length>1).flatMap(d=>d.spots.filter(s=>s.photo).map(s=>`<a href="${s.photo.page}" target="_blank" rel="noopener">${s.name}</a>（${s.photo.by}，${s.photo.lic}）`)).join('、');
 document.getElementById('tips').querySelector('.wrap').insertAdjacentHTML('beforeend',pager(nb('tips')[0],null));
 
 /* 簡圖 / 地圖 切換 */
