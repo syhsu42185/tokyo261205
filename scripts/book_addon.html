@@ -151,7 +151,7 @@ page(`<div class="tag">NOTES</div><h2>旅途備忘</h2>
  <div style="margin-top:6mm;border-top:.3mm dashed #d5dfea;padding-top:3mm" class="note">景點照片：Wikimedia Commons（各照片作者與授權列於網頁版「須知」頁底）。地圖 © OpenStreetMap contributors。</div>`,'paper');
 
 // 補成 4 的倍數（騎馬釘）
-while(pno%4)page('<div class="note" style="margin-top:80mm;text-align:center">MEMO</div>');
+if(!window.BOOK_SEQ)while(pno%4)page('<div class="note" style="margin-top:80mm;text-align:center">MEMO</div>');
 document.documentElement.dataset.pages=pno;
 requestAnimationFrame(()=>{maps.forEach(f=>f());setTimeout(()=>document.documentElement.dataset.ready='1',5000)});
 })();
