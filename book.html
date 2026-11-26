@@ -1303,6 +1303,36 @@ body.book>*:not(#book){display:none!important}
 #book .note{font-size:7.4pt;color:#7d8690}
 #book .lf-num{width:18px;height:18px;font-size:10px}
 #book .leaflet-control-container{display:none}
+
+/* ===== 黑白列印版 ===== */
+#book,#book *{color:#000}
+#book .pg,#book .pg.paper{background:#fff!important}
+#book .fo,#book .note,#book .mini,#book .st8 small,#book .night .fac,#book .sup span:last-child{color:#333!important}
+#book h1,#book h2,#book h3{color:#000}
+#book h2{border-bottom:.6mm solid #000;padding-bottom:1mm;margin-bottom:2mm}
+#book .tag{display:inline-block;background:#000;color:#fff!important;padding:.3mm 2mm;border-radius:1mm;letter-spacing:.08em}
+#book .num{background:#000;color:#fff!important}
+#book .tl .num{border-color:#fff;z-index:3;width:5.4mm;height:5.4mm;font-size:8pt}
+#book img,#book .tl svg,#book .st8 svg{filter:grayscale(1) contrast(1.12)}
+#book .bmap{border:.4mm solid #000}
+#book .bmap .leaflet-tile-pane{filter:grayscale(1) contrast(.85) brightness(1.12)}
+#book .meal div{background:#fff;border:.3mm solid #000}
+#book .meal i{background:#000;color:#fff!important}
+#book .meal small,#book .gift{color:#000;font-weight:700}
+#book .gift b{text-decoration:underline}
+#book .kv dt{color:#000;font-weight:900}
+#book .kv dd{border-bottom:.15mm dotted #999}
+#book .sp{border-bottom:.3mm solid #000}
+#book .night{border:.6mm solid #000;border-radius:1.5mm}
+#book .sup div{border-bottom:.2mm dotted #666}
+#book .ov div.r,#book .st8{border-bottom:.3mm solid #999}
+#book .ov b{color:#000}
+#book .lf-num{background:#000!important;color:#fff!important;border:2px solid #fff!important;box-shadow:none!important}
+#book .lf-num.sq{background:#fff!important;color:#000!important;border:2px solid #000!important}
+#book .cover{background:#fff!important;justify-content:flex-end;border:1.2mm solid #000}
+#book .cover h1,#book .cover p,#book .cover .eb{color:#000!important}
+#book .cover img{height:60%}
+#book .cover .eb{border-top:.6mm solid #000;padding-top:2mm}
 </style>
 <div id="book"></div>
 <script>
@@ -1317,7 +1347,7 @@ const tile=s=>`<div class="tl">${s._num?`<span class="num">${s._num}</span>`:''}
 const maps=[];
 const mkMap=(el,pts)=>maps.push(()=>{const m=L.map(el,{zoomControl:false,attributionControl:false,fadeAnimation:false,zoomAnimation:false});
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(m);
-  L.polyline(pts.map(p=>p.ll),{color:'#c8413b',weight:3,dashArray:'6 6'}).addTo(m);
+  L.polyline(pts.map(p=>p.ll),{color:'#fff',weight:7}).addTo(m);L.polyline(pts.map(p=>p.ll),{color:'#000',weight:3.5,dashArray:'7 5'}).addTo(m);
   pts.forEach(p=>L.marker(p.ll,{icon:L.divIcon({className:'',html:`<div class="lf-num ${p.sq?'sq':''}">${p.label}</div>`,iconSize:[18,18],iconAnchor:[9,9]})}).addTo(m));
   m.fitBounds(L.latLngBounds(pts.map(p=>p.ll)),{padding:[18,18],maxZoom:15});});
 
