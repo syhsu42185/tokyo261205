@@ -543,6 +543,16 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
 .kzm .sec{font-size:12px;font-weight:700;color:var(--navy);margin:8px 2px 4px}
 .kzm .tax{margin-top:6px;font-size:11px;background:#fff7e0;border-radius:8px;padding:5px 8px;line-height:1.45}
 
+/* D8 順路加逛 */
+.near{margin-top:6px;background:#f3f7ff;border-radius:10px;padding:6px 8px}
+.near .h{font-size:11.5px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.near a{display:block;text-decoration:none;color:var(--ink);padding:3px 0;border-top:1px dashed #d5deea;line-height:1.35}
+.near a:first-of-type{border-top:0}
+.near b{font-size:12.5px}
+.near em{font-style:normal;font-size:10px;font-weight:700;border-radius:5px;padding:0 5px;margin-left:5px}
+.near em.ok{background:#e3f4e6;color:#1f7a43}.near em.chk{background:#fff1d6;color:#9a5b00}
+.near small{display:block;font-size:11px;color:#555}
+
 </style>
 </head>
 <body>
@@ -913,6 +923,12 @@ const mineHTML=k=>{const M=MINE[k];if(!M)return '';
   <ol>${M.more.map(([nm,ar,c,u,no])=>li([0,nm,ar,c,u,'jp',no],1)).join('')}</ol>
   <div class="tax">🧾 同一天同一家店消費滿 ¥5,000（未稅）可免稅 10%，<b>要帶護照正本</b>。<br>⚠️ 價差是一般情況，實際以當天標價為準；精品、鞋款可先拍台灣官網價格比較。</div></div>`};
 
+
+/* ============ D8 順路加逛 ============ */
+const D8NEAR={"2": [["Blue Bottle 原宿カフェ", "2026/3 新開，神宮前 6-15-17，8:00–20:00，早到可先買咖啡", "ブルーボトルコーヒー 原宿カフェ", "ok"], ["THE NORTH FACE Mountain", "明治通り旗艦店（神宮前 6），原宿一帶有好幾間 TNF 旗艦", "THE NORTH FACE MOUNTAIN 原宿", "ok"], ["niko and... TOKYO", "明治通り上的旗艦店", "niko and... TOKYO", "chk"], ["asics Store 原宿", "明治通り×竹下通り路口", "アシックスストア 原宿", "chk"]], "3": [["HOKA 原宿", "國內最大直營店，神宮前交差點附近，11:00–20:00", "HOKA 原宿", "ok"], ["Salomon Store 東京 渋谷", "明治通り上，2024/11 移轉擴大、2 層樓；離明治神宮前站近", "サロモンストア 東京 渋谷", "ok"], ["A.P.C. 原宿", "明治神宮前站步行約 3 分", "A.P.C. 原宿", "ok"], ["BEAMS 原宿", "原宿有好幾間 BEAMS（本店、PLUS、ANNEX）", "BEAMS 原宿", "chk"]], "4": [["Onitsuka Tiger 表參道", "2025/4 開幕的 4 層樓 Yellow Concept Store，就在表參道上", "オニツカタイガー 表参道", "ok"]], "5": [["Maison Kitsuné 青山", "南青山 3-15-13，表參道站步行約 3 分", "Maison Kitsune Aoyama", "ok"], ["Café Kitsuné 青山", "南青山 3-15-9，就在 Maison Kitsuné 旁；有青山限定甜點", "Cafe Kitsune Aoyama", "ok"], ["Blue Bottle 青山カフェ", "南青山 3-13-14，和 Kitsuné 同一區，8:00–19:00", "ブルーボトルコーヒー 青山カフェ", "ok"]], "6": [["Café Kitsuné 渋谷", "MIYASHITA PARK North 2F，往澀谷途中順路，11:00–21:00", "Cafe Kitsune MIYASHITA PARK", "ok"]], "7": [["A.P.C. 渋谷 PARCO", "就在 PARCO 3F，跟 HUMAN MADE 同一棟", "A.P.C. 渋谷PARCO", "ok"], ["Disney Store 渋谷公園通り", "宇田川町 20-15，PARCO 附近，日本限定商品", "ディズニーストア 渋谷公園通り店", "ok"], ["HOKA 渋谷", "公園通り上，2025/12 開幕、國內第一間 3 層樓直營店", "HOKA 渋谷", "ok"]], "9": [["Blue Bottle 渋谷カフェ", "澀谷的 Blue Bottle", "ブルーボトルコーヒー 渋谷カフェ", "chk"]], "10": [["Bic Camera 有樂町", "有樂町站旁，Anker、電器、藥妝都有，可免稅", "ビックカメラ 有楽町", "ok"], ["UNIQLO 銀座", "銀座旗艦店，日本價比台灣低", "ユニクロ 銀座店", "ok"], ["Onitsuka Tiger 銀座", "品牌第一間 Yellow Concept Store（2023/8）", "オニツカタイガー 銀座 イエローコンセプトストア", "ok"]]};
+const nearHTML=i=>{const L=D8NEAR[i];if(!L)return '';
+  return `<div class="near"><div class="h">🧭 順路可加（你有興趣的店）</div>${L.map(([n,p,q,st])=>`<a href="${G(q)}" target="_blank" rel="noopener"><b>${n}</b><em class="${st}">${st==='ok'?'已查證':'出發前確認'}</em><small>${p}</small></a>`).join('')}</div>`};
+
 /* ============ 繪製頁面 ============ */
 const tiles=()=>L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
 const icon=(t,cls='')=>L.divIcon({className:'',html:`<div class="lf-num ${cls}">${t}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
@@ -1048,7 +1064,7 @@ DAYS.forEach(day=>{
      <div class="t"><span class="num ${s.start||s.end?'r':''}">${s.k}</span>${s.t}${s.stay?`<span class="stay">${s.stay}</span>`:''}</div>
      <h4>${s.name}</h4><p>${s.p}</p>
      <div class="more"><a href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>${d.stops[i+1]?`<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(s.q)}&destination=${encodeURIComponent(d.stops[i+1].q)}&travelmode=transit" target="_blank" rel="noopener">到下一站怎麼走 ↗</a>`:''}</div>
-     <div class="finds" data-k="d8s${i}"></div>${chHTML(D8CH[i])}${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>
+     ${nearHTML(i)}<div class="finds" data-k="d8s${i}"></div>${chHTML(D8CH[i])}${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>
    
    ${pager(pv,nx)}</div>`;
   daysEl.appendChild(el);
