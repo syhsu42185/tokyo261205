@@ -559,6 +559,12 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
 .near em.ap{background:#eef1f5;color:#667}
 
 .kzm .route{font-size:11.5px;line-height:1.5;background:#e9f1ff;border-radius:8px;padding:5px 8px;margin:6px 0 2px;color:#123}
+.chdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff;border:2.5px solid #e46a8f;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.chdot.pk{border-color:#d33}
+.chl{font-size:11.5px;margin-top:5px;padding:4px 8px;border-radius:8px;background:#fdeef3;color:#7a2141}
+.chl.pk{background:#fdeaea;color:#8a1c1c}
+.near small.wk{color:#1d4f91;font-weight:700}
+
 </style>
 </head>
 <body>
@@ -917,9 +923,9 @@ const DCMORE=[["鋼彈基地 THE GUNDAM BASE", "7F", "", "https://mitsui-shoppin
 const AQMINE=[[1, "Yogibo 懶骨頭", "3F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=3F", "", "懶骨頭太大不好帶，可看小抱枕、Yogibo Mate 玩偶"], [2, "鬼塚虎 Onitsuka Tiger", "3F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=3F", "jp", "日本售價明顯比台灣低，再加免稅；熱門款常缺尺寸，先試穿"], [3, "asics", "3F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=3F", "jp", "日本本國品牌，價格比台灣低"], [4, "Disney Store", "3F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=3F", "jp", "日本 Disney Store 限定商品、聖誕季商品"], [5, "Bic Camera 電器（Air BIC）", "3F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=3F", "jp", "可免稅；DiverCity 2F 也有一家，擇一逛"], [6, "LAWSON 便利商店", "1F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=1F", "", "補給點；Uchi Café 甜點是 Lawson 限定"], [7, "Wendy's・First Kitchen（美食街內）", "1F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=1F", "jp", "日本限定的漢堡＋義大利麵套餐，美食街裡面"]];
 const AQMORE=[["Zoff", "3F", "", "https://www.aquacity.jp/floorguide/floor.php?floor=3F", "📍在 ④ 迪士尼和 ⑤ Bic Camera 之間｜日本眼鏡連鎖，配一副約 30–60 分鐘可取，比台灣便宜"]];
 const ROUTE={"kz": "巴士停車場 → 新西區 ①②③ → 樹木商場 ④⑤⑥ → 中央商場 ⑦⑧ → 沿上方大路直接到東區 ⑨⑩⑪⑫ → 新東區 ⑬⑭⑮⑯⑰ → 沿上方大路回西區 ⑱ Anker → ⑲ Tully's 休息 → ⑳ 全家買今晚零食 → 回巴士", "dc": "1F 東京電訊港站進 ① → 2F ②③④⑤ → 西中庭上 3F ⑥⑦ → 東中庭上 4F ⑧⑨⑩ → 西中庭上 5F ⑪⑫ → 東中庭上 6F ⑬ → 下 2F 西側出口，走往台場站方向 → Aqua City", "aq": "從台場站進 3F ①②③④⑤ → 中央電扶梯下 1F ⑥ → ⑦ 美食街 Wendy's 收尾"};
-const MINE={kz:{name:'',img:'img/kz_map.jpg',pdf:'img/kz_map.pdf',cap:'藍線＝順路路線',base:'https://www.karuizawa-psp.jp',mine:KZMINE,more:KZMORE},
-  dc:{name:'DiverCity Tokyo Plaza',img:'img/dc_map.jpg',cap:'1F–6F 依樓層排',base:'',mine:DCMINE,more:DCMORE},
-  aq:{name:'Aqua City 台場',img:'img/aq_map.jpg',cap:'1F・3F',base:'',mine:AQMINE,more:AQMORE}};
+const MINE={kz:{name:'',img:'img/kz_map.jpg?v=11271614',pdf:'img/kz_map.pdf?v=11271614',cap:'藍線＝順路路線',base:'https://www.karuizawa-psp.jp',mine:KZMINE,more:KZMORE},
+  dc:{name:'DiverCity Tokyo Plaza',img:'img/dc_map.jpg?v=11271614',cap:'1F–6F 依樓層排',base:'',mine:DCMINE,more:DCMORE},
+  aq:{name:'Aqua City 台場',img:'img/aq_map.jpg?v=11271614',cap:'1F・3F',base:'',mine:AQMINE,more:AQMORE}};
 const mineHTML=k=>{const M=MINE[k];if(!M)return '';
   const li=([n,nm,ar,c,u,t,no],more)=>`<li><a class="${more?'more':''}" href="${M.base+u}" target="_blank" rel="noopener"><span class="n">${more?'+':n}</span><span><b>${nm}</b><em>${ar}${c?' '+c:''}</em>${t==='jp'?'<i>日本限定／價差</i>':''}<small>${no}</small></span></a></li>`;
   return `<div class="kzm"><h4>⭐ ${M.name?M.name+' ':''}我的必逛（樓層圖已圈好）</h4>
@@ -934,9 +940,11 @@ const mineHTML=k=>{const M=MINE[k];if(!M)return '';
 
 /* ============ D8 順路加逛 ============ */
 const D8NEAR={"2": [["Blue Bottle 原宿カフェ", "2026/3 新開，神宮前 6-15-17，8:00–20:00，早到可先買咖啡", "ブルーボトルコーヒー 原宿カフェ", "ok", 35.6668, 139.7035, 1], ["THE NORTH FACE Mountain", "明治通り旗艦店（神宮前 6），原宿一帶有好幾間 TNF 旗艦", "THE NORTH FACE MOUNTAIN 原宿", "ok", 35.66747, 139.70492, 0], ["niko and... TOKYO", "明治通り上的旗艦店", "niko and... TOKYO", "chk", 35.66664, 139.70434, 0], ["asics Store 原宿", "明治通り×竹下通り路口", "アシックスストア 原宿", "chk", 35.67041, 139.70652, 0]], "3": [["HOKA 原宿", "國內最大直營店，神宮前交差點附近，11:00–20:00", "HOKA 原宿", "ok", 35.6693, 139.7061, 1], ["Salomon Store 東京 渋谷", "明治通り上，2024/11 移轉擴大、2 層樓；離明治神宮前站近", "サロモンストア 東京 渋谷", "ok", 35.6672, 139.7047, 1], ["A.P.C. 原宿", "明治神宮前站步行約 3 分", "A.P.C. 原宿", "ok", 35.669, 139.7072, 1], ["BEAMS 原宿", "原宿有好幾間 BEAMS（本店、PLUS、ANNEX）", "BEAMS 原宿", "chk", 35.67169, 139.70811, 0]], "4": [["Onitsuka Tiger 表參道", "2025/4 開幕的 4 層樓 Yellow Concept Store，就在表參道上", "オニツカタイガー 表参道", "ok", 35.668, 139.7062, 1]], "5": [["Maison Kitsuné 青山", "南青山 3-15-13，表參道站步行約 3 分", "Maison Kitsune Aoyama", "ok", 35.6661, 139.7141, 1], ["Café Kitsuné 青山", "南青山 3-15-9，就在 Maison Kitsuné 旁；有青山限定甜點", "Cafe Kitsune Aoyama", "ok", 35.6659, 139.7144, 1], ["Blue Bottle 青山カフェ", "南青山 3-13-14，和 Kitsuné 同一區，8:00–19:00", "ブルーボトルコーヒー 青山カフェ", "ok", 35.6664, 139.7136, 1]], "6": [["Café Kitsuné 渋谷", "MIYASHITA PARK North 2F，往澀谷途中順路，11:00–21:00", "Cafe Kitsune MIYASHITA PARK", "ok", 35.6638, 139.7024, 1]], "7": [["A.P.C. 渋谷 PARCO", "就在 PARCO 3F，跟 HUMAN MADE 同一棟", "A.P.C. 渋谷PARCO", "ok", 35.662, 139.6986, 0], ["Disney Store 渋谷公園通り", "宇田川町 20-15，PARCO 附近，日本限定商品", "ディズニーストア 渋谷公園通り店", "ok", 35.66119, 139.70021, 0], ["HOKA 渋谷", "公園通り上，2025/12 開幕、國內第一間 3 層樓直營店", "HOKA 渋谷", "ok", 35.6626, 139.6995, 1]], "9": [["Blue Bottle 渋谷カフェ", "澀谷的 Blue Bottle", "ブルーボトルコーヒー 渋谷カフェ", "chk", 35.6645, 139.6995, 1]], "10": [["Bic Camera 有樂町", "有樂町站旁，Anker、電器、藥妝都有，可免稅", "ビックカメラ 有楽町", "ok", 35.6755, 139.76301, 0], ["UNIQLO 銀座", "銀座旗艦店，日本價比台灣低", "ユニクロ 銀座店", "ok", 35.67045, 139.76365, 1], ["Onitsuka Tiger 銀座", "品牌第一間 Yellow Concept Store（2023/8）", "オニツカタイガー 銀座 イエローコンセプトストア", "ok", 35.6717, 139.765, 1]]};
+const D8CHLL={"4": [["ちいかわらんど 原宿店", "Kiddy Land 原宿 1F", 35.66772, 139.70654, "ck"]], "7": [["ポケモンセンターシブヤ", "渋谷 PARCO 6F", 35.66193, 139.69875, "pk"]]};
+const walkTxt=(a,b)=>{const m=distKm(a,b)*1000,w=Math.max(1,Math.round(m*1.3/80));return `距本站約 ${m<1000?Math.round(m/10)*10+"m":(m/1000).toFixed(1)+"km"}・步行約 ${w} 分`};
 const ABC='ABCDEFGH';
 const nearHTML=i=>{const L=D8NEAR[i];if(!L)return '';
-  return `<div class="near"><div class="h">🧭 順路可加（你有興趣的店）</div>${L.map(([n,p,q,st,la,lo,ap],j)=>`<a href="${G(q)}" target="_blank" rel="noopener"><span class="ndot">${ABC[j]}</span><b>${n}</b><em class="${st}">${st==='ok'?'已查證':'出發前確認'}</em>${ap?'<em class="ap">位置約略</em>':''}<small>${p}</small></a>`).join('')}</div>`};
+  return `<div class="near"><div class="h">🧭 順路可加（你有興趣的店）</div>${L.map(([n,p,q,st,la,lo,ap],j)=>`<a href="${G(q)}" target="_blank" rel="noopener"><span class="ndot">${ABC[j]}</span><b>${n}</b><em class="${st}">${st==='ok'?'已查證':'出發前確認'}</em>${ap?'<em class="ap">位置約略</em>':''}<small class="wk">🚶 ${walkTxt(D8.stops[i].ll,[la,lo])}</small><small>${p}</small></a>`).join('')}</div>`};
 /* 每站小地圖：這站 → 下一站＋順路店 */
 function stopMap(el,i){
   const S=D8.stops,a=S[i],b=S[i+1],m=L.map(el,Object.assign({},mapOpts,{zoomControl:false}));tiles().addTo(m);
@@ -946,6 +954,9 @@ function stopMap(el,i){
   (D8NEAR[i]||[]).forEach(([n,p,q,st,la,lo,ap],j)=>{pts.push([la,lo]);
     L.marker([la,lo],{icon:L.divIcon({className:'',html:`<div class="ndot big">${ABC[j]}</div>`,iconSize:[22,22],iconAnchor:[11,11]})}).addTo(m)
      .bindPopup(`<b>${n}</b>${ap?'（位置約略）':''}<br>${p}<br><a target="_blank" rel="noopener" href="${G(q)}">Google 地圖 ↗</a>`);});
+  (D8CHLL[i]||[]).forEach(([n,f,la,lo,t])=>{pts.push([la,lo]);
+    L.marker([la,lo],{icon:L.divIcon({className:'',html:`<div class="chdot ${t}">${t==='ck'?'🐹':'🔴'}</div>`,iconSize:[26,26],iconAnchor:[13,13]}),zIndexOffset:800}).addTo(m)
+     .bindPopup(`<b>${n}</b><br>${f}<br>${walkTxt(a.ll,[la,lo])}`);});
   if(a.end&&!b){m.setView(a.ll,14)}else m.fitBounds(L.latLngBounds(pts),{padding:[22,22],maxZoom:16});
   return m;
 }
@@ -1085,7 +1096,7 @@ DAYS.forEach(day=>{
      <div class="t"><span class="num ${s.start||s.end?'r':''}">${s.k}</span>${s.t}${s.stay?`<span class="stay">${s.stay}</span>`:''}</div>
      <h4>${s.name}</h4><p>${s.p}</p>
      <div class="more"><a href="${G(s.q)}" target="_blank" rel="noopener">Google 地圖 ↗</a>${d.stops[i+1]?`<a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(s.q)}&destination=${encodeURIComponent(d.stops[i+1].q)}&travelmode=transit" target="_blank" rel="noopener">到下一站怎麼走 ↗</a>`:''}</div>
-     <div class="smap" data-i="${i}"></div>${nearHTML(i)}<div class="finds" data-k="d8s${i}"></div>${chHTML(D8CH[i])}${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>
+     <div class="smap" data-i="${i}"></div>${(D8CHLL[i]||[]).map(([n,f,la,lo,t])=>`<div class="chl ${t}">${t==='ck'?'🐹 Chiikawa':'🔴 Pokémon'}：<b>${n}</b>（${f}）・${walkTxt(s.ll,[la,lo])}</div>`).join('')}${nearHTML(i)}<div class="finds" data-k="d8s${i}"></div>${chHTML(D8CH[i])}${s.nx?`<div class="nx">下一站 ↓ ${s.nx}</div>`:''}</div></li>`).join('')}</ol>
    
    ${pager(pv,nx)}</div>`;
   daysEl.appendChild(el);
