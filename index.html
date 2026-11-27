@@ -529,7 +529,7 @@ footer{color:var(--muted);font-size:11px;padding:20px 0 10px;line-height:1.6}
 .kzm .maps a{position:relative;display:block;border-radius:9px;overflow:hidden;border:1px solid #e4e8ee}
 .kzm .maps img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
 .kzm .maps.one{grid-template-columns:1fr}
-.kzm .maps.one img{aspect-ratio:auto;max-height:360px;object-fit:cover;object-position:top}
+.kzm .maps.one img{aspect-ratio:4/3;height:auto;object-fit:cover;object-position:top}
 .kzm .maps span{position:absolute;left:5px;bottom:5px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
 .kzm .hint{font-size:10.5px;color:var(--muted);margin:4px 2px 6px}
 .kzm ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
@@ -880,9 +880,13 @@ function posterHTML(tiles,title){
 /* 跳到景點：對齊卡片頂端（扣掉上方固定列），等圖片／地圖載入後再校正一次 */
 let goTok=0;['touchstart','wheel'].forEach(ev=>window.addEventListener(ev,()=>goTok++,{passive:true}));
 function goTo(el){const tk=++goTok,off=()=>{const top=document.querySelector('.top');return (top?top.getBoundingClientRect().height:0)+8};
-  const y=()=>el.getBoundingClientRect().top+window.scrollY-off();
-  window.scrollTo({top:y(),behavior:'smooth'});
-  [500,1000,1600].forEach(t=>setTimeout(()=>{if(tk!==goTok)return;const dy=el.getBoundingClientRect().top-off();if(Math.abs(dy)>4)window.scrollTo({top:window.scrollY+dy,behavior:'auto'})},t));}
+  window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-off(),behavior:'smooth'});
+  /* 等捲動完全停下來，才檢查要不要微調（避免中途打斷造成跳動） */
+  let last=-1,still=0;const t0=performance.now();
+  const chk=()=>{if(tk!==goTok)return;const sy=window.scrollY;if(Math.abs(sy-last)<1)still++;else{still=0;last=sy}
+    if(still>=8){const dy=el.getBoundingClientRect().top-off();if(Math.abs(dy)>3)window.scrollTo({top:sy+dy,behavior:'smooth'});return}
+    if(performance.now()-t0<4000)requestAnimationFrame(chk)};
+  requestAnimationFrame(chk);}
 document.addEventListener('click',e=>{const t=e.target.closest('.pt');if(!t)return;e.preventDefault();const el=document.getElementById(t.dataset.go);if(!el)return;
   goTo(el);el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600);});
 
